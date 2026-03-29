@@ -1,0 +1,2927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COMP202 Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #D94F3D;
+    --red-light: #f0695a;
+    --red-pale: #fdf2f1;
+    --ink: #1a1a2e;
+    --ink-soft: #3d3d5c;
+    --ink-muted: #7a7a9d;
+    --cream: #faf9f6;
+    --yellow: #F5C842;
+    --yellow-pale: #fffbea;
+    --green: #2D9E6B;
+    --green-pale: #edf8f3;
+    --blue: #3A7BD5;
+    --blue-pale: #eef4fd;
+    --border: #e8e4df;
+    --code-bg: #1e1e2e;
+    --code-text: #cdd6f4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.8;
+  }
+
+  header {
+    background: var(--ink);
+    color: white;
+    padding: 3rem 2rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(217,79,61,0.15);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 20%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(245,200,66,0.08);
+  }
+  .header-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+  .course-tag {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+  header p { color: rgba(255,255,255,0.6); font-size: 0.95rem; max-width: 600px; }
+  .legend { display: flex; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  .lesson {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .lesson:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+
+  .lesson-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .lesson-header:hover { background: #fafafa; }
+  .lesson.open .lesson-header { border-color: var(--border); }
+
+  .lesson-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--red);
+    background: var(--red-pale);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .lesson-title { font-weight: 700; font-size: 1.05rem; flex: 1; }
+  .lesson-meta { font-size: 0.78rem; color: var(--ink-muted); }
+  .chevron { width: 20px; height: 20px; transition: transform 0.3s; color: var(--ink-muted); flex-shrink: 0; }
+  .lesson.open .chevron { transform: rotate(180deg); }
+  .lesson-body { display: none; padding: 1.5rem; }
+  .lesson.open .lesson-body { display: block; }
+
+  .importance-box {
+    background: var(--ink);
+    color: white;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .importance-box .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--yellow);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.4rem;
+    display: block;
+  }
+
+  .topic {
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .topic:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .topic-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.15rem 0.55rem;
+    border-radius: 20px;
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+  }
+  .tag-logic { background: #fef3cd; color: #8a6200; border: 1px solid #f5c842; }
+  .tag-memory { background: #fde8e8; color: #8a1c1c; border: 1px solid #e98585; }
+  .tag-key { background: var(--green-pale); color: #1a6e49; border: 1px solid #7dd4b0; }
+
+  .analogy {
+    background: var(--blue-pale);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 8px 8px 0;
+    padding: 0.85rem 1rem;
+    margin: 0.75rem 0;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+  .analogy .analogy-label {
+    font-weight: 700;
+    color: var(--blue);
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+  }
+
+  .trap {
+    background: #fff8f0;
+    border-left: 3px solid #e8843a;
+    border-radius: 0 8px 8px 0;
+    padding: 0.85rem 1rem;
+    margin: 0.75rem 0;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+  .trap .trap-label {
+    font-weight: 700;
+    color: #c0580a;
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+  }
+
+  .term {
+    border-bottom: 2px dashed var(--red);
+    cursor: help;
+    position: relative;
+    color: var(--red);
+    font-weight: 500;
+  }
+  .term:hover::after {
+    content: attr(data-def);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: white;
+    font-size: 0.78rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    white-space: normal;
+    z-index: 100;
+    pointer-events: none;
+    font-weight: 400;
+    line-height: 1.4;
+    max-width: 220px;
+    text-align: center;
+  }
+  .term:hover::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--ink);
+    z-index: 100;
+  }
+
+  .code-block {
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    margin: 0.75rem 0;
+    overflow-x: auto;
+    line-height: 1.7;
+    white-space: pre;
+  }
+  .code-block .kw { color: #cba6f7; }
+  .code-block .fn { color: #89b4fa; }
+  .code-block .str { color: #a6e3a1; }
+  .code-block .num { color: #fab387; }
+  .code-block .cm { color: #6c7086; font-style: italic; }
+
+  .topic p { font-size: 0.92rem; color: var(--ink-soft); margin-bottom: 0.6rem; }
+  .topic ul { margin-left: 1.2rem; margin-bottom: 0.6rem; }
+  .topic ul li { font-size: 0.92rem; color: var(--ink-soft); margin-bottom: 0.3rem; line-height: 1.7; }
+
+  .framework-banner {
+    background: linear-gradient(135deg, var(--ink) 0%, #2a2a4a 100%);
+    color: white;
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.75rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .framework-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .framework-banner h3 { font-size: 0.85rem; color: var(--yellow); margin-bottom: 0.3rem; letter-spacing: 0.08em; font-family: 'JetBrains Mono', monospace; }
+  .framework-banner p { font-size: 0.9rem; color: rgba(255,255,255,0.8); line-height: 1.7; }
+
+  .concept-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+  }
+  .concept-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+  .concept-card strong { display: block; margin-bottom: 0.2rem; color: var(--ink); }
+  .concept-card span { color: var(--ink-muted); font-size: 0.82rem; }
+
+  .toc {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .toc h2 { font-size: 0.75rem; letter-spacing: 0.12em; color: var(--ink-muted); font-family: 'JetBrains Mono', monospace; margin-bottom: 1rem; }
+  .toc-list { display: flex; flex-direction: column; gap: 0.4rem; }
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.88rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+    color: var(--ink-soft);
+  }
+  .toc-item:hover { background: var(--red-pale); color: var(--red); }
+  .toc-num { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--red); width: 40px; flex-shrink: 0; }
+
+  .summary-card {
+    background: var(--red);
+    color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 2.5rem;
+  }
+  .summary-card h2 { font-family: 'Playfair Display', serif; margin-bottom: 1rem; }
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .summary-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.85rem; }
+  .summary-item h4 { font-size: 0.78rem; letter-spacing: 0.08em; opacity: 0.8; margin-bottom: 0.4rem; font-family: 'JetBrains Mono', monospace; }
+  .summary-item p { font-size: 0.87rem; line-height: 1.6; opacity: 0.92; }
+
+  kbd {
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+  }
+
+  .sum-link {
+    color: white;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(255,255,255,0.45);
+    cursor: pointer;
+    transition: text-decoration-color 0.15s, opacity 0.15s;
+    white-space: nowrap;
+  }
+  .sum-link:hover { text-decoration-color: white; opacity: 0.85; }
+
+  @keyframes flash-highlight {
+    0%   { background: transparent; }
+    20%  { background: rgba(245, 200, 66, 0.22); border-radius: 8px; }
+    60%  { background: rgba(245, 200, 66, 0.15); border-radius: 8px; }
+    100% { background: transparent; }
+  }
+  .highlight-flash { animation: flash-highlight 1.8s ease-out forwards; }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin: 0.75rem 0;
+  }
+  .compare-table th {
+    background: var(--ink);
+    color: white;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.82rem;
+  }
+  .compare-table td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--ink-soft);
+    vertical-align: top;
+  }
+  .compare-table tr:nth-child(even) td { background: #fafafa; }
+
+  @media (max-width: 600px) {
+    .summary-grid { grid-template-columns: 1fr; }
+    .legend { gap: 1rem; }
+  }
+  /* ── Language Switcher ── */
+.lang-switcher {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  display: flex;
+  gap: 0.35rem;
+  z-index: 10;
+}
+.lang-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.75rem;
+  border-radius: 3px;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  background: transparent;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.lang-btn:hover {
+  border-color: rgba(255,255,255,0.6);
+  color: white;
+}
+.lang-btn.active {
+  background: var(--red);
+  border-color: var(--red);
+  color: white;
+}
+/* ── Search Bar ── */
+.search-wrap {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.85rem 1rem 0.85rem 1.1rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.search-wrap svg {
+  flex-shrink: 0;
+  color: var(--ink-muted);
+}
+#search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 0.92rem;
+  color: var(--ink);
+  background: transparent;
+}
+#search-input::placeholder {
+  color: var(--ink-muted);
+}
+#search-clear {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-muted);
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 0.1rem;
+  display: none;        /* 默认隐藏，有输入才显示 */
+}
+#search-clear:hover { color: var(--red); }
+#search-status {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 0.75rem;
+  min-height: 1.2em;   /* 占位，防止布局跳动 */
+}
+.search-highlight {
+  background: #fff176;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="lang-switcher">
+  <a class="lang-btn" href="index-cn.html">中文</a>
+  <span class="lang-btn active">EN</span>
+    </div>
+    <div class="course-tag">COMP202 · McGill · U0 Wynne Chen</div>
+    <h1>Python Core Concepts Study Guide</h1>
+    <p>Week 1–13 · Lesson 1–21 · Key terms explained, difficulty tags on every topic</p>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#f5c842"></div> 🧠 Understand the logic</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e98585"></div> 📝 Memorise / Recall</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#7dd4b0"></div> ⭐ Must know</div>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ── Search Bar ── -->
+<div class="search-wrap">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2">
+    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+  </svg>
+  <input id="search-input" type="search" placeholder="Search keywords, e.g. recursion, dict, OOP…" autocomplete="off">
+  <button id="search-clear" title="Clear">✕</button>
+</div>
+<div id="search-status"></div>
+  <div class="toc">
+    <h2>LESSONS OVERVIEW — click to jump</h2>
+    <div class="toc-list">
+      <div class="toc-item" onclick="jumpTo('l1')"><span class="toc-num">L1 W1</span> Binary ↔ Decimal · Bits &amp; Bytes · Encoding formats</div>
+      <div class="toc-item" onclick="jumpTo('l2')"><span class="toc-num">L2 W2</span> Algorithm · Program · High/Low-level languages · print() · Comments</div>
+      <div class="toc-item" onclick="jumpTo('l3')"><span class="toc-num">L3 W2</span> Variables · Types · input() · Arithmetic · Math module</div>
+      <div class="toc-item" onclick="jumpTo('l4')"><span class="toc-num">L4 W3</span> Boolean · Relational operators · and/or/not · if/elif/else</div>
+      <div class="toc-item" onclick="jumpTo('l5')"><span class="toc-num">L5 W4</span> Functions: def · Scope · Void/Fruitful · Docstring</div>
+      <div class="toc-item" onclick="jumpTo('l6')"><span class="toc-num">L6 W5</span> While Loop · Infinite loops · Shorthand Assignment</div>
+      <div class="toc-item" onclick="jumpTo('l7')"><span class="toc-num">L7 W5</span> Recursion · For Loop · Variable Scope · Break/Continue</div>
+      <div class="toc-item" onclick="jumpTo('l8')"><span class="toc-num">L8 W6</span> Random · Modules · Strings basics</div>
+      <div class="toc-item" onclick="jumpTo('l9')"><span class="toc-num">L9 W7</span> Three ways to traverse a String</div>
+      <div class="toc-item" onclick="jumpTo('l10')"><span class="toc-num">L10 W7</span> List: creation, access, operations, built-in functions</div>
+      <div class="toc-item" onclick="jumpTo('l11')"><span class="toc-num">L11 W7</span> Nested Loops · Nested Lists · String ↔ List conversion</div>
+      <div class="toc-item" onclick="jumpTo('l12')"><span class="toc-num">L12 W8</span> Object Identity · Aliasing / Shallow / Deep Copy · Mutable vs Immutable</div>
+      <div class="toc-item" onclick="jumpTo('l13')"><span class="toc-num">L13 W8</span> Doctest · Debugging · Raising Exceptions</div>
+      <div class="toc-item" onclick="jumpTo('l14')"><span class="toc-num">L14 W10</span> Dictionary: creation, access, add/remove, methods, iteration</div>
+      <div class="toc-item" onclick="jumpTo('l15')"><span class="toc-num">L15 W10</span> File I/O · Pickle · CSV</div>
+      <div class="toc-item" onclick="jumpTo('l16')"><span class="toc-num">L16 W11</span> Tuple · Packing/Unpacking · Enumerate</div>
+      <div class="toc-item" onclick="jumpTo('l19')"><span class="toc-num">L19 W12</span> Exception Handling: Try/Except · Finally</div>
+      <div class="toc-item" onclick="jumpTo('l20')"><span class="toc-num">L20 W13</span> OOP 1: Object · Class · Attributes</div>
+      <div class="toc-item" onclick="jumpTo('l21')"><span class="toc-num">L21 W13</span> OOP 2: Constructor · Class Attributes · Methods · __str__</div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 1 ==================== -->
+  <div class="lesson" id="l1">
+    <div class="lesson-header" onclick="toggleLesson('l1')">
+      <span class="lesson-num">LESSON 1 · Week 1</span>
+      <span class="lesson-title">Binary ↔ Decimal Conversion, Bits &amp; Bytes, Encoding Formats</span>
+      <span class="lesson-meta">3 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">💡</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>This is the foundation of the whole course. Computers only understand 0s and 1s — every piece of text, image, and music is ultimately a sequence of binary digits. Understanding this helps you grasp why Python has so many different data types (int, float, str…) — the same string of bits becomes something completely different depending on how it's interpreted. Exams rarely ask heavy calculations, but concept and multiple-choice questions on this appear regularly.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-binary">
+        <div class="topic-title">
+          <span class="term" data-def="Binary: a base-2 number system using only 0 and 1 — the language computers actually speak">Binary</span> ↔ <span class="term" data-def="Decimal: the base-10 number system (0–9) we use every day">Decimal</span> Conversion
+          <span class="tag tag-memory">📝 Memorise the method</span>
+        </div>
+
+        <p><strong>Binary → Decimal (multiply each digit by its power of 2, then sum):</strong></p>
+        <div class="code-block">
+<span class="cm"># Convert 10101100 to decimal:</span>
+<span class="cm"># Position:  7  6  5  4  3  2  1  0   ← count from the right, starting at 0</span>
+<span class="cm"># Digit:     1  0  1  0  1  1  0  0</span>
+<span class="cm">#</span>
+<span class="cm"># Calculation: 1×2⁷ + 0×2⁶ + 1×2⁵ + 0×2⁴ + 1×2³ + 1×2² + 0×2¹ + 0×2⁰</span>
+<span class="cm">#            =  128  +  0   +  32  +  0   +   8  +   4  +   0  +   0</span>
+<span class="cm">#            = 172</span>
+<span class="cm"># So 10101100₂ = 172₁₀</span></div>
+
+        <p style="margin-top:0.75rem"><strong>Decimal → Binary (repeatedly divide by 2, collect remainders, read bottom-to-top):</strong></p>
+        <div class="code-block">
+<span class="cm"># Convert 14 to binary:</span>
+<span class="cm"># 14 ÷ 2 = 7  remainder 0   ← least significant bit</span>
+<span class="cm">#  7 ÷ 2 = 3  remainder 1</span>
+<span class="cm">#  3 ÷ 2 = 1  remainder 1</span>
+<span class="cm">#  1 ÷ 2 = 0  remainder 1   ← most significant bit</span>
+<span class="cm">#</span>
+<span class="cm"># Read remainders bottom-to-top: 1 1 1 0</span>
+<span class="cm"># So 14₁₀ = 1110₂</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          Decimal counts in groups of 10 (0–9), carrying over when you hit 10. Binary only has 0 and 1, carrying over at 2 — like a light switch that is either ON or OFF. A row of switches together can represent any number.
+        </div>
+
+        <table class="compare-table">
+          <tr><th>Common powers of 2 (worth memorising!)</th><th>Value</th></tr>
+          <tr><td>2⁰</td><td>1</td></tr>
+          <tr><td>2¹</td><td>2</td></tr>
+          <tr><td>2²</td><td>4</td></tr>
+          <tr><td>2³</td><td>8</td></tr>
+          <tr><td>2⁴</td><td>16</td></tr>
+          <tr><td>2⁵</td><td>32</td></tr>
+          <tr><td>2⁶</td><td>64</td></tr>
+          <tr><td>2⁷</td><td>128</td></tr>
+        </table>
+      </div>
+
+      <div class="topic" id="anchor-bytes">
+        <div class="topic-title">
+          Bits, Bytes, and Encoding Formats
+          <span class="tag tag-memory">📝 Know the concepts</span>
+        </div>
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>Bit</strong>
+            <span>A single 0 or 1 — the smallest unit of information in a computer.</span>
+          </div>
+          <div class="concept-card" style="border-color:#a0c4ff">
+            <strong>Byte</strong>
+            <span>8 bits grouped together.<br>1 Byte = 8 Bits.</span>
+          </div>
+        </div>
+        <p style="margin-top:0.75rem">The same binary string can mean completely different things depending on how it's interpreted:</p>
+        <div class="code-block">
+<span class="cm"># The binary number 1001000 could be interpreted as:</span>
+<span class="cm">#   The number 72</span>
+<span class="cm">#   The character 'H' (ASCII encoding)</span>
+<span class="cm">#   A colour in an image (RGB encoding)</span>
+<span class="cm">#</span>
+<span class="cm"># That's why we need standard formats to tell the computer what the bits mean:</span>
+<span class="cm">#   .mp3 / .wav  → audio</span>
+<span class="cm">#   .jpeg / .png → image</span>
+<span class="cm">#   ASCII / Unicode → text</span></div>
+        <div class="trap">
+          <span class="trap-label">⚠️ Common numeral systems (good to know)</span>
+          Decimal (base 10) · Binary (base 2) · Octal (base 8) · Hexadecimal (base 16, common in colour codes like <kbd>#FF5733</kbd>)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 2 ==================== -->
+  <div class="lesson" id="l2">
+    <div class="lesson-header" onclick="toggleLesson('l2')">
+      <span class="lesson-num">LESSON 2 · Week 2</span>
+      <span class="lesson-title">Algorithm, Program, High/Low-Level Languages, print(), Comments</span>
+      <span class="lesson-meta">4 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">📐</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>This is the starting point of computational thinking. Before writing any code, you need to learn how to break a problem into clear, step-by-step instructions — that's what an algorithm is. You also need to understand what kind of language Python is, how it runs, and the most basic output tool: <kbd>print()</kbd>. The ideas here aren't hard, but they're fundamental to understanding what programming actually is.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-algo">
+        <div class="topic-title">
+          Algorithm vs Program
+          <span class="tag tag-memory">📝 Know the difference</span>
+        </div>
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#f5c842">
+            <strong><span class="term" data-def="Algorithm: a well-defined, finite sequence of steps designed to solve a specific problem — independent of any programming language">Algorithm</span></strong>
+            <span>A step-by-step plan for solving a problem, independent of any specific language. Can be expressed in natural language, pseudo-code, or flowcharts.</span>
+          </div>
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>Program</strong>
+            <span>The actual implementation of an algorithm in a specific programming language (e.g. Python, Java, C++).</span>
+          </div>
+        </div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          An algorithm is a recipe written in words. A program is actually cooking the dish. The recipe can be translated into any language, but to actually make the food you must use a specific kitchen (programming language).
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-languages">
+        <div class="topic-title">
+          Low-Level vs High-Level Languages
+          <span class="tag tag-memory">📝 Know the categories</span>
+        </div>
+        <table class="compare-table">
+          <tr><th></th><th>Low-Level</th><th>High-Level</th></tr>
+          <tr><td>Examples</td><td>Machine code, Assembly</td><td>Python, Java, C++</td></tr>
+          <tr><td>Readability</td><td>Poor — close to 0/1 instructions</td><td>Close to human language</td></tr>
+          <tr><td>Portability</td><td>Tied to specific hardware</td><td>Runs on different machines</td></tr>
+          <tr><td>Translation</td><td>Runs directly</td><td>Needs a Compiler or Interpreter</td></tr>
+        </table>
+        <p style="margin-top:0.75rem">Python is a high-level language that uses an <strong>Interpreter</strong> — it translates and executes code line by line. That's why Python error messages can tell you the exact line number: the interpreter knows exactly where it crashed.</p>
+      </div>
+
+      <div class="topic" id="anchor-print">
+        <div class="topic-title">
+          print(), <kbd>\n</kbd>, <kbd>\t</kbd>
+          <span class="tag tag-memory">📝 Know the usage</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <div class="code-block">
+<span class="cm"># Basic usage</span>
+<span class="fn">print</span>(<span class="str">"hello"</span>, <span class="str">"world"</span>)           <span class="cm"># hello world  (default sep=" ")</span>
+<span class="fn">print</span>(<span class="str">"hello"</span>, <span class="str">"world"</span>, sep=<span class="str">"-"</span>)   <span class="cm"># hello-world</span>
+<span class="fn">print</span>(<span class="str">"hello"</span>, end=<span class="str">""</span>)             <span class="cm"># no newline at end</span>
+
+<span class="cm"># Printing a variable</span>
+x = <span class="num">7</span>
+<span class="fn">print</span>(<span class="str">"The value of x is"</span>, x)    <span class="cm"># The value of x is 7</span>
+
+<span class="cm"># Special characters</span>
+<span class="fn">print</span>(<span class="str">"Line 1\nLine 2"</span>)     <span class="cm"># \n = newline</span>
+<span class="fn">print</span>(<span class="str">"col1\tcol2"</span>)         <span class="cm"># \t = tab (pads to next multiple of 4)</span>
+
+<span class="cm"># Comments: anything after # is ignored by Python</span>
+x = <span class="num">5</span>  <span class="cm"># this is an inline comment</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 3 ==================== -->
+  <div class="lesson" id="l3">
+    <div class="lesson-header" onclick="toggleLesson('l3')">
+      <span class="lesson-num">LESSON 3 · Week 2</span>
+      <span class="lesson-title">Variables, Types, input(), Arithmetic, Math Module, Expression vs Statement</span>
+      <span class="lesson-meta">5 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">🔢</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>Variables are the core of programming — they are your containers for storing data. This lesson teaches you the basic data types Python has, how to convert between them (type casting), how to get input from the user, and how to do arithmetic. Everything in later lessons builds on this.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-variables">
+        <div class="topic-title">
+          Variables and Types
+          <span class="tag tag-memory">📝 Know the types</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <div class="code-block">
+<span class="cm"># Assignment: variable_name = value</span>
+number = <span class="num">67</span>
+name = <span class="str">"Alice"</span>
+pi = <span class="num">3.14</span>
+is_student = <span class="kw">True</span>
+
+<span class="cm"># Check the type</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="num">12.3</span>))       <span class="cm"># &lt;class 'float'&gt;</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="str">"hello"</span>))   <span class="cm"># &lt;class 'str'&gt;</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="num">5</span>))         <span class="cm"># &lt;class 'int'&gt;</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="kw">True</span>))      <span class="cm"># &lt;class 'bool'&gt;</span></div>
+
+        <p><strong>Type Casting (converting between types):</strong></p>
+        <div class="code-block">
+<span class="fn">int</span>(<span class="num">3.14</span>)      <span class="cm"># → 3     (truncates, does NOT round!)</span>
+<span class="fn">float</span>(<span class="num">5</span>)       <span class="cm"># → 5.0</span>
+<span class="fn">str</span>(<span class="num">42</span>)        <span class="cm"># → "42"</span>
+<span class="fn">int</span>(<span class="str">"hello"</span>)  <span class="cm"># ❌ ValueError — can't convert text to int</span>
+<span class="fn">int</span>(<span class="str">"42"</span>)     <span class="cm"># ✅ → 42   (works if the string is a pure number)</span></div>
+        <div class="trap">
+          <span class="trap-label">⚠️ int() truncates — it does NOT round!</span>
+          <kbd>int(3.9)</kbd> gives <kbd>3</kbd>, not <kbd>4</kbd>. It just drops the decimal part. To round properly, use <kbd>round(3.9)</kbd>.
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-input">
+        <div class="topic-title">
+          input() Function
+          <span class="tag tag-key">⭐ Must know</span>
+          <span class="tag tag-memory">📝 Don't forget the trap</span>
+        </div>
+        <p><kbd>input()</kbd> reads keyboard input from the user, but it <strong>always returns a string</strong> — even if the user types a number!</p>
+        <div class="code-block">
+<span class="cm"># ❌ Dangerous: forgot to cast the type</span>
+x = <span class="fn">input</span>(<span class="str">"Enter a number: "</span>)
+<span class="fn">print</span>(x + <span class="num">1</span>)    <span class="cm"># TypeError! Can't add str + int</span>
+
+<span class="cm"># ✅ Correct: always cast</span>
+x = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Enter an integer: "</span>))
+<span class="fn">print</span>(x + <span class="num">1</span>)    <span class="cm"># Works fine now</span>
+
+y = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Enter a decimal: "</span>))
+<span class="fn">print</span>(y * <span class="num">2</span>)</div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          <kbd>input()</kbd> is like a translator who always replies in the same language (string), no matter what language you asked in. If you wanted a number, you have to translate it yourself (type cast).
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-math-ops">
+        <div class="topic-title">
+          Arithmetic Operators + Precedence
+          <span class="tag tag-memory">📝 Know the operators</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <div class="code-block">
+<span class="num">10</span> + <span class="num">3</span>    <span class="cm"># → 13    addition</span>
+<span class="num">10</span> - <span class="num">3</span>    <span class="cm"># → 7     subtraction</span>
+<span class="num">10</span> * <span class="num">3</span>    <span class="cm"># → 30    multiplication</span>
+<span class="num">10</span> / <span class="num">3</span>    <span class="cm"># → 3.333... division (always returns float!)</span>
+<span class="num">10</span> ** <span class="num">3</span>   <span class="cm"># → 1000  exponentiation (power)</span>
+<span class="num">10</span> // <span class="num">3</span>   <span class="cm"># → 3     floor division (rounds down)</span>
+<span class="num">10</span> % <span class="num">3</span>    <span class="cm"># → 1     modulus (remainder)</span>
+
+<span class="cm"># Operator precedence (high → low):</span>
+<span class="cm"># 1. ()   parentheses — highest</span>
+<span class="cm"># 2. **   exponentiation</span>
+<span class="cm"># 3. * / % //</span>
+<span class="cm"># 4. + -  lowest</span></div>
+        <div class="trap">
+          <span class="trap-label">⚠️ The three most-confused operators</span>
+          <kbd>/</kbd> always returns a float (e.g. <kbd>6/2 = 3.0</kbd>).<br>
+          <kbd>//</kbd> floor division, rounds DOWN (e.g. <kbd>7//2 = 3</kbd>, but <kbd>-7//2 = -4</kbd>!).<br>
+          <kbd>%</kbd> gives the remainder (e.g. <kbd>7%3 = 1</kbd>). Use it to check odd/even: <kbd>n%2 == 0</kbd> means n is even.
+        </div>
+        <p><strong>Built-in functions + Math module:</strong></p>
+        <div class="code-block">
+<span class="cm"># Built-in (no import needed)</span>
+<span class="fn">abs</span>(-<span class="num">5</span>)           <span class="cm"># → 5     absolute value</span>
+<span class="fn">pow</span>(<span class="num">2</span>, <span class="num">10</span>)         <span class="cm"># → 1024  same as 2**10</span>
+<span class="fn">round</span>(<span class="num">7.948</span>, <span class="num">2</span>)   <span class="cm"># → 7.95  round to 2 decimal places</span>
+
+<span class="cm"># math module (must import first)</span>
+<span class="kw">import</span> math
+math.<span class="fn">sin</span>(math.pi / <span class="num">4</span>)   <span class="cm"># sin(45°)</span>
+math.<span class="fn">cos</span>(math.pi)        <span class="cm"># cos(180°) = -1.0</span>
+math.pi                    <span class="cm"># → 3.141592653589793</span></div>
+      </div>
+
+      <div class="topic" id="anchor-expr">
+        <div class="topic-title">
+          Expression vs Statement
+          <span class="tag tag-logic">🧠 Understand the concept</span>
+        </div>
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#f5c842">
+            <strong>Expression</strong>
+            <span>A piece of code that evaluates to a value.<br>E.g. <kbd>1/2</kbd>, <kbd>a + 5</kbd>, <kbd>"hello" + "world"</kbd></span>
+          </div>
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>Statement</strong>
+            <span>A complete instruction that performs an action — doesn't necessarily return a value.<br>E.g. <kbd>x = 5</kbd>, <kbd>print("hi")</kbd></span>
+          </div>
+        </div>
+        <p style="margin-top:0.75rem">A program executes statements top-to-bottom. When it encounters an expression, it evaluates it to a value and then moves on.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 4 ==================== -->
+  <div class="lesson" id="l4">
+    <div class="lesson-header" onclick="toggleLesson('l4')">
+      <span class="lesson-num">LESSON 4 · Week 3</span>
+      <span class="lesson-title">Boolean, Relational Operators, and/or/not, if/elif/else</span>
+      <span class="lesson-meta">4 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">🚦</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>So far, programs just run from line 1 to the end with no decisions made. This lesson teaches you how to make your program take different paths depending on conditions — that's what makes programs "smart". <span class="term" data-def="Boolean: a type with only two values — True and False">Boolean</span> values are the foundation for decisions, and <kbd>if/elif/else</kbd> is the gate that controls where the program goes next. Nearly every meaningful program uses conditional logic.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-boolean">
+        <div class="topic-title">
+          Boolean Values and Relational Operators
+          <span class="tag tag-memory">📝 Know the operators</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <div class="code-block">
+<span class="cm"># Relational operators: compare two values, result is True or False</span>
+<span class="num">7</span> == <span class="num">7</span>    <span class="cm"># True   (equal to)</span>
+<span class="num">7</span> != <span class="num">5</span>    <span class="cm"># True   (not equal to)</span>
+<span class="num">7</span> &gt; <span class="num">5</span>     <span class="cm"># True   (greater than)</span>
+<span class="num">7</span> &lt; <span class="num">5</span>     <span class="cm"># False  (less than)</span>
+<span class="num">7</span> &gt;= <span class="num">7</span>    <span class="cm"># True   (greater than or equal to)</span>
+<span class="num">7</span> &lt;= <span class="num">6</span>    <span class="cm"># False  (less than or equal to)</span></div>
+        <div class="trap">
+          <span class="trap-label">⚠️ Never confuse == and =</span>
+          <kbd>=</kbd> is assignment: <kbd>x = 5</kbd> stores 5 in x.<br>
+          <kbd>==</kbd> is comparison: <kbd>x == 5</kbd> asks "is x equal to 5?" — result is True or False.<br>
+          Writing <kbd>if x = 5:</kbd> causes an immediate SyntaxError. This is one of the most classic beginner bugs.
+        </div>
+        <p><strong>The float comparison trap:</strong></p>
+        <div class="code-block">
+x = <span class="num">1.1</span> + <span class="num">2.2</span>
+<span class="fn">print</span>(x == <span class="num">3.3</span>)    <span class="cm"># False!! Floating point has precision errors</span>
+
+<span class="cm"># Correct approach: check if they're "close enough"</span>
+epsilon = <span class="num">0.0001</span>
+<span class="fn">print</span>(<span class="fn">abs</span>(x - <span class="num">3.3</span>) &lt; epsilon)   <span class="cm"># True ← this is the right way to compare floats</span></div>
+      </div>
+
+      <div class="topic" id="anchor-bool-ops">
+        <div class="topic-title">
+          Boolean Operators: not, and, or
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+          <span class="tag tag-memory">📝 Know the truth tables</span>
+        </div>
+        <div class="code-block">
+<span class="cm"># not (negation): flips True ↔ False</span>
+<span class="kw">not</span> <span class="kw">True</span>    <span class="cm"># False</span>
+<span class="kw">not</span> <span class="kw">False</span>   <span class="cm"># True</span>
+
+<span class="cm"># and: True only if BOTH sides are True</span>
+<span class="kw">True</span> <span class="kw">and</span> <span class="kw">True</span>    <span class="cm"># True</span>
+<span class="kw">True</span> <span class="kw">and</span> <span class="kw">False</span>   <span class="cm"># False</span>
+
+<span class="cm"># or: True if AT LEAST ONE side is True</span>
+<span class="kw">True</span> <span class="kw">or</span> <span class="kw">False</span>    <span class="cm"># True</span>
+<span class="kw">False</span> <span class="kw">or</span> <span class="kw">False</span>   <span class="cm"># False</span>
+
+<span class="cm"># Precedence: not > and > or  (like × > + in math)</span>
+<span class="kw">not</span> <span class="kw">True</span> <span class="kw">or</span> <span class="kw">False</span>   <span class="cm"># = (not True) or False = False or False = False</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          <kbd>and</kbd>: You need both a student card AND your homework to enter the lab — both conditions must be met.<br>
+          <kbd>or</kbd>: You can pay with cash OR with your phone for bubble tea — one is enough.<br>
+          <kbd>not</kbd>: Flips True/False, like "is NOT a student."
+        </div>
+        <div class="trap">
+          <span class="trap-label">⚠️ Short-circuit evaluation</span>
+          <kbd>True or (3 + "error")</kbd> evaluates to <kbd>True</kbd> — because the left side is already True, Python never evaluates the right side (which would crash). Same with <kbd>and</kbd>: <kbd>False and anything</kbd> short-circuits to False immediately.
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-ifelse">
+        <div class="topic-title">
+          if / elif / else Conditional Statements
+          <span class="tag tag-key">⭐ Must know</span>
+          <span class="tag tag-logic">🧠 Understand the flow</span>
+        </div>
+        <div class="code-block">
+<span class="cm"># Basic structure</span>
+<span class="kw">if</span> condition1:
+    <span class="fn">print</span>(<span class="str">"condition 1 is True"</span>)
+<span class="kw">elif</span> condition2:
+    <span class="fn">print</span>(<span class="str">"condition 2 is True"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"all conditions are False"</span>)    <span class="cm"># else is optional</span>
+
+<span class="cm"># Nested conditionals</span>
+<span class="kw">if</span> x == y:
+    <span class="fn">print</span>(<span class="str">'x and y are equal'</span>)
+<span class="kw">else</span>:
+    <span class="kw">if</span> x &lt; y:
+        <span class="fn">print</span>(<span class="str">'x is less than y'</span>)
+    <span class="kw">else</span>:
+        <span class="fn">print</span>(<span class="str">'x is greater than y'</span>)</div>
+        <p><strong>Key rules:</strong></p>
+        <ul>
+          <li>Once one block executes, all remaining <kbd>elif</kbd> and <kbd>else</kbd> blocks are skipped</li>
+          <li>You can have as many <kbd>elif</kbd>s as you want</li>
+          <li>The final <kbd>else</kbd> is optional</li>
+          <li><strong>Indentation is critical</strong> — Python uses it to determine which code belongs to which block</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 5 ==================== -->
+  <div class="lesson" id="l5">
+    <div class="lesson-header" onclick="toggleLesson('l5')">
+      <span class="lesson-num">LESSON 5 · Week 4</span>
+      <span class="lesson-title">Functions: def, Parameters, Scope, Void/Fruitful, Docstring, Common Mistakes</span>
+      <span class="lesson-meta">6 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">⚙️</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>Functions are the most important abstraction tool in programming. They let you wrap a reusable block of code, give it a name, and call it whenever needed — no copy-pasting. The concepts covered here — scope, return vs print, and docstrings — are among the highest-frequency exam and assignment topics in COMP202. Make sure you understand them thoroughly.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-def">
+        <div class="topic-title">
+          Defining (def) and Calling a Function
+          <span class="tag tag-key">⭐ Must know</span>
+          <span class="tag tag-memory">📝 Know the syntax</span>
+        </div>
+        <div class="code-block">
+<span class="cm"># Defining a function (defining ≠ running!)</span>
+<span class="kw">def</span> <span class="fn">greet</span>(name):
+    <span class="fn">print</span>(<span class="str">"Hello, "</span> + name)
+    <span class="fn">print</span>(<span class="str">"Welcome to McGill!"</span>)
+
+<span class="cm"># Calling a function (must be AFTER the definition)</span>
+<span class="fn">greet</span>(<span class="str">"Alice"</span>)
+<span class="fn">greet</span>(<span class="str">"Bob"</span>)
+
+<span class="cm"># Returning multiple values (actually returns a tuple)</span>
+<span class="kw">def</span> <span class="fn">calculator</span>(a, b):
+    add = a + b
+    subtract = <span class="fn">abs</span>(a - b)
+    multiply = a * b
+    divide = a / b
+    <span class="kw">return</span> add, subtract, multiply, divide
+
+result = <span class="fn">calculator</span>(<span class="num">10</span>, <span class="num">5</span>)
+<span class="fn">print</span>(result)   <span class="cm"># (15, 5, 50, 2.0)</span></div>
+        <div class="trap">
+          <span class="trap-label">⚠️ Defining a function does NOT run it!</span>
+          Writing <kbd>def greet():</kbd> just tells Python "I'm defining this function." The body does <strong>not execute immediately</strong>. You must call <kbd>greet()</kbd> to actually run it. This is one of the most common beginner misconceptions.
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-scope">
+        <div class="topic-title">
+          Scope: Local vs Global Variables
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#e98585">
+            <strong>Local Variable</strong>
+            <span>Defined inside a function (including parameters). Only exists inside that function — gone when the function ends.</span>
+          </div>
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>Global Variable</strong>
+            <span>Defined outside all functions. Functions can read it, but cannot modify it without the <kbd>global</kbd> keyword.</span>
+          </div>
+        </div>
+        <div class="code-block">
+<span class="kw">def</span> <span class="fn">my_function</span>():
+    x = <span class="num">5</span>               <span class="cm"># x is local — only exists inside this function</span>
+    <span class="fn">print</span>(<span class="str">"inside:"</span>, x)
+
+X = <span class="num">10</span>               <span class="cm"># X is global</span>
+<span class="fn">my_function</span>()        <span class="cm"># inside: 5</span>
+<span class="fn">print</span>(<span class="str">"outside:"</span>, X)  <span class="cm"># outside: 10  ← x and X are two completely separate variables</span>
+
+<span class="cm"># ❌ This crashes: trying to modify a global variable inside a function</span>
+count = <span class="num">5</span>
+<span class="kw">def</span> <span class="fn">bad_function</span>():
+    count += <span class="num">7</span>    <span class="cm"># UnboundLocalError! Python sees it as an unassigned local variable</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          A function is like a private workshop. The tools inside (local variables) only exist in there and disappear when you leave. The shared tools in the hallway (global variables) can be seen and used inside the workshop, but you can't throw them away or replace them without special permission (the <kbd>global</kbd> keyword).
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-void-fruitful">
+        <div class="topic-title">
+          Void vs Fruitful Functions: print vs return
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+          <span class="tag tag-key">⭐ Very high-frequency exam topic</span>
+        </div>
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#e98585">
+            <strong>Void Function</strong>
+            <span>No <kbd>return</kbd> statement (or just <kbd>return</kbd> with no value). Actually returns <kbd>None</kbd>.<br>Uses <kbd>print()</kbd> to display output.</span>
+          </div>
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>Fruitful Function</strong>
+            <span>Has a <kbd>return value</kbd> statement. The caller can store and use the returned value.<br>Uses <kbd>return</kbd>, not print.</span>
+          </div>
+        </div>
+        <div class="code-block">
+<span class="cm"># ❌ Common mistake: print is NOT the same as return</span>
+<span class="kw">def</span> <span class="fn">bad_add</span>(a, b):
+    <span class="fn">print</span>(a + b)      <span class="cm"># only displays — returns nothing</span>
+
+result = <span class="fn">bad_add</span>(<span class="num">3</span>, <span class="num">4</span>)
+<span class="fn">print</span>(result)        <span class="cm"># None ← nothing was returned!</span>
+
+<span class="cm"># ✅ Correct: use return</span>
+<span class="kw">def</span> <span class="fn">good_add</span>(a, b):
+    <span class="kw">return</span> a + b
+
+result = <span class="fn">good_add</span>(<span class="num">3</span>, <span class="num">4</span>)
+<span class="fn">print</span>(result)        <span class="cm"># 7 ← correct</span>
+
+<span class="cm"># return immediately exits the function — code after it won't run</span>
+<span class="kw">def</span> <span class="fn">early_exit</span>(x):
+    <span class="kw">if</span> x &lt; <span class="num">0</span>:
+        <span class="kw">return</span> <span class="num">0</span>     <span class="cm"># exits here; the next line never runs</span>
+    <span class="kw">return</span> x * <span class="num">2</span></div>
+        <div class="trap">
+          <span class="trap-label">⚠️ Always catch the return value!</span>
+          Calling <kbd>test()</kbd> without assigning the result means the return value vanishes immediately. Write <kbd>value = test()</kbd> to hold onto it.
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-docstring">
+        <div class="topic-title">
+          Docstring Format
+          <span class="tag tag-memory">📝 Memorise the format</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <p>A docstring is written right after the function header, wrapped in triple quotes. It's a COMP202 assignment standard — wrong format costs marks!</p>
+        <div class="code-block">
+<span class="kw">def</span> <span class="fn">area_circle</span>(radius):
+    <span class="str">"""
+    (num) -> num
+    Returns the area of a circle with a given radius.
+
+    &gt;&gt;&gt; area_circle(20)
+    1256.64
+    &gt;&gt;&gt; area_circle(0)
+    0
+    """</span>
+    <span class="kw">import</span> math
+    <span class="kw">return</span> math.pi * <span class="fn">pow</span>(radius, <span class="num">2.0</span>)</div>
+        <p>Three components of a docstring:</p>
+        <ul>
+          <li><strong>Type contract</strong>: first line, format <kbd>(input types) -> return type</kbd></li>
+          <li><strong>Description</strong>: what the function does</li>
+          <li><strong>Examples</strong>: lines starting with <kbd>&gt;&gt;&gt;</kbd> showing inputs and expected outputs (these become doctests in L13!)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 6 ==================== -->
+  <div class="lesson" id="l6">
+    <div class="lesson-header" onclick="toggleLesson('l6')">
+      <span class="lesson-num">LESSON 6 · Week 5</span>
+      <span class="lesson-title">While Loop: Syntax, Update Condition, Infinite Loops, Shorthand Assignment</span>
+      <span class="lesson-meta">4 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">🔄</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>A while loop makes your program repeat something. Unlike a for loop (L7, used to traverse a known sequence), a while loop is for "I don't know how many times, but I know when to stop" — e.g., keep asking the user to input until they give a valid answer. Paired with try/except from L19, this is the classic pattern for handling user input errors.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-while">
+        <div class="topic-title">
+          While Loop Syntax + Execution Flow
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <div class="code-block">
+<span class="cm"># Basic syntax</span>
+<span class="kw">while</span> condition:    <span class="cm"># condition is checked before every iteration</span>
+    <span class="cm"># ⚠️ something inside MUST eventually make condition False!</span>
+
+<span class="cm"># Full example: countdown</span>
+n = <span class="num">3</span>
+<span class="kw">while</span> n &gt; <span class="num">0</span>:
+    <span class="fn">print</span>(<span class="str">'Value of n is:'</span>, n)
+    n = n - <span class="num">1</span>     <span class="cm"># ← critical: update n so the condition eventually becomes False</span>
+<span class="cm"># Output: 3, 2, 1  (when n=0, 0>0 is False — loop stops)</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          A while loop is like a washing machine cycle: "keep washing as long as the clothes aren't clean." After each wash it checks — still dirty? wash again. Clean? Stop. The key is: the washing process must be making the clothes progressively cleaner, otherwise it will wash forever (infinite loop).
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-infinite">
+        <div class="topic-title">
+          Infinite Loop — 3 Common Causes
+          <span class="tag tag-logic">🧠 Know why it happens</span>
+          <span class="tag tag-key">⭐ Must avoid</span>
+        </div>
+        <div class="code-block">
+<span class="cm"># ❌ Cause 1: condition is never updated</span>
+n = <span class="num">3</span>
+<span class="kw">while</span> n &gt; <span class="num">0</span>:
+    <span class="fn">print</span>(<span class="str">'hello'</span>)    <span class="cm"># n stays 3 forever</span>
+
+<span class="cm"># ❌ Cause 2: updated in the wrong direction</span>
+n = <span class="num">6</span>
+<span class="kw">while</span> n &gt; <span class="num">5</span>:
+    n = n + <span class="num">1</span>     <span class="cm"># n keeps growing — always > 5</span>
+
+<span class="cm"># ❌ Cause 3: condition reset to a constant every iteration</span>
+n = <span class="num">6</span>
+<span class="kw">while</span> n &gt; <span class="num">5</span>:
+    n = <span class="num">7</span>         <span class="cm"># n is always reset to 7 — always > 5</span></div>
+        <p>If you get stuck in an infinite loop in Thonny, press <kbd>Ctrl + C</kbd> to force-stop the program.</p>
+      </div>
+
+      <div class="topic" id="anchor-shorthand">
+        <div class="topic-title">
+          Shorthand Assignment Operators
+          <span class="tag tag-memory">📝 Know the shorthands</span>
+        </div>
+        <div class="code-block">
+x += <span class="num">3</span>    <span class="cm"># same as x = x + 3</span>
+x -= <span class="num">3</span>    <span class="cm"># same as x = x - 3</span>
+x *= <span class="num">3</span>    <span class="cm"># same as x = x * 3</span>
+x /= <span class="num">3</span>    <span class="cm"># same as x = x / 3</span>
+x **= <span class="num">2</span>   <span class="cm"># same as x = x ** 2</span>
+x %= <span class="num">3</span>    <span class="cm"># same as x = x % 3</span>
+x //= <span class="num">3</span>   <span class="cm"># same as x = x // 3</span>
+
+<span class="cm"># Used in while loops to update a counter concisely</span>
+count = <span class="num">0</span>
+<span class="kw">while</span> count &lt; <span class="num">5</span>:
+    <span class="fn">print</span>(count)
+    count += <span class="num">1</span>    <span class="cm"># cleaner than count = count + 1</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 7 ==================== -->
+  <div class="lesson open" id="l7">
+    <div class="lesson-header" onclick="toggleLesson('l7')">
+      <span class="lesson-num">LESSON 7 · Week 5</span>
+      <span class="lesson-title">Recursion, For Loop, Variable Scope, Break/Continue</span>
+      <span class="lesson-meta">4 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">🏗️</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>The core of this lesson is "making your program repeat work efficiently." For loops let you process data in bulk; recursion gives you an alternative problem-solving style; and understanding variable scope tells you exactly when a variable "exists" and when it "disappears." These three things are the foundation of writing genuinely useful programs.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-recursion">
+        <div class="topic-title">
+          <span class="term" data-def="Recursion: a function that calls itself to solve a problem by breaking it into smaller versions of the same problem">Recursion</span>
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <p>Recursion is a function calling itself. Every recursive function needs exactly two things — miss either one and it breaks:</p>
+        <ul>
+          <li><strong>Base case</strong>: tells the program when to stop — without this, you get infinite recursion and a crash</li>
+          <li><strong>Recursive step</strong>: calls itself, but must get one step closer to the base case each time</li>
+        </ul>
+        <div class="code-block">
+<span class="kw">def</span> <span class="fn">countdown</span>(n):
+    <span class="kw">if</span> n &lt;= <span class="num">0</span>:                  <span class="cm"># ← Base case: stop here!</span>
+        <span class="fn">print</span>(<span class="str">'Blastoff!'</span>)
+    <span class="kw">else</span>:
+        <span class="fn">print</span>(n)
+        <span class="fn">countdown</span>(n - <span class="num">1</span>)      <span class="cm"># ← Recursive step: n decreases each time</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          Imagine counting a stack of plates. You pick up the top plate, count "1," and ask the person next to you to count the rest — and they do the same thing. Eventually the last person finds no plates left (base case), reports "0," and the answer bubbles back up through everyone. That's how recursion works.
+        </div>
+        <p><strong>Recursion vs loop — when to use which?</strong></p>
+        <ul>
+          <li>Many iterations, care about memory and speed → use a loop (while or for)</li>
+          <li>Not performance-critical, want cleaner code for naturally recursive problems → use recursion</li>
+        </ul>
+      </div>
+
+      <div class="topic" id="anchor-forloop">
+        <div class="topic-title">
+          For Loop + range()
+          <span class="tag tag-memory">📝 Memorise</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <div class="code-block">
+<span class="kw">for</span> variable <span class="kw">in</span> sequence:    <span class="cm"># sequence = something iterable (list, range, string…)</span>
+    instructions               <span class="cm"># runs once per element, must be indented</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          Like a teacher taking attendance: they go through the list (sequence), call each name (variable gets assigned that student's name), the student answers (loop body runs), then on to the next.
+        </div>
+        <p style="margin-top:0.75rem"><strong>Three ways to use range() — must memorise!</strong></p>
+        <table class="compare-table">
+          <tr><th>Syntax</th><th>Numbers generated</th><th>How to remember</th></tr>
+          <tr><td><kbd>range(5)</kbd></td><td>0, 1, 2, 3, 4</td><td>From 0 up to (not including) end</td></tr>
+          <tr><td><kbd>range(3, 7)</kbd></td><td>3, 4, 5, 6</td><td>From start up to (not including) end</td></tr>
+          <tr><td><kbd>range(10, 2, -2)</kbd></td><td>10, 8, 6, 4</td><td>Step can be negative — counts down</td></tr>
+        </table>
+        <div class="trap">
+          <span class="trap-label">⚠️ Extremely common mistake</span>
+          range() <strong>never includes the right endpoint</strong>. This is called a <span class="term" data-def="Half-open interval: includes the left endpoint, excludes the right — written as [start, end)">half-open interval</span>, written [start, end). Many people forget this and end up one number short.
+        </div>
+        <p style="margin-top:0.75rem"><strong>For loop or while loop?</strong></p>
+        <ul>
+          <li><strong>For</strong>: you know how many times to iterate, or you want to process each element in a sequence</li>
+          <li><strong>While</strong>: you don't know how many times, just a stopping condition (e.g. keep re-prompting until valid input)</li>
+        </ul>
+      </div>
+
+      <div class="topic" id="anchor-scope">
+        <div class="topic-title">
+          <span class="term" data-def="Variable Scope: the region of code where a variable is accessible">Variable Scope</span>
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+        </div>
+        <p>In Python, the smallest "local" scope is a <strong>function body</strong> — not an if/for/while block! This means variables defined inside an if or for block are accessible outside it (as long as that branch actually ran).</p>
+        <div class="code-block">
+x = <span class="num">5</span>
+<span class="kw">if</span> x &gt; <span class="num">0</span>:
+    y = x
+<span class="fn">print</span>(y)    <span class="cm"># ✅ Fine! The if branch ran, so y exists → prints 5</span>
+
+x = <span class="num">5</span>
+<span class="kw">if</span> x &gt; <span class="num">0</span>:
+    y = x
+<span class="kw">else</span>:
+    z = -x    <span class="cm"># x=5 > 0, so the else never ran</span>
+<span class="fn">print</span>(z)    <span class="cm"># ❌ NameError! z was never created</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          A variable only exists if the code that creates it actually ran. If that if/else branch was never executed, the variable was never "placed" in memory — trying to access it is like reaching into an empty box.
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-breakcontinue">
+        <div class="topic-title">
+          break and continue
+          <span class="tag tag-memory">📝 Know the difference</span>
+        </div>
+        <table class="compare-table">
+          <tr><th>Keyword</th><th>Effect</th><th>Analogy</th></tr>
+          <tr><td><kbd>break</kbd></td><td>Immediately exits the entire loop — all remaining iterations cancelled</td><td>Skipping class entirely — you walk out the door</td></tr>
+          <tr><td><kbd>continue</kbd></td><td>Skips the rest of this iteration — jumps straight to the next one</td><td>Sleeping through one class — you're still in your seat, but you miss this one and wait for the next</td></tr>
+        </table>
+        <div class="code-block">
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>):
+    <span class="kw">if</span> i == <span class="num">5</span>:
+        <span class="kw">break</span>
+    <span class="fn">print</span>(i, end=<span class="str">" "</span>)
+<span class="cm"># Output: 1 2 3 4  ← hit 5, exits immediately, rest gone</span>
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>):
+    <span class="kw">if</span> i == <span class="num">5</span>:
+        <span class="kw">continue</span>
+    <span class="fn">print</span>(i, end=<span class="str">" "</span>)
+<span class="cm"># Output: 1 2 3 4 6 7 8 9 10  ← skipped 5, everything else printed</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 8 ==================== -->
+  <div class="lesson" id="l8">
+    <div class="lesson-header" onclick="toggleLesson('l8')">
+      <span class="lesson-num">LESSON 8 · Week 6</span>
+      <span class="lesson-title">Random, Modules, Strings Basics</span>
+      <span class="lesson-meta">4 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">🔧</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>This lesson opens the door to "using tools that others have already written" (modules), and introduces one of the most common data types — strings. Strings appear in virtually every program, so understanding their underlying rules (immutability, indexing, etc.) is essential for everything that follows.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-modules">
+        <div class="topic-title">
+          <span class="term" data-def="Module: a .py file containing reusable code that you can import into your program">Modules</span> — 4 Import Styles
+          <span class="tag tag-memory">📝 Know the syntax</span>
+        </div>
+        <table class="compare-table">
+          <tr><th>Syntax</th><th>How to call</th><th>Best used when</th></tr>
+          <tr><td><kbd>import math</kbd></td><td><kbd>math.sqrt(16)</kbd></td><td>Safest — no naming conflicts</td></tr>
+          <tr><td><kbd>from math import sqrt</kbd></td><td><kbd>sqrt(16)</kbd></td><td>Only need a few functions — cleaner syntax</td></tr>
+          <tr><td><kbd>from math import *</kbd></td><td><kbd>sqrt(16)</kbd></td><td>Use carefully! May clash with your own names</td></tr>
+          <tr><td><kbd>import math as m</kbd></td><td><kbd>m.sqrt(16)</kbd></td><td>Long module name — use an alias</td></tr>
+        </table>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          <kbd>import math</kbd> = borrowing a whole textbook — you must look up every function in the index (math.xxx). <kbd>from math import sqrt</kbd> = photocopying just that one page and putting it in your notes. <kbd>from math import *</kbd> = copying the whole book into your notes — risky if you already have something called "sqrt" in there.
+        </div>
+        <p style="margin-top:0.75rem"><strong>__name__ and __main__</strong> <span class="tag tag-logic" style="vertical-align:middle">🧠 Understand the logic</span></p>
+        <p>When a .py file is <strong>run directly</strong>, Python sets <kbd>__name__</kbd> to <kbd>"__main__"</kbd>. When it's imported by another file, <kbd>__name__</kbd> becomes the filename instead. Use <kbd>if __name__ == "__main__":</kbd> at the bottom of a module so certain code only runs when the file is executed directly, not when it's imported.</p>
+      </div>
+
+      <div class="topic" id="anchor-random">
+        <div class="topic-title">
+          Random Module
+          <span class="tag tag-memory">📝 Know the API names</span>
+        </div>
+        <div class="code-block">
+<span class="kw">import</span> random
+
+random.<span class="fn">random</span>()              <span class="cm"># random float in [0.0, 1.0) — excludes 1.0</span>
+random.<span class="fn">randint</span>(<span class="num">2</span>, <span class="num">5</span>)        <span class="cm"># random int from 2 to 5 INCLUSIVE on both ends!</span>
+random.<span class="fn">seed</span>(<span class="num">123</span>)             <span class="cm"># fix the seed to make results reproducible</span></div>
+        <div class="trap">
+          <span class="trap-label">⚠️ Easy to confuse</span>
+          <kbd>randint(2, 5)</kbd> is <strong>inclusive on both ends</strong> — 2 and 5 can both appear. But <kbd>range(2, 5)</kbd> excludes 5. Same-looking format, different rules — don't mix them up!
+        </div>
+        <p><span class="term" data-def="Seed: the starting value for a random number generator — the same seed always produces the same sequence, useful for reproducing results">random.seed()</span>: with the same seed, every run produces the same "random" sequence. Extremely useful for testing, since you can reproduce your results.</p>
+      </div>
+
+      <div class="topic" id="anchor-strings">
+        <div class="topic-title">
+          Strings — Indexing, Slicing, Methods
+          <span class="tag tag-memory">📝 Memorise</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <p><strong>Indexing</strong>: first character is [0], last is [-1]</p>
+        <div class="code-block">
+fruit = <span class="str">'banana'</span>
+fruit[<span class="num">0</span>]     <span class="cm"># 'b'</span>
+fruit[-<span class="num">1</span>]    <span class="cm"># 'a'  (negative index counts from the end)</span>
+fruit[<span class="num">1000</span>]  <span class="cm"># ❌ IndexError (out of range)</span></div>
+        <p style="margin-top:0.75rem"><strong>Slicing: s[start : end : step]</strong> — incredibly useful</p>
+        <div class="code-block">
+s = <span class="str">'Hello world'</span>
+s[<span class="num">0</span>:<span class="num">5</span>]       <span class="cm"># 'Hello'  (index 0 to 4, excludes 5)</span>
+s[<span class="num">6</span>:]        <span class="cm"># 'world'  (from 6 to end)</span>
+s[<span class="num">0</span>:<span class="num">5</span>:<span class="num">2</span>]     <span class="cm"># 'Hlo'    (step=2, take every other character)</span>
+s[::<span class="num">-1</span>]      <span class="cm"># 'dlrow olleH'  (reverse the string — classic trick!)</span></div>
+        <p style="margin-top:0.75rem"><strong>Common string methods:</strong></p>
+        <div class="concept-grid">
+          <div class="concept-card"><strong>s.lower() / s.upper()</strong><span>Convert to all lowercase / all uppercase — returns a new string</span></div>
+          <div class="concept-card"><strong>s.replace(old, new)</strong><span>Replace all occurrences of old with new</span></div>
+          <div class="concept-card"><strong>s.count(c)</strong><span>Count how many times c appears</span></div>
+          <div class="concept-card"><strong>s.find(c)</strong><span>Find the first index of c; returns -1 if not found</span></div>
+        </div>
+        <div class="trap">
+          <span class="trap-label">⚠️ Most important string property: strings are immutable!</span>
+          Strings are <span class="term" data-def="Immutable: cannot be changed after creation — all string methods return a NEW string, the original is untouched">immutable</span>. Every method returns a <strong>brand new string</strong> — the original is never modified. You can't do <kbd>s[0] = 'X'</kbd> — that throws a <span class="term" data-def="TypeError: an operation applied to an object of inappropriate type">TypeError</span>.
+        </div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          Strings are like words carved into stone. You can't chisel out one letter and replace it — you have to carve a brand new stone (create a new string).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 9 ==================== -->
+  <div class="lesson" id="l9">
+    <div class="lesson-header" onclick="toggleLesson('l9')">
+      <span class="lesson-num">LESSON 9 · Week 7</span>
+      <span class="lesson-title">Three Ways to Traverse a String</span>
+      <span class="lesson-meta">3 core patterns</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">🔍</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>Processing strings character-by-character is one of the most fundamental operations in programming. These three traversal patterns are templates you'll reuse constantly — in assignments, interview problems, and real projects. Each suits a different scenario; knowing when to pick which is the skill.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-traverse">
+        <div class="topic-title">
+          The 3 Traversal Patterns
+          <span class="tag tag-memory">📝 Know all three patterns</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <div class="code-block">
+s = <span class="str">"banana"</span>
+
+<span class="cm"># Pattern 1: for-in loop (simplest — just need the character)</span>
+<span class="kw">for</span> char <span class="kw">in</span> s:
+    <span class="fn">print</span>(char)    <span class="cm"># b, a, n, a, n, a</span>
+
+<span class="cm"># Pattern 2: for loop with range (need the index too)</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(s)):
+    <span class="fn">print</span>(i, s[i])  <span class="cm"># 0 b, 1 a, 2 n, ...</span>
+
+<span class="cm"># Pattern 3: while loop (most flexible — can skip ahead or go backwards)</span>
+i = <span class="num">0</span>
+<span class="kw">while</span> i &lt; <span class="fn">len</span>(s):
+    <span class="fn">print</span>(s[i])
+    i += <span class="num">1</span></div>
+        <table class="compare-table">
+          <tr><th>Pattern</th><th>Best for</th><th>Can get index?</th></tr>
+          <tr><td>for char in s</td><td>Just need each character</td><td>❌ No (use enumerate if needed)</td></tr>
+          <tr><td>for i in range(len(s))</td><td>Need both index and character</td><td>✅ Yes</td></tr>
+          <tr><td>while i &lt; len(s)</td><td>Need flexible control (skip, jump)</td><td>✅ Yes</td></tr>
+        </table>
+      </div>
+
+      <div class="topic" id="anchor-patterns">
+        <div class="topic-title">
+          Three Classic Loop Patterns
+          <span class="tag tag-logic">🧠 Understand when to use each</span>
+        </div>
+        <div class="code-block">
+<span class="cm"># Reducing (reduce many values to one)</span>
+total = <span class="num">0</span>
+<span class="kw">for</span> char <span class="kw">in</span> <span class="str">"hello"</span>:
+    total += <span class="num">1</span>
+<span class="fn">print</span>(total)   <span class="cm"># 5  (count characters)</span>
+
+<span class="cm"># Mapping (transform each element — same count, different values)</span>
+result = <span class="str">""</span>
+<span class="kw">for</span> char <span class="kw">in</span> <span class="str">"hello"</span>:
+    result += char.<span class="fn">upper</span>()
+<span class="fn">print</span>(result)   <span class="cm"># "HELLO"</span>
+
+<span class="cm"># Filtering (keep only elements matching a condition)</span>
+vowels = <span class="str">""</span>
+<span class="kw">for</span> char <span class="kw">in</span> <span class="str">"hello"</span>:
+    <span class="kw">if</span> char <span class="kw">in</span> <span class="str">"aeiou"</span>:
+        vowels += char
+<span class="fn">print</span>(vowels)   <span class="cm"># "eo"</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          Reducing = juicing a bag of apples into one glass (many → one). Mapping = peeling each apple (same count, each one transformed). Filtering = picking out only the good apples and discarding the bad ones (fewer remain).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 10 ==================== -->
+  <div class="lesson" id="l10">
+    <div class="lesson-header" onclick="toggleLesson('l10')">
+      <span class="lesson-num">LESSON 10 · Week 7</span>
+      <span class="lesson-title">List: Creation, Access, Operations, Built-in Functions</span>
+      <span class="lesson-meta">5 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">📋</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>Lists are arguably the most used data structure in Python. Wherever you need to store a collection of things and process them one by one, you'll use a list. Every lesson from here on uses lists — they're non-negotiable.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-listbasics">
+        <div class="topic-title">
+          List Basics: Creation and Access
+          <span class="tag tag-key">⭐ Must know</span>
+          <span class="tag tag-memory">📝 Memorise</span>
+        </div>
+        <div class="code-block">
+<span class="cm"># Creating a list</span>
+fruits = [<span class="str">'apple'</span>, <span class="str">'banana'</span>, <span class="str">'cherry'</span>]
+mixed = [<span class="num">1</span>, <span class="str">"hello"</span>, <span class="kw">True</span>, <span class="num">3.14</span>]   <span class="cm"># can hold any types</span>
+empty = []
+
+<span class="cm"># Accessing elements (same indexing as strings)</span>
+fruits[<span class="num">0</span>]     <span class="cm"># 'apple'   (first element)</span>
+fruits[-<span class="num">1</span>]    <span class="cm"># 'cherry'  (last element)</span>
+fruits[<span class="num">1</span>:<span class="num">3</span>]   <span class="cm"># ['banana', 'cherry']  (slicing works too)</span>
+
+<span class="cm"># Lists are MUTABLE — you can change elements</span>
+fruits[<span class="num">0</span>] = <span class="str">'avocado'</span>
+<span class="fn">print</span>(fruits)   <span class="cm"># ['avocado', 'banana', 'cherry']</span></div>
+      </div>
+
+      <div class="topic" id="anchor-listmethods">
+        <div class="topic-title">
+          List Methods Quick Reference
+          <span class="tag tag-memory">📝 Memorise names and effects</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <div class="code-block">
+lst = [<span class="num">3</span>, <span class="num">1</span>, <span class="num">4</span>, <span class="num">1</span>, <span class="num">5</span>]
+
+lst.<span class="fn">append</span>(<span class="num">9</span>)          <span class="cm"># adds 9 to the end → [3,1,4,1,5,9]</span>
+lst.<span class="fn">insert</span>(<span class="num">2</span>, <span class="num">99</span>)       <span class="cm"># inserts 99 at index 2 → [3,1,99,4,1,5,9]</span>
+lst.<span class="fn">remove</span>(<span class="num">1</span>)           <span class="cm"># removes first occurrence of 1</span>
+lst.<span class="fn">pop</span>()               <span class="cm"># removes and returns last element</span>
+lst.<span class="fn">pop</span>(<span class="num">0</span>)              <span class="cm"># removes and returns element at index 0</span>
+lst.<span class="fn">sort</span>()              <span class="cm"># sorts in place (modifies the list!)</span>
+lst.<span class="fn">reverse</span>()          <span class="cm"># reverses in place</span>
+lst.<span class="fn">count</span>(<span class="num">1</span>)           <span class="cm"># how many times 1 appears</span>
+lst.<span class="fn">index</span>(<span class="num">4</span>)           <span class="cm"># index of first occurrence of 4</span>
+
+<span class="cm"># Built-in functions that work on lists</span>
+<span class="fn">len</span>(lst)    <span class="cm"># number of elements</span>
+<span class="fn">min</span>(lst)    <span class="cm"># smallest element</span>
+<span class="fn">max</span>(lst)    <span class="cm"># largest element</span>
+<span class="fn">sum</span>(lst)    <span class="cm"># sum of all elements (numbers only)</span></div>
+        <div class="trap">
+          <span class="trap-label">⚠️ sort() modifies the list in place — it returns None!</span>
+          <kbd>new_list = lst.sort()</kbd> gives you <kbd>None</kbd>. If you want a sorted copy without touching the original, use <kbd>new_list = sorted(lst)</kbd> instead.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 11 ==================== -->
+  <div class="lesson" id="l11">
+    <div class="lesson-header" onclick="toggleLesson('l11')">
+      <span class="lesson-num">LESSON 11 · Week 7</span>
+      <span class="lesson-title">Nested Loops, Nested Lists, String ↔ List Conversion</span>
+      <span class="lesson-meta">4 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">🗂️</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>Real-world data is often 2D: spreadsheets, matrices, image pixels… <span class="term" data-def="Nested list: a list containing other lists — used to represent 2D or multi-dimensional data">Nested lists</span> + nested loops are the core pattern for handling this. split/join are indispensable text-parsing tools used in almost every real-world program.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-nestedloops">
+        <div class="topic-title">
+          Nested Loops
+          <span class="tag tag-logic">🧠 Understand the execution order</span>
+        </div>
+        <div class="code-block">
+<span class="cm"># Multiplication table: outer loop = row, inner loop = column</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">6</span>):          <span class="cm"># outer runs once...</span>
+    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">13</span>):      <span class="cm"># ...inner completes one full cycle!</span>
+        <span class="fn">print</span>(i * j, end=<span class="str">' '</span>)
+    <span class="fn">print</span>()                       <span class="cm"># newline after each row</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          Like searching for a parking spot in a multi-storey car park: the outer loop is "which floor," the inner loop is "check every spot on this floor." For every one step of the outer, the inner runs a full lap.
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-nestedlists">
+        <div class="topic-title">
+          Nested Lists
+          <span class="tag tag-logic">🧠 Understand indexing</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <p>A nested list is a list containing other lists — used to represent 2D data (matrices, tables).</p>
+        <div class="code-block">
+matrix = [[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>],
+          [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>],
+          [<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>]]
+
+matrix[<span class="num">1</span>]       <span class="cm"># [4, 5, 6]  ← second row</span>
+matrix[<span class="num">1</span>][<span class="num">2</span>]    <span class="cm"># 6          ← second row, third column</span>
+<span class="cm"># Rule: matrix[row][column] — row first, then column</span></div>
+      </div>
+
+      <div class="topic" id="anchor-splitjoin">
+        <div class="topic-title">
+          String ↔ List: split() and join()
+          <span class="tag tag-memory">📝 Know the syntax</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <div class="code-block">
+<span class="cm"># String → List: use split()</span>
+<span class="str">"Hello world"</span>.<span class="fn">split</span>()          <span class="cm"># ['Hello', 'world']  (default splits on spaces)</span>
+<span class="str">"a-b-c"</span>.<span class="fn">split</span>(<span class="str">'-'</span>)             <span class="cm"># ['a', 'b', 'c']     (split on '-')</span>
+<span class="fn">list</span>(<span class="str">"Hi"</span>)                       <span class="cm"># ['H', 'i']          (split into individual characters)</span>
+
+<span class="cm"># List → String: use join()</span>
+<span class="str">' '</span>.<span class="fn">join</span>([<span class="str">'Hello'</span>, <span class="str">'world'</span>])   <span class="cm"># 'Hello world'</span>
+<span class="str">','</span>.<span class="fn">join</span>([<span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'c'</span>])      <span class="cm"># 'a,b,c'</span>
+<span class="str">''</span>.<span class="fn">join</span>([<span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'c'</span>])       <span class="cm"># 'abc'  (empty string joins directly)</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          split() is like cutting a beaded necklace at specific points — you choose where to cut (<span class="term" data-def="Delimiter: the character used to separate parts of a string">delimiter</span>) and get individual beads (list). join() is threading beads back together with a piece of string (the separator) between each one.
+        </div>
+        <div class="trap">
+          <span class="trap-label">⚠️ join() syntax is easy to write backwards!</span>
+          It's <kbd>"separator".join(list)</kbd>, NOT <kbd>list.join("separator")</kbd>. Remember: <strong>the separator string calls join, the list is the argument</strong>. Most people write it backwards the first time.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 12 ==================== -->
+  <div class="lesson" id="l12">
+    <div class="lesson-header" onclick="toggleLesson('l12')">
+      <span class="lesson-num">LESSON 12 · Week 8</span>
+      <span class="lesson-title">Object Identity, Aliasing / Shallow / Deep Copy, Mutable vs Immutable</span>
+      <span class="lesson-meta">4 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">🧬</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>This is Python's "under the hood" lesson. Understanding <span class="term" data-def="Reference: a variable stores a memory address, not the value itself — two variables can point to the same object">references</span> and copying prevents a particularly sneaky class of bug: you think you're modifying a "copy," but you're actually changing the original, and your data mysteriously changes elsewhere. This is frequently tested in assignments and interviews.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-identity">
+        <div class="topic-title">
+          <span class="term" data-def="Object Identity: every object has a unique memory address — you can check it with id()">Object Identity</span> — is vs ==
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+        </div>
+        <p>Every Python object has a unique memory address, viewable with <kbd>id()</kbd>.</p>
+        <ul>
+          <li><kbd>==</kbd>: checks whether two variables have the <strong>same value</strong></li>
+          <li><kbd>is</kbd>: checks whether two variables <strong>point to the exact same object in memory</strong> (equivalent to <kbd>id(a) == id(b)</kbd>)</li>
+        </ul>
+        <div class="code-block">
+a = <span class="str">"hello"</span>
+b = <span class="str">"hel"</span>
+b += <span class="str">"lo"</span>
+a == b    <span class="cm"># True  ← same value</span>
+a <span class="kw">is</span> b   <span class="cm"># False ← different objects (different memory addresses)</span>
+
+a = <span class="num">400</span>
+b = a     <span class="cm"># b points to the same object as a</span>
+a <span class="kw">is</span> b   <span class="cm"># True</span>
+b = <span class="num">200</span>  <span class="cm"># b now points to a new object</span>
+a <span class="kw">is</span> b   <span class="cm"># False</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          <kbd>==</kbd> checks if two people have the same name. <kbd>is</kbd> checks if they're literally the same person (same ID card). Two different people can both be named "Alex" (== True) but are still two distinct people (is False).
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-copy">
+        <div class="topic-title">
+          Aliasing, Shallow Copy, and Deep Copy — What's the Difference?
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+          <span class="tag tag-key">⭐ Critical — high exam frequency</span>
+        </div>
+
+        <p>These three are completely different things. The clearest way to understand them is to split by <strong>1D list</strong> vs <strong>2D list (nested list)</strong>.</p>
+
+        <p style="margin-top:1rem"><strong>① Aliasing — this is NOT a copy at all!</strong></p>
+        <p><kbd>list2 = list1</kbd> doesn't create a new list. It just makes <kbd>list2</kbd> point to the same block of memory. Two names, one object.</p>
+        <div class="code-block">
+list1 = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
+list2 = list1           <span class="cm"># ← Aliasing! list2 is NOT a new list — just another name for the same one</span>
+
+list1[<span class="num">0</span>] = <span class="num">99</span>
+<span class="fn">print</span>(list1)   <span class="cm"># [99, 2, 3]</span>
+<span class="fn">print</span>(list2)   <span class="cm"># [99, 2, 3]  ← list2 changed too! They were the same thing all along</span>
+<span class="fn">print</span>(list1 <span class="kw">is</span> list2)   <span class="cm"># True ← confirmed: identical memory address</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          Aliasing is like giving two nicknames to the same person — "Alex" and "Al" refer to the same individual. Tell "Alex" to get a haircut, "Al" will have shorter hair too.
+        </div>
+
+        <p style="margin-top:1.25rem"><strong>② 1D list: <kbd>.copy()</kbd> or <kbd>[:]</kbd> is enough</strong></p>
+        <p>For a flat list whose elements are immutable values (ints, strings…), <kbd>.copy()</kbd> and <kbd>[:]</kbd> create a genuinely independent new list. Modifying one won't affect the other.</p>
+        <div class="code-block">
+list1 = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
+list2 = list1.<span class="fn">copy</span>()    <span class="cm"># method 1: .copy()</span>
+list3 = list1[:]         <span class="cm"># method 2: slicing — exactly the same effect</span>
+
+<span class="fn">print</span>(list1 <span class="kw">is</span> list2)   <span class="cm"># False ← now they are two separate list objects</span>
+
+list1[<span class="num">0</span>] = <span class="num">99</span>
+<span class="fn">print</span>(list1)   <span class="cm"># [99, 2, 3]</span>
+<span class="fn">print</span>(list2)   <span class="cm"># [1, 2, 3]  ← unaffected ✅</span>
+<span class="fn">print</span>(list3)   <span class="cm"># [1, 2, 3]  ← also unaffected ✅</span></div>
+
+        <p style="margin-top:1.25rem"><strong>③ 2D list: .copy() is NOT enough — you must use <kbd>copy.deepcopy()</kbd></strong></p>
+        <p>This is where the most hidden bugs live! When a list contains other lists, <kbd>.copy()</kbd> only duplicates the outer shell — the inner sub-lists are <strong>still shared references</strong>. Modify an inner element and both copies change.</p>
+        <div class="code-block">
+<span class="kw">import</span> copy
+
+original = [[<span class="num">1</span>, <span class="num">2</span>], [<span class="num">3</span>, <span class="num">4</span>]]
+
+<span class="cm"># ⚠️ .copy() on a 2D list = shallow copy — outer is new, inner is still shared</span>
+shallow = original.<span class="fn">copy</span>()
+
+<span class="fn">print</span>(original <span class="kw">is</span> shallow)          <span class="cm"># False ← outer list IS new</span>
+<span class="fn">print</span>(original[<span class="num">0</span>] <span class="kw">is</span> shallow[<span class="num">0</span>])  <span class="cm"># True  ← but [1,2] is the SAME object!</span>
+
+original[<span class="num">0</span>][<span class="num">0</span>] = <span class="num">99</span>    <span class="cm"># modify the inner sub-list</span>
+<span class="fn">print</span>(original)   <span class="cm"># [[99, 2], [3, 4]]</span>
+<span class="fn">print</span>(shallow)    <span class="cm"># [[99, 2], [3, 4]]  ← shallow changed too! 😱</span>
+
+<span class="cm"># ✅ deepcopy() duplicates every level independently</span>
+deep = copy.<span class="fn">deepcopy</span>(original)
+
+<span class="fn">print</span>(original[<span class="num">0</span>] <span class="kw">is</span> deep[<span class="num">0</span>])   <span class="cm"># False ← inner sub-lists are also new objects</span>
+
+original[<span class="num">0</span>][<span class="num">0</span>] = <span class="num">0</span>
+<span class="fn">print</span>(original)   <span class="cm"># [[0, 2], [3, 4]]</span>
+<span class="fn">print</span>(deep)       <span class="cm"># [[99, 2], [3, 4]]  ← deep copy completely unaffected ✅</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY — using apartments</span>
+          <strong>Aliasing</strong>: You give your friend your address. They move into YOUR apartment. Whatever they rearrange, you feel it.<br><br>
+          <strong>Shallow copy (works for 1D, fails for 2D)</strong>: You move into a brand new apartment — but all the furniture inside is rented shared furniture. Your friend rearranges the shared sofa in their place, and yours disappears too.<br><br>
+          <strong>Deep copy</strong>: You get a brand new apartment AND all-new furniture bought fresh. Your friend can redecorate theirs however they like — yours is completely independent.
+        </div>
+
+        <table class="compare-table">
+          <tr><th></th><th>Aliasing <kbd>b = a</kbd></th><th>Shallow Copy <kbd>.copy()</kbd> / <kbd>[:]</kbd></th><th>Deep Copy <kbd>copy.deepcopy()</kbd></th></tr>
+          <tr><td>Creates new list?</td><td>❌ Same object</td><td>✅ New outer list</td><td>✅ Every level is new</td></tr>
+          <tr><td>1D: modify outer element</td><td>Both change</td><td>Independent ✅</td><td>Independent ✅</td></tr>
+          <tr><td>2D: modify inner element</td><td>Both change</td><td>Both change ⚠️</td><td>Independent ✅</td></tr>
+          <tr><td>Requires import?</td><td>❌</td><td>❌</td><td>✅ <kbd>import copy</kbd></td></tr>
+        </table>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ Decision rule — use this flow every time</span>
+          Is your list 1D (elements are numbers, strings)? → <kbd>.copy()</kbd> or <kbd>[:]</kbd> is sufficient.<br>
+          Is your list 2D or deeper (lists inside lists)? → You MUST use <kbd>copy.deepcopy()</kbd> or the inner lists will still be shared.
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-mutable">
+        <div class="topic-title">
+          <span class="term" data-def="Mutable: can be changed after creation — the object's content can be modified in place">Mutable</span> vs <span class="term" data-def="Immutable: cannot be changed after creation — 'modifying' creates a brand new object">Immutable</span>
+          <span class="tag tag-memory">📝 Know the categories</span>
+        </div>
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>✅ Mutable</strong>
+            <span>List, Dictionary<br>Content can be changed in-place; same id</span>
+          </div>
+          <div class="concept-card" style="border-color:#e98585">
+            <strong>❌ Immutable</strong>
+            <span>String, int, float, bool, tuple<br>"Changing" creates a new object; id changes</span>
+          </div>
+        </div>
+        <div class="code-block">
+<span class="cm"># String — immutable, can't modify in place</span>
+t = <span class="str">"hello"</span>
+t[<span class="num">0</span>] = <span class="str">"1"</span>    <span class="cm"># ❌ TypeError</span>
+
+<span class="cm"># List — mutable, no problem</span>
+lst = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
+lst[<span class="num">0</span>] = <span class="num">99</span>   <span class="cm"># ✅ works fine</span></div>
+        <p style="margin-top:0.75rem">Important implication: when you pass a list to a function, the function receives a reference to it. If the function modifies the list, <strong>the original list outside also changes</strong>! This does not happen with int or string.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 13 ==================== -->
+  <div class="lesson" id="l13">
+    <div class="lesson-header" onclick="toggleLesson('l13')">
+      <span class="lesson-num">LESSON 13 · Week 8</span>
+      <span class="lesson-title">Doctest, Debugging, Raising Exceptions</span>
+      <span class="lesson-meta">3 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">🛡️</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>Writing code has two steps: making it run, and making it run correctly. All previous lessons taught the first step. This lesson teaches the second — how to test code, find bugs, and how to "reject" bad input gracefully and tell the caller what went wrong. In large projects, test and error-handling code can be just as voluminous as the feature code itself. This lesson is the beginning of writing professional-grade code.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-doctest">
+        <div class="topic-title">
+          <span class="term" data-def="Doctest: test cases written inside a docstring — Python can run them automatically">Doctest</span>
+          <span class="tag tag-memory">📝 Memorise the format</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <p>Think of doctest as an "automated taste-test" system. When you write a function, you include a few "if I pass this in, this should come out" examples in the docstring. Python will automatically verify them.</p>
+        <p><strong>Two lines to activate doctests:</strong></p>
+        <div class="code-block">
+<span class="kw">import</span> doctest       <span class="cm"># line 1: import the module</span>
+doctest.<span class="fn">testmod</span>()    <span class="cm"># line 2: run all tests (put this at the bottom of your file)</span></div>
+        <p><strong>How to write doctests:</strong> inside the docstring, lines starting with <kbd>&gt;&gt;&gt;</kbd> are test inputs, the next line is the expected output:</p>
+        <div class="code-block">
+<span class="kw">def</span> <span class="fn">add</span>(x, y):
+    <span class="str">"""
+    (num, num) -> num
+    Returns the sum of x and y.
+
+    &gt;&gt;&gt; add(2, 2)
+    4
+    &gt;&gt;&gt; add(-2, 3)
+    1
+    &gt;&gt;&gt; add(1.2, 3.5)
+    4.7
+    """</span>
+    <span class="kw">return</span> x + y
+
+<span class="kw">import</span> doctest
+doctest.<span class="fn">testmod</span>()    <span class="cm"># all pass → nothing printed (silence = good!)</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          <kbd>&gt;&gt;&gt; add(2, 2)</kbd> is you saying "test: put 2 and 2 in, machine should output 4." If your function accidentally uses multiplication instead of addition, <kbd>add(-2, 3)</kbd> exposes the bug — it should be <kbd>1</kbd> but multiplication gives <kbd>-6</kbd>. Good doctests must cover edge cases, not just the "normal" case.
+        </div>
+        <div class="trap">
+          <span class="trap-label">⚠️ Doctest is character-for-character strict</span>
+          If your function returns <kbd>4.699999999999999</kbd> (floating point precision) but your docstring says <kbd>4.7</kbd>, the test fails. Solution: use <kbd>round()</kbd> on the result, or write the expected value in the exact form it will appear.
+        </div>
+        <p><strong>When your function raises an exception, doctest for it like this:</strong></p>
+        <div class="code-block">
+<span class="kw">def</span> <span class="fn">print_multiples</span>(n, times):
+    <span class="str">"""
+    &gt;&gt;&gt; print_multiples('2', 4)
+    Traceback (most recent call last):
+        ...
+    TypeError: the function expects two integers as input
+    """</span>
+    <span class="kw">if</span> <span class="kw">not</span> <span class="fn">isinstance</span>(n, <span class="fn">int</span>) <span class="kw">or</span> <span class="kw">not</span> <span class="fn">isinstance</span>(times, <span class="fn">int</span>):
+        <span class="kw">raise</span> <span class="fn">TypeError</span>(<span class="str">"the function expects two integers as input"</span>)</div>
+        <table class="compare-table">
+          <tr><th>Doctest rule</th><th>Details</th></tr>
+          <tr><td>Test lines start with <kbd>&gt;&gt;&gt;</kbd></td><td>Python uses this to identify test inputs</td></tr>
+          <tr><td>Expected output on the next line (no <kbd>&gt;&gt;&gt;</kbd>)</td><td>If the function returns None, omit the expected output line</td></tr>
+          <tr><td>Exception tests: write Traceback header first</td><td>Middle stack trace can be replaced with <kbd>...</kbd></td></tr>
+          <tr><td>All pass = no output</td><td>Any output means a test failed</td></tr>
+        </table>
+      </div>
+
+      <div class="topic" id="anchor-debugging">
+        <div class="topic-title">
+          <span class="term" data-def="Debugging: the process of finding and fixing errors in a program. The word 'bug' came from a real moth stuck in a computer in 1947!">Debugging</span> — 4 Types of Errors
+          <span class="tag tag-memory">📝 Know the categories</span>
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+        </div>
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#a0c4ff">
+            <strong>① Stylistic Errors</strong>
+            <span>Code runs fine but is hard to read. E.g. messy variable names, inconsistent indentation.<br><em>Not a real error — but may cost marks!</em></span>
+          </div>
+          <div class="concept-card" style="border-color:#e98585">
+            <strong>② Syntax Errors</strong>
+            <span>Invalid code structure — Python refuses to run at all. Detected first.<br><em>Fix these before anything else.</em></span>
+          </div>
+          <div class="concept-card" style="border-color:#f5c842">
+            <strong>③ Runtime Errors</strong>
+            <span>Syntax is fine, but the program crashes during execution. E.g. dividing by zero, wrong type.<br><em>Discovered one step later than syntax errors.</em></span>
+          </div>
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>④ Logic Errors</strong>
+            <span>Program finishes without crashing, but the output is wrong. Python never complains.<br><em>Hardest to find — entirely up to you.</em></span>
+          </div>
+        </div>
+        <div class="code-block">
+<span class="cm"># ❌ Syntax Error — missing colon</span>
+x = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Enter a number: "</span>))
+<span class="kw">if</span> x &gt; <span class="num">100</span>    <span class="cm"># missing ':' → SyntaxError, program won't run at all</span>
+    <span class="fn">print</span>(<span class="str">"You think big!"</span>)
+
+<span class="cm"># ❌ Runtime Error — wrong type</span>
+x = <span class="fn">input</span>(<span class="str">"Enter a number: "</span>)    <span class="cm"># input() returns str!</span>
+<span class="kw">if</span> x &gt; <span class="num">100</span>:    <span class="cm"># TypeError: '>' not supported between str and int</span>
+    <span class="fn">print</span>(<span class="str">"You think big!"</span>)
+
+<span class="cm"># ❌ Logic Error — program runs, but result is wrong</span>
+x = <span class="fn">input</span>(<span class="str">"Enter your favourite number: "</span>)
+<span class="fn">print</span>(<span class="str">"Multiplied by 2:"</span>, x * <span class="num">2</span>)
+<span class="cm"># Input 5 → outputs "55" because "5" * 2 = "55" (string repetition, not math!)</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          <strong>Syntax Error</strong>: You write a letter with grammatical errors so bad the secretary returns it without even sending it in.<br>
+          <strong>Runtime Error</strong>: The letter gets sent, but the system crashes because you put the wrong ID number format.<br>
+          <strong>Logic Error</strong>: Everything processes successfully, but you wrote the wrong destination — you end up in the wrong city and no one told you.
+        </div>
+        <div class="trap">
+          <span class="trap-label">⚠️ Syntax errors block all other error detection</span>
+          If there's a syntax error, Python won't run at all, so runtime and logic errors stay hidden. <strong>Always fix syntax errors first</strong>, then re-run and look for the next type of error.
+        </div>
+        <p><strong>How to fix each type:</strong></p>
+        <ul>
+          <li><strong>Syntax / Runtime</strong>: read the error message carefully — it tells you the line number and what went wrong. Search the course slides or online.</li>
+          <li><strong>Logic (hardest!)</strong>: add <kbd>print()</kbd> statements at suspicious spots to trace how variables change; use the IDE debugger to step through line-by-line; try <strong>rubber ducking</strong> — explain the code out loud to an inanimate object (a rubber duck, a teddy bear, anyone). You'll often spot the bug mid-explanation.</li>
+        </ul>
+      </div>
+
+      <div class="topic" id="anchor-exceptions">
+        <div class="topic-title">
+          Raising Exceptions — Deliberately Signalling Errors
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+          <span class="tag tag-memory">📝 Know the syntax</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <p>An exception is an event that disrupts the normal flow of a program. Python raises some automatically (like <kbd>TypeError</kbd>, <kbd>ZeroDivisionError</kbd>). But as a programmer, you can — and should — raise exceptions yourself to signal that invalid input was received.</p>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          You run a food delivery app. Someone orders "0 servings of fried rice." The system won't crash, but that order makes no sense. As the programmer, you should proactively reject it and say "must order at least 1 serving" — rather than silently processing an empty order. That's what <kbd>raise Exception</kbd> does: <strong>catch bad input early, make bugs easier to find.</strong>
+        </div>
+        <p><strong>Syntax:</strong></p>
+        <div class="code-block">
+<span class="kw">raise</span> SomeExceptionType(<span class="str">"Error message goes here"</span>)
+
+<span class="cm"># Common exception types:</span>
+<span class="kw">raise</span> <span class="fn">TypeError</span>(<span class="str">"message"</span>)     <span class="cm"># wrong type passed in</span>
+<span class="kw">raise</span> <span class="fn">ValueError</span>(<span class="str">"message"</span>)    <span class="cm"># right type, but value is invalid</span></div>
+        <p><strong>Complete example:</strong></p>
+        <div class="code-block">
+<span class="kw">def</span> <span class="fn">divide</span>(a, b):
+    <span class="str">"""
+    (int, int) -> float
+    Divides a by b.
+
+    &gt;&gt;&gt; divide(10, 2)
+    5.0
+    &gt;&gt;&gt; divide(10, 0)
+    Traceback (most recent call last):
+        ...
+    ValueError: The divisor 'b' cannot be zero.
+    &gt;&gt;&gt; divide(10.0, 2)
+    Traceback (most recent call last):
+        ...
+    TypeError: Both arguments must be integers.
+    """</span>
+    <span class="kw">if</span> <span class="kw">not</span> <span class="fn">isinstance</span>(a, <span class="fn">int</span>) <span class="kw">or</span> <span class="kw">not</span> <span class="fn">isinstance</span>(b, <span class="fn">int</span>):
+        <span class="kw">raise</span> <span class="fn">TypeError</span>(<span class="str">"Both arguments must be integers."</span>)
+    <span class="kw">if</span> b == <span class="num">0</span>:
+        <span class="kw">raise</span> <span class="fn">ValueError</span>(<span class="str">"The divisor 'b' cannot be zero."</span>)
+    <span class="kw">return</span> a / b</div>
+        <table class="compare-table">
+          <tr><th>Exception Type</th><th>When to raise</th><th>Example</th></tr>
+          <tr><td><kbd>TypeError</kbd></td><td>Wrong <strong>type</strong> passed in</td><td>Function expects int, got str</td></tr>
+          <tr><td><kbd>ValueError</kbd></td><td>Right type, but <strong>value</strong> is invalid</td><td>Function expects positive number, got -5</td></tr>
+          <tr><td><kbd>ZeroDivisionError</kbd></td><td>Dividing by zero</td><td>Usually Python raises this automatically; you can also raise it early</td></tr>
+        </table>
+        <div class="trap">
+          <span class="trap-label">⚠️ Don't confuse TypeError vs ValueError</span>
+          You ordered a "bubble tea" and got a plate of fried rice — that's <strong>TypeError</strong> (completely wrong type). You ordered a "less sweet" bubble tea and got it extra sweet — that's <strong>ValueError</strong> (right type, wrong value).
+        </div>
+        <p style="margin-top:0.75rem"><strong>raise and doctest relationship:</strong> if your function uses <kbd>raise</kbd>, you <strong>must</strong> add corresponding exception doctest examples — see the format above. This is a common mark-deduction point in COMP202 assignments.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 14 ==================== -->
+  <div class="lesson" id="l14">
+    <div class="lesson-header" onclick="toggleLesson('l14')">
+      <span class="lesson-num">LESSON 14 · Week 10</span>
+      <span class="lesson-title">Dictionary: Creation, Access, Add/Remove, Methods, Iteration</span>
+      <span class="lesson-meta">6 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">📖</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>Lists store things and you find them by position (index). Dictionaries let you attach a "label" (key) to each item, so you retrieve it by name — no need to know its position. Think of it as upgrading from a bookshelf to a library catalogue system. For large datasets, dict lookups are dramatically faster than list searches. Dicts appear constantly in real projects.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-dict-basics">
+        <div class="topic-title">
+          Creating a Dictionary + Key/Value Rules
+          <span class="tag tag-memory">📝 Know the rules</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <p>Each element in a <span class="term" data-def="Dictionary: a key-value mapping structure — look up values instantly using their associated key">dictionary</span> is called an <strong>item</strong>, made up of a <strong>key</strong> and a <strong>value</strong>, separated by <kbd>:</kbd>.</p>
+        <div class="code-block">
+<span class="cm"># Method 1: curly braces {}</span>
+heights = {<span class="str">'Sasha'</span>: <span class="num">182</span>, <span class="str">'Rohan'</span>: <span class="num">168</span>, <span class="str">'Kate'</span>: <span class="num">177</span>}
+
+<span class="cm"># Method 2: dict() function — creates an empty dict</span>
+empty_dict = <span class="fn">dict</span>()
+also_empty = {}    <span class="cm"># both work</span></div>
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>✅ Key rules</strong>
+            <span>Must be <strong>immutable</strong>: str, int, float, bool, tuple.<br>Must be <strong>unique</strong> within a dict (no duplicates).</span>
+          </div>
+          <div class="concept-card" style="border-color:#a0c4ff">
+            <strong>✅ Value rules</strong>
+            <span>Can be <strong>any type</strong>, including list, dict, None.<br>Does not need to be unique.</span>
+          </div>
+        </div>
+        <div class="trap">
+          <span class="trap-label">⚠️ Lists cannot be keys!</span>
+          Because lists are mutable, using one as a dict key raises <kbd>TypeError: unhashable type: 'list'</kbd>. Tuples are fine as keys.
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-dict-ops">
+        <div class="topic-title">
+          Accessing, Adding, Removing
+          <span class="tag tag-memory">📝 Know the syntax</span>
+        </div>
+        <div class="code-block">
+heights = {<span class="str">'Sasha'</span>: <span class="num">182</span>, <span class="str">'Rohan'</span>: <span class="num">168</span>, <span class="str">'Kate'</span>: <span class="num">177</span>}
+
+<span class="cm"># Access a value: dict[key]</span>
+<span class="fn">print</span>(heights[<span class="str">'Rohan'</span>])    <span class="cm"># 168</span>
+
+<span class="cm"># Add / modify: simple assignment</span>
+heights[<span class="str">'Rohan'</span>] = <span class="num">175</span>    <span class="cm"># key exists → overwrites old value</span>
+heights[<span class="str">'Lena'</span>] = <span class="num">165</span>     <span class="cm"># key doesn't exist → adds new item</span>
+
+<span class="cm"># Delete: del dict[key]</span>
+<span class="kw">del</span> heights[<span class="str">'Sasha'</span>]
+<span class="fn">print</span>(heights)    <span class="cm"># {'Rohan': 175, 'Kate': 177, 'Lena': 165}</span></div>
+        <div class="trap">
+          <span class="trap-label">⚠️ KeyError: accessing a non-existent key will crash!</span>
+          <kbd>heights['NotExist']</kbd> raises <kbd>KeyError</kbd>. Safer: use <kbd>dict.get(key)</kbd> — returns <kbd>None</kbd> instead of crashing if the key isn't found.
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-dict-methods">
+        <div class="topic-title">
+          Useful Methods Quick Reference
+          <span class="tag tag-memory">📝 Memorise these</span>
+        </div>
+        <table class="compare-table">
+          <tr><th>Method / Function</th><th>What it does</th><th>Notes</th></tr>
+          <tr><td><kbd>d.get(key)</kbd></td><td>Safe value retrieval — returns None if not found</td><td>Preferred over <kbd>d[key]</kbd> to avoid KeyError</td></tr>
+          <tr><td><kbd>d.pop(key)</kbd></td><td>Removes and returns the value for key</td><td>Raises KeyError if key doesn't exist</td></tr>
+          <tr><td><kbd>d.keys()</kbd></td><td>Returns a view of all keys</td><td>Not a real list — wrap in <kbd>list()</kbd> if needed</td></tr>
+          <tr><td><kbd>d.items()</kbd></td><td>Returns all (key, value) pairs</td><td>Each element is a tuple — great with for loops</td></tr>
+          <tr><td><kbd>d.update(d2)</kbd></td><td>Merges d2 into d</td><td>d2's values overwrite d's on key conflicts</td></tr>
+          <tr><td><kbd>len(d)</kbd></td><td>Number of items</td><td>Regular function, not a method</td></tr>
+          <tr><td><kbd>key in d</kbd></td><td>Check if key exists</td><td>Only checks keys, not values</td></tr>
+        </table>
+      </div>
+
+      <div class="topic" id="anchor-dict-iter">
+        <div class="topic-title">
+          Iterating Through a Dictionary
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+        </div>
+        <div class="code-block">
+scores = {<span class="str">'Alice'</span>: <span class="num">90</span>, <span class="str">'Bob'</span>: <span class="num">85</span>, <span class="str">'Carol'</span>: <span class="num">92</span>}
+
+<span class="cm"># Method 1: direct for loop → iterates over keys</span>
+<span class="kw">for</span> key <span class="kw">in</span> scores:
+    <span class="fn">print</span>(key, scores[key])
+
+<span class="cm"># Method 2: .items() → get key AND value at the same time (more Pythonic!)</span>
+<span class="kw">for</span> name, score <span class="kw">in</span> scores.<span class="fn">items</span>():
+    <span class="fn">print</span>(name, <span class="str">"scored"</span>, score)</div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          Iterating a dict is like flipping through a contact book. Method 1 = reading each name (key) then manually looking up the phone number. Method 2 (using <kbd>.items()</kbd>) = reading each line that already has "name + number" together — much more convenient.
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-dict-count">
+        <div class="topic-title">
+          Classic Pattern: Counting Occurrences with a Dict
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <p>This is the most frequently tested practical dict application in COMP202. The idea: key = "what the thing is," value = "how many times it appeared."</p>
+        <div class="code-block">
+<span class="kw">def</span> <span class="fn">count_occurrences</span>(input_list):
+    <span class="str">"""
+    (list) -> dict
+    Returns a dict counting how many times each element appears.
+
+    &gt;&gt;&gt; count_occurrences(['a', 'b', 'a', 'c', 'b', 'a'])
+    {'a': 3, 'b': 2, 'c': 1}
+    """</span>
+    count = {}
+    <span class="kw">for</span> element <span class="kw">in</span> input_list:
+        <span class="kw">if</span> element <span class="kw">in</span> count:
+            count[element] += <span class="num">1</span>    <span class="cm"># seen before — increment</span>
+        <span class="kw">else</span>:
+            count[element] = <span class="num">1</span>     <span class="cm"># first time — initialise to 1</span>
+    <span class="kw">return</span> count</div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          Like tallying bubble tea flavour preferences on a whiteboard: for each person — if their flavour is already on the board, add a tick next to it; if not, write a new line and start at 1. That's exactly this algorithm.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 15 ==================== -->
+  <div class="lesson" id="l15">
+    <div class="lesson-header" onclick="toggleLesson('l15')">
+      <span class="lesson-num">LESSON 15 · Week 10</span>
+      <span class="lesson-title">File I/O, Pickle, CSV</span>
+      <span class="lesson-meta">3 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">💾</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>Until now, everything your program stores disappears when it exits. File I/O (<span style="color:var(--yellow)">Input/Output</span>) lets your program interact with files on disk — storing data permanently or reading data someone else prepared. This is the key step towards building programs that are genuinely useful in the real world.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-fileio">
+        <div class="topic-title">
+          File Operations: Open → Read/Write → Close
+          <span class="tag tag-memory">📝 Know the workflow</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          Working with files is like borrowing a library book: first <strong>check it out (open)</strong>, then <strong>read or write notes (read/write)</strong>, and finally <strong>return it (close)</strong>. Not returning the book (not closing the file) locks it up for others and may cause data loss.
+        </div>
+        <p><strong>open() mode parameter:</strong></p>
+        <table class="compare-table">
+          <tr><th>mode</th><th>Meaning</th><th>Watch out</th></tr>
+          <tr><td><kbd>'r'</kbd></td><td>Read only</td><td>Raises error if file doesn't exist</td></tr>
+          <tr><td><kbd>'w'</kbd></td><td>Write (overwrite)</td><td>⚠️ If file exists, it's <strong>completely wiped</strong>!</td></tr>
+          <tr><td><kbd>'a'</kbd></td><td>Append</td><td>Adds to the end — original content preserved</td></tr>
+          <tr><td><kbd>'rb'</kbd> / <kbd>'wb'</kbd></td><td>Binary read / write</td><td>Used for Pickle — handles non-text data</td></tr>
+        </table>
+        <p style="margin-top:0.75rem"><strong>Reading a file:</strong></p>
+        <div class="code-block">
+<span class="cm"># Method 1: for loop line-by-line (most common — memory-friendly)</span>
+fobj = <span class="fn">open</span>(<span class="str">'quotes.txt'</span>, <span class="str">'r'</span>)
+<span class="kw">for</span> line <span class="kw">in</span> fobj:
+    <span class="fn">print</span>(line)          <span class="cm"># note: each line ends with '\n'</span>
+fobj.<span class="fn">close</span>()
+
+<span class="cm"># Method 2: read entire file into one string</span>
+fobj = <span class="fn">open</span>(<span class="str">'quotes.txt'</span>, <span class="str">'r'</span>)
+content = fobj.<span class="fn">read</span>()
+fobj.<span class="fn">close</span>()
+
+<span class="cm"># Method 3: read into a list, one line per element</span>
+fobj = <span class="fn">open</span>(<span class="str">'quotes.txt'</span>, <span class="str">'r'</span>)
+lines = fobj.<span class="fn">readlines</span>()    <span class="cm"># → ['line1\n', 'line2\n', ...]</span>
+fobj.<span class="fn">close</span>()</div>
+        <p style="margin-top:0.75rem"><strong>Writing to a file:</strong></p>
+        <div class="code-block">
+<span class="cm"># Overwrite (clears existing content!)</span>
+fobj = <span class="fn">open</span>(<span class="str">'output.txt'</span>, <span class="str">'w'</span>)
+fobj.<span class="fn">write</span>(<span class="str">'Hello, world!\n'</span>)    <span class="cm"># write() does NOT add \n automatically</span>
+fobj.<span class="fn">write</span>(<span class="str">'Second line\n'</span>)
+fobj.<span class="fn">close</span>()
+
+<span class="cm"># Append (preserves existing content)</span>
+fobj = <span class="fn">open</span>(<span class="str">'output.txt'</span>, <span class="str">'a'</span>)
+fobj.<span class="fn">write</span>(<span class="str">'This is appended.\n'</span>)
+fobj.<span class="fn">close</span>()</div>
+        <div class="trap">
+          <span class="trap-label">⚠️ Two most common mistakes</span>
+          1. <strong>Always close() the file!</strong> Without it, data may not actually be written to disk (still in the buffer).<br>
+          2. <strong><kbd>'w'</kbd> mode immediately erases the existing file</strong> — unrecoverable. If you want to keep original content, use <kbd>'a'</kbd>.
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-pickle">
+        <div class="topic-title">
+          <span class="term" data-def="Pickle: Python's serialisation module — saves any Python object (lists, dicts, etc.) directly to a binary file">Pickle Module</span>
+          <span class="tag tag-memory">📝 Know the syntax</span>
+        </div>
+        <p>Regular file I/O only stores strings (text). If you want to save a list or dict directly without converting it to text, use <strong>pickle</strong>!</p>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          Regular file I/O is like photographing an object — others can see the photo, but it might lose detail. Pickle is like vacuum-sealing the original object — perfectly preserved, but only Python can open it; a text editor sees gibberish.
+        </div>
+        <div class="code-block">
+<span class="kw">import</span> pickle
+
+<span class="cm"># Save (dump): write a Python object to file</span>
+data = [<span class="num">1</span>, <span class="num">3</span>, <span class="num">1001</span>, <span class="str">'a'</span>, [<span class="num">7</span>, <span class="num">8</span>]]
+f = <span class="fn">open</span>(<span class="str">'data.pkl'</span>, <span class="str">'wb'</span>)    <span class="cm"># 'wb' = write binary</span>
+pickle.<span class="fn">dump</span>(data, f)
+f.<span class="fn">close</span>()
+
+<span class="cm"># Load: restore a Python object from file</span>
+f = <span class="fn">open</span>(<span class="str">'data.pkl'</span>, <span class="str">'rb'</span>)    <span class="cm"># 'rb' = read binary</span>
+saved_data = pickle.<span class="fn">load</span>(f)
+f.<span class="fn">close</span>()
+<span class="fn">print</span>(saved_data)    <span class="cm"># [1, 3, 1001, 'a', [7, 8]] ← fully restored!</span></div>
+        <table class="compare-table">
+          <tr><th></th><th>Regular File I/O (.txt)</th><th>Pickle (.pkl)</th></tr>
+          <tr><td>Format</td><td>Plain text, human-readable</td><td>Binary, Python-only</td></tr>
+          <tr><td>What you can store</td><td>Strings only</td><td>Any Python object</td></tr>
+          <tr><td>Best for</td><td>Sharing data with others / other programs</td><td>Your program's own internal use</td></tr>
+        </table>
+      </div>
+
+      <div class="topic" id="anchor-csv">
+        <div class="topic-title">
+          <span class="term" data-def="CSV: Comma-Separated Values — a plain text format that spreadsheet software like Excel can open directly">CSV Files</span>
+          <span class="tag tag-memory">📝 Understand the format</span>
+        </div>
+        <p>CSV is a plain text format that stores tabular data using commas as separators. Excel / Numbers can open CSV files directly. From Python's perspective, reading and writing CSV is exactly the same as reading any regular .txt file — the only difference is that the content inside uses commas.</p>
+        <div class="code-block">
+<span class="cm"># CSV file contents look like this:</span>
+<span class="cm"># Movie1,80,100,90,100</span>
+<span class="cm"># Movie2,90,93,100,100</span>
+
+<span class="cm"># Reading CSV in Python — same as any text file</span>
+fobj = <span class="fn">open</span>(<span class="str">'movies.csv'</span>, <span class="str">'r'</span>)
+<span class="kw">for</span> line <span class="kw">in</span> fobj:
+    parts = line.<span class="fn">strip</span>().<span class="fn">split</span>(<span class="str">','</span>)    <span class="cm"># strip() removes \n, split on ','</span>
+    <span class="fn">print</span>(parts)    <span class="cm"># → ['Movie1', '80', '100', '90', '100']</span>
+fobj.<span class="fn">close</span>()</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 16 ==================== -->
+  <div class="lesson" id="l16">
+    <div class="lesson-header" onclick="toggleLesson('l16')">
+      <span class="lesson-num">LESSON 16 · Week 11</span>
+      <span class="lesson-title">Tuple, Packing/Unpacking, Enumerate</span>
+      <span class="lesson-meta">4 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">📦</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>A <span class="term" data-def="Tuple: an immutable ordered collection — defined with () instead of []">tuple</span> is the "read-only version" of a list — same structure, but it can't be changed after creation. That's not a limitation; it's a feature: when you want to guarantee a group of data won't be accidentally modified (e.g. coordinates, dates), use a tuple. <kbd>enumerate()</kbd> is a small but powerful tool that gives you both the element and its position at the same time in a for loop.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-tuple">
+        <div class="topic-title">
+          Tuple Basics: Creation, Indexing, Immutability
+          <span class="tag tag-memory">📝 Know the properties</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <div class="code-block">
+<span class="cm"># Creating a tuple: use round brackets ()</span>
+coords = (<span class="num">45.5</span>, -<span class="num">73.6</span>)
+tup = (<span class="num">45</span>, <span class="num">23</span>, <span class="str">'abc'</span>)
+
+<span class="cm"># Indexing — same as lists</span>
+<span class="fn">print</span>(tup[<span class="num">1</span>])      <span class="cm"># 23</span>
+<span class="fn">print</span>(tup[-<span class="num">1</span>])     <span class="cm"># 'abc'</span>
+
+<span class="cm"># Convert other sequences to tuple</span>
+t = <span class="fn">tuple</span>(<span class="str">'lupins'</span>)
+<span class="fn">print</span>(t)    <span class="cm"># ('l', 'u', 'p', 'i', 'n', 's')</span>
+
+<span class="cm"># ❌ Cannot modify!</span>
+tup[<span class="num">0</span>] = <span class="num">99</span>    <span class="cm"># TypeError: 'tuple' object does not support item assignment</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          A list is a pencil-written shopping list — add, remove, and change items freely. A tuple is a shopping list carved in stone — once done, it's done. That's actually useful when storing GPS coordinates: you really don't want a bug accidentally changing them.
+        </div>
+        <table class="compare-table">
+          <tr><th></th><th>List <kbd>[]</kbd></th><th>Tuple <kbd>()</kbd></th></tr>
+          <tr><td>Modifiable?</td><td>✅ Can add/remove/change</td><td>❌ Immutable after creation</td></tr>
+          <tr><td>Speed</td><td>Slightly slower</td><td>Faster than list</td></tr>
+          <tr><td>Can be a dict key?</td><td>❌ No (mutable)</td><td>✅ Yes!</td></tr>
+          <tr><td>Best for</td><td>Data that needs modification</td><td>Fixed data (coordinates, dates)</td></tr>
+        </table>
+      </div>
+
+      <div class="topic" id="anchor-unpack">
+        <div class="topic-title">
+          Packing &amp; Unpacking, Multiple Assignment
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <p><strong>Packing</strong>: bundle multiple values into one tuple (parentheses are optional):</p>
+        <div class="code-block">
+my_tuple = <span class="num">0</span>, <span class="num">3</span>, <span class="num">7</span>    <span class="cm"># equivalent to my_tuple = (0, 3, 7)</span></div>
+        <p><strong>Unpacking</strong>: assign values from a tuple/list/string to multiple variables at once:</p>
+        <div class="code-block">
+my_tuple = (<span class="num">0</span>, <span class="num">3</span>, <span class="num">7</span>)
+x, y, z = my_tuple
+<span class="fn">print</span>(x, y, z)    <span class="cm"># 0  3  7</span>
+
+<span class="cm"># Multiple assignment (same mechanism)</span>
+city, population, area = <span class="str">'Montreal'</span>, <span class="num">1704694</span>, <span class="num">431.5</span>
+<span class="fn">print</span>(city)    <span class="cm"># Montreal</span></div>
+        <div class="trap">
+          <span class="trap-label">⚠️ Left and right counts must match — otherwise ValueError</span>
+          <kbd>x, y = (1, 2, 3)</kbd> raises <kbd>ValueError: too many values to unpack (expected 2)</kbd>. The number of variables on the left must exactly equal the number of elements on the right.
+        </div>
+        <p><strong>For loops with a list of tuples (very exam-friendly):</strong></p>
+        <div class="code-block">
+favorite_languages = [(<span class="str">'Bob'</span>, <span class="str">'C++'</span>), (<span class="str">'Rahul'</span>, <span class="str">'Python'</span>), (<span class="str">'Yifan'</span>, <span class="str">'R'</span>)]
+
+<span class="cm"># Method 1: access via index</span>
+<span class="kw">for</span> tup <span class="kw">in</span> favorite_languages:
+    <span class="fn">print</span>(tup[<span class="num">0</span>], tup[<span class="num">1</span>])
+
+<span class="cm"># Method 2: unpack directly (cleaner — recommended!)</span>
+<span class="kw">for</span> name, language <span class="kw">in</span> favorite_languages:
+    <span class="fn">print</span>(name, language)
+<span class="cm"># Bob C++ / Rahul Python / Yifan R</span></div>
+      </div>
+
+      <div class="topic" id="anchor-tuple-dict">
+        <div class="topic-title">
+          Tuple ↔ Dictionary Conversion
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+        </div>
+        <div class="code-block">
+<span class="cm"># List of tuples → dict (each tuple is a (key, value) pair)</span>
+list_of_pairs = [(<span class="str">'Montreal'</span>, <span class="num">1.78</span>), (<span class="str">'Rome'</span>, <span class="num">2.87</span>), (<span class="str">'Tokyo'</span>, <span class="num">9.27</span>)]
+city_pop = <span class="fn">dict</span>(list_of_pairs)    <span class="cm"># {'Montreal': 1.78, 'Rome': 2.87, 'Tokyo': 9.27}</span>
+
+<span class="cm"># Dict → list of tuples (use .items())</span>
+as_list = <span class="fn">list</span>(city_pop.<span class="fn">items</span>())
+<span class="cm"># [('Montreal', 1.78), ('Rome', 2.87), ('Tokyo', 9.27)]</span></div>
+      </div>
+
+      <div class="topic" id="anchor-enumerate">
+        <div class="topic-title">
+          <span class="term" data-def="enumerate(): built-in function that gives you both the element and its index during iteration — no manual counter needed">enumerate()</span> — Get Index and Value Together
+          <span class="tag tag-key">⭐ Must know</span>
+          <span class="tag tag-memory">📝 Know the usage</span>
+        </div>
+        <p>Without <kbd>enumerate()</kbd>, you need a manual counter variable to track your position. <kbd>enumerate()</kbd> does it automatically:</p>
+        <div class="code-block">
+s = <span class="str">"banana"</span>
+
+<span class="cm"># Old way without enumerate (tedious)</span>
+i = <span class="num">0</span>
+<span class="kw">for</span> char <span class="kw">in</span> s:
+    <span class="fn">print</span>(char, <span class="str">"has index"</span>, i)
+    i += <span class="num">1</span>
+
+<span class="cm"># Clean way with enumerate ✅</span>
+<span class="kw">for</span> index, char <span class="kw">in</span> <span class="fn">enumerate</span>(s):
+    <span class="fn">print</span>(char, <span class="str">"has index"</span>, index)
+<span class="cm"># b has index 0 / a has index 1 / n has index 2 ...</span>
+
+<span class="cm"># Works on lists, tuples, dicts too</span>
+fruits = [<span class="str">'apple'</span>, <span class="str">'banana'</span>, <span class="str">'cherry'</span>]
+<span class="kw">for</span> i, fruit <span class="kw">in</span> <span class="fn">enumerate</span>(fruits):
+    <span class="fn">print</span>(i, fruit)    <span class="cm"># 0 apple / 1 banana / 2 cherry</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          A teacher calling attendance but numbering each student: "Number 1, Alice; Number 2, Bob…" — <kbd>enumerate()</kbd> is the helper that automatically adds the number, so you don't have to count yourself.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 19 ==================== -->
+  <div class="lesson" id="l19">
+    <div class="lesson-header" onclick="toggleLesson('l19')">
+      <span class="lesson-num">LESSON 19 · Week 12</span>
+      <span class="lesson-title">Exception Handling: Try/Except, Multiple Exceptions, Finally</span>
+      <span class="lesson-meta">3 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">🪤</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>L13 taught you to "raise (throw) exceptions" — announcing that something is wrong. This lesson teaches you to "catch exceptions" — when an error occurs, instead of crashing, you handle it gracefully. Imagine a program that asks the user to type a number. You can't stop users from typing "abc" — but you can build in a safety net so the program doesn't crash; instead it says "please try again." That's try/except.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-tryexcept">
+        <div class="topic-title">
+          Try / Except — Basic Structure
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          Try/except is like an airbag in a car:<br>
+          <kbd>try</kbd> block = driving normally (doing what you want to do)<br>
+          <kbd>except</kbd> block = airbag deploys on crash (what to do when an error occurs)<br>
+          With an airbag, a crash doesn't necessarily kill you. With except, an error doesn't necessarily crash your program.
+        </div>
+        <div class="code-block">
+<span class="kw">try</span>:
+    s = <span class="fn">input</span>(<span class="str">'Please enter a number: '</span>)
+    number = <span class="fn">int</span>(s)            <span class="cm"># ← this might crash (if user types "abc")</span>
+    <span class="fn">print</span>(<span class="str">'No error, you entered:'</span>, number)
+<span class="kw">except</span> <span class="fn">ValueError</span>:
+    <span class="fn">print</span>(<span class="str">'That was not a valid number!'</span>)    <span class="cm"># ← only runs if ValueError occurs</span></div>
+        <p>Flow: Python runs the <kbd>try</kbd> block. If a <kbd>ValueError</kbd> is raised, it jumps straight to the <kbd>except ValueError</kbd> block. If no error occurs, the <kbd>except</kbd> block is skipped entirely.</p>
+        <div class="trap">
+          <span class="trap-label">⚠️ When should you use try/except? Only for errors you CAN'T prevent as a programmer!</span>
+          Things like user input, network connections, files that may or may not exist — you can't control these. But <strong>never</strong> use try/except to "hide" bugs in your own code — that makes bugs unfindable.
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-multi-except">
+        <div class="topic-title">
+          Handling Multiple Exceptions
+          <span class="tag tag-memory">📝 Know the syntax</span>
+        </div>
+        <div class="code-block">
+<span class="cm"># Method 1: separate except blocks (recommended — handle each differently)</span>
+<span class="kw">try</span>:
+    result = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">'Enter index: '</span>))
+    my_list = [<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>]
+    <span class="fn">print</span>(my_list[result])
+<span class="kw">except</span> <span class="fn">ValueError</span>:
+    <span class="fn">print</span>(<span class="str">'Input is not a number'</span>)
+<span class="kw">except</span> <span class="fn">IndexError</span>:
+    <span class="fn">print</span>(<span class="str">'Index out of range'</span>)
+
+<span class="cm"># Method 2: tuple to catch multiple in one except</span>
+<span class="kw">try</span>:
+    <span class="kw">pass</span>
+<span class="kw">except</span> (<span class="fn">IndexError</span>, <span class="fn">TypeError</span>):
+    <span class="fn">print</span>(<span class="str">'IndexError or TypeError occurred'</span>)
+
+<span class="cm"># Method 3: bare except — catches ALL errors (use sparingly!)</span>
+<span class="kw">try</span>:
+    <span class="kw">pass</span>
+<span class="kw">except</span>:
+    <span class="fn">print</span>(<span class="str">'Something went wrong'</span>)    <span class="cm"># hides what kind of error — use with caution</span></div>
+      </div>
+
+      <div class="topic" id="anchor-finally">
+        <div class="topic-title">
+          <kbd>finally</kbd> Block — Always Executes
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+        </div>
+        <p>Code inside <kbd>finally</kbd> <strong>always runs</strong> — whether the try succeeded, whether except was triggered, even if there's a <kbd>return</kbd>, <kbd>break</kbd>, or <kbd>continue</kbd> inside the try/except blocks.</p>
+        <div class="code-block">
+<span class="kw">while</span> <span class="kw">True</span>:
+    <span class="kw">try</span>:
+        s = <span class="fn">input</span>(<span class="str">'Please enter a valid number: '</span>)
+        number = <span class="fn">int</span>(s)
+        <span class="kw">break</span>                        <span class="cm"># success — exit the while loop</span>
+    <span class="kw">except</span> <span class="fn">ValueError</span>:
+        <span class="fn">print</span>(<span class="str">'Invalid input!'</span>)
+    <span class="kw">finally</span>:
+        <span class="fn">print</span>(<span class="str">'This always prints.'</span>)   <span class="cm"># runs every iteration, success or failure</span>
+
+<span class="fn">print</span>(<span class="str">"Valid number entered: "</span> + <span class="fn">str</span>(number))</div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          <kbd>finally</kbd> is like "clean up the tables before closing the restaurant" — no matter how the day went, no matter if customers complained or loved it, you always clean up before closing. In file operations, <kbd>finally</kbd> is commonly used to guarantee <kbd>close()</kbd> always gets called, even if something went wrong during reading.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 20 ==================== -->
+  <div class="lesson" id="l20">
+    <div class="lesson-header" onclick="toggleLesson('l20')">
+      <span class="lesson-num">LESSON 20 · Week 13</span>
+      <span class="lesson-title">OOP 1: Object-Oriented Programming, Objects, Classes, Attributes</span>
+      <span class="lesson-meta">4 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">🏛️</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>Until now, all data types you used (int, list, str) were Python built-ins. <strong>OOP (Object-Oriented Programming)</strong> lets you <strong>define entirely new data types</strong>. This is a major upgrade: you can create a "Student" type that stores a name, student ID, and grades, and that has its own operations like "get grades" and "change name" — far cleaner than managing everything in separate lists and dicts. Almost all large-scale software is written using OOP.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-oop-intro">
+        <div class="topic-title">
+          What is Object-Oriented Programming?
+          <span class="tag tag-logic">🧠 Understand the concept</span>
+        </div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          Think of LEGO. The factory designs a <strong>mould (Class/Blueprint)</strong> for a mini-figure that specifies it has a head, body, arms, and legs, and can "sit" and "hold things." The factory uses this mould to produce unlimited individual figures — each figure is an <strong>Object (instance)</strong>. Each figure's colour and hair can differ, but all follow the same mould.<br><br>
+          In Python: <strong>Class = the mould</strong>, <strong>Object = a specific thing made from the mould</strong>.
+        </div>
+        <p>You've been using OOP since day one — you just didn't know it:</p>
+        <div class="code-block">
+a = <span class="str">"hello"</span>         <span class="cm"># a is an object (instance) of the str class</span>
+a.<span class="fn">upper</span>()         <span class="cm"># upper() is a method defined in the str class</span>
+
+my_list = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]   <span class="cm"># my_list is an object of the list class</span>
+my_list.<span class="fn">append</span>(<span class="num">4</span>)  <span class="cm"># append() is a method defined in the list class</span>
+
+<span class="fn">print</span>(<span class="fn">type</span>(a))        <span class="cm"># &lt;class 'str'&gt; ← everything belongs to some class!</span></div>
+      </div>
+
+      <div class="topic" id="anchor-class">
+        <div class="topic-title">
+          Defining a Class
+          <span class="tag tag-memory">📝 Know the syntax</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <div class="code-block">
+<span class="cm"># Define a new class (a blueprint)</span>
+<span class="kw">class</span> <span class="fn">MyClass</span>:
+    <span class="str">"""a new type"""</span>
+
+<span class="cm"># Create an object (an instance) from the class</span>
+my_object = <span class="fn">MyClass</span>()    <span class="cm"># call the class name like a function</span>
+
+<span class="fn">print</span>(<span class="fn">type</span>(my_object))
+<span class="cm"># &lt;class '__main__.MyClass'&gt;  ← '__main__' means the current file</span></div>
+        <p>Key distinction:</p>
+        <ul>
+          <li><strong>Class</strong>: the blueprint / design — not a concrete thing itself</li>
+          <li><strong>Object / Instance</strong>: a concrete thing created from the class — <kbd>MyClass()</kbd> creates one</li>
+        </ul>
+        <div class="trap">
+          <span class="trap-label">⚠️ Class names must start with a capital letter!</span>
+          Python convention: class names use <strong>CamelCase</strong> (e.g. <kbd>Student</kbd>, <kbd>BankAccount</kbd>); variable and function names use <strong>snake_case</strong> (e.g. <kbd>my_student</kbd>, <kbd>get_balance</kbd>). This is a basic code readability standard.
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-attributes">
+        <div class="topic-title">
+          <span class="term" data-def="Attribute: a variable that belongs to a specific object — accessed via object.attribute">Attributes</span> — Attaching Data to Objects
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <p>An attribute is a "variable that belongs to this specific object." Access and modify via <kbd>object.attribute_name</kbd>:</p>
+        <div class="code-block">
+<span class="kw">class</span> <span class="fn">MyClass</span>:
+    <span class="str">"""a new type"""</span>
+
+my_object = <span class="fn">MyClass</span>()
+
+<span class="cm"># Set attributes</span>
+my_object.name = <span class="str">"John"</span>
+my_object.age = <span class="num">20</span>
+
+<span class="cm"># Read attributes</span>
+<span class="fn">print</span>(my_object.name)    <span class="cm"># John</span>
+<span class="fn">print</span>(my_object.age)     <span class="cm"># 20</span>
+
+<span class="cm"># Modify attributes</span>
+my_object.name = <span class="str">"Max"</span>
+<span class="fn">print</span>(my_object.name)    <span class="cm"># Max</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          Attributes are like fields on a personal profile: name, age, student ID. Each object has its own set, completely independent of other objects. <kbd>my_object.name</kbd> means "the name field belonging to this specific object" — the dot means "belonging to."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 21 ==================== -->
+  <div class="lesson" id="l21">
+    <div class="lesson-header" onclick="toggleLesson('l21')">
+      <span class="lesson-num">LESSON 21 · Week 13</span>
+      <span class="lesson-title">OOP 2: Constructor (__init__), Class Attributes, Methods, __str__</span>
+      <span class="lesson-meta">4 core concepts</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+      <div class="framework-banner">
+        <div class="framework-icon">🔧</div>
+        <div>
+          <h3>WHY DOES THIS LESSON MATTER?</h3>
+          <p>Now that you know what a class is, this lesson teaches you how to write one properly: use <kbd>__init__</kbd> so every object starts with its own data; use methods to give objects things they can do; use <kbd>__str__</kbd> to control what an object looks like when printed. After these two OOP lessons, you'll understand exactly why <kbd>my_list.append()</kbd> works the way it does — and you'll be able to build your own types that work the same way.</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-init">
+        <div class="topic-title">
+          Constructor: <kbd>__init__</kbd>
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <p>Every time you write <kbd>MyClass()</kbd> to create an object, Python automatically calls a special method named <kbd>__init__</kbd> — that's the <span class="term" data-def="Constructor: a special method called automatically when an object is created — used to initialise its attributes">constructor</span>. You define it yourself to control what data the object starts with:</p>
+        <div class="code-block">
+<span class="kw">class</span> <span class="fn">Student</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, name, ID=<span class="num">0</span>):
+        <span class="cm"># self represents "the object currently being created"</span>
+        <span class="kw">self</span>.name = name    <span class="cm"># store the passed-in name as an attribute</span>
+        <span class="kw">self</span>.ID = ID        <span class="cm"># ID has a default value of 0</span>
+
+<span class="cm"># Creating objects — arguments get passed to __init__</span>
+john = <span class="fn">Student</span>(<span class="str">"John"</span>, <span class="num">20</span>)
+<span class="fn">print</span>(john.name, john.ID)    <span class="cm"># John 20</span>
+
+<span class="cm"># With default value, can pass fewer arguments</span>
+default_student = <span class="fn">Student</span>(<span class="str">"no name"</span>)
+<span class="fn">print</span>(default_student.name, default_student.ID)    <span class="cm"># no name 0</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          <kbd>__init__</kbd> is like the registration form new students fill in on their first day. Every student (object), the moment they enrol (are created), must provide their name and student ID. Those details are then permanently associated with that person (object) and can be looked up any time.
+        </div>
+        <p><strong>Key things to know about <kbd>self</kbd>:</strong></p>
+        <ul>
+          <li><kbd>self</kbd> is a convention (you could name it anything, but <strong>never do</strong>)</li>
+          <li><kbd>self</kbd> represents "this specific object." Inside a class, you don't know what the object will be named later, so you use <kbd>self</kbd> as a stand-in</li>
+          <li><kbd>self</kbd> must be the first parameter in <kbd>__init__</kbd>, but you don't pass it when calling — Python inserts it automatically</li>
+          <li><kbd>__init__</kbd> should have no <kbd>return</kbd> statement</li>
+        </ul>
+        <div class="trap">
+          <span class="trap-label">⚠️ Forgetting required arguments raises TypeError</span>
+          If <kbd>__init__(self, name, ID)</kbd> has no defaults, calling <kbd>Student()</kbd> with no args raises <kbd>TypeError: __init__() missing 2 required positional arguments</kbd>. Note: <kbd>self</kbd> doesn't count!
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-class-attr">
+        <div class="topic-title">
+          Class Attributes vs Instance Attributes
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+          <span class="tag tag-key">⭐ Easy to confuse!</span>
+        </div>
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>Instance Attribute</strong>
+            <span>Defined with <kbd>self.xxx</kbd> inside <kbd>__init__</kbd>.<br>Each object has its own independent copy.</span>
+          </div>
+          <div class="concept-card" style="border-color:#f5c842">
+            <strong>Class Attribute</strong>
+            <span>Defined at the top of the class (outside any method).<br>Shared across ALL objects of that class.</span>
+          </div>
+        </div>
+        <div class="code-block">
+<span class="kw">class</span> <span class="fn">Car</span>:
+    fuel = <span class="num">100</span>          <span class="cm"># ← Class Attribute: shared by all Car objects</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, brand):
+        <span class="kw">self</span>.brand = brand  <span class="cm"># ← Instance Attribute: unique to each car</span>
+
+car1 = <span class="fn">Car</span>(<span class="str">"Toyota"</span>)
+car2 = <span class="fn">Car</span>(<span class="str">"BMW"</span>)
+
+<span class="fn">print</span>(car1.fuel)    <span class="cm"># 100 ← inherited from class</span>
+<span class="fn">print</span>(car2.fuel)    <span class="cm"># 100</span>
+
+car1.fuel = <span class="num">20</span>     <span class="cm"># creates a new INSTANCE attribute for car1 — shadows the class attribute</span>
+<span class="fn">print</span>(car1.fuel)    <span class="cm"># 20  ← car1's own instance attribute</span>
+<span class="fn">print</span>(car2.fuel)    <span class="cm"># 100 ← car2 is unaffected — still sees the class attribute</span></div>
+        <div class="trap">
+          <span class="trap-label">⚠️ To truly change the class attribute for all objects, use the class name</span>
+          <kbd>car1.fuel = 50</kbd> only creates a new instance attribute for car1 — it doesn't modify the class attribute. To update it for everyone: <kbd>Car.fuel = 50</kbd>.
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-methods">
+        <div class="topic-title">
+          Methods — Functions That Belong to a Class
+          <span class="tag tag-logic">🧠 Understand the logic</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <p>A method is just a function defined inside a class. The only difference from a regular function: the first parameter must be <kbd>self</kbd> (the object calling the method).</p>
+        <div class="code-block">
+<span class="kw">class</span> <span class="fn">Student</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, name, ID=<span class="num">0</span>):
+        <span class="kw">self</span>.name = name
+        <span class="kw">self</span>.ID = ID
+
+    <span class="kw">def</span> <span class="fn">print_info</span>(<span class="kw">self</span>):                <span class="cm"># only self — no extra params</span>
+        <span class="fn">print</span>(<span class="str">"Name:"</span>, <span class="kw">self</span>.name, <span class="str">"ID:"</span>, <span class="kw">self</span>.ID)
+
+    <span class="kw">def</span> <span class="fn">modify_name</span>(<span class="kw">self</span>, new_name):      <span class="cm"># self + extra param</span>
+        <span class="kw">self</span>.name = new_name               <span class="cm"># modifies THIS object's name</span>
+
+john = <span class="fn">Student</span>(<span class="str">"John"</span>, <span class="num">20</span>)
+john.<span class="fn">print_info</span>()            <span class="cm"># Name: John ID: 20</span>
+john.<span class="fn">modify_name</span>(<span class="str">"John Doe"</span>)
+john.<span class="fn">print_info</span>()            <span class="cm"># Name: John Doe ID: 20</span></div>
+        <p>When you call <kbd>john.print_info()</kbd>, Python automatically passes <kbd>john</kbd> as <kbd>self</kbd> behind the scenes — equivalent to <kbd>Student.print_info(john)</kbd>.</p>
+      </div>
+
+      <div class="topic" id="anchor-str-method">
+        <div class="topic-title">
+          <kbd>__str__()</kbd> — Control What print() Shows
+          <span class="tag tag-memory">📝 Know the usage</span>
+          <span class="tag tag-key">⭐ Must know</span>
+        </div>
+        <p>By default, printing a custom object shows a useless memory address:</p>
+        <div class="code-block">
+john = <span class="fn">Student</span>(<span class="str">"John"</span>, <span class="num">20</span>)
+<span class="fn">print</span>(john)
+<span class="cm"># &lt;__main__.Student object at 0x0000024F6EBC8F10&gt;  ← meaningless</span></div>
+        <p>Define <kbd>__str__</kbd> to make print show something useful:</p>
+        <div class="code-block">
+<span class="kw">class</span> <span class="fn">Student</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, name, ID=<span class="num">0</span>):
+        <span class="kw">self</span>.name = name
+        <span class="kw">self</span>.ID = ID
+
+    <span class="kw">def</span> <span class="fn">__str__</span>(<span class="kw">self</span>):
+        <span class="cm"># Must RETURN a string — do NOT print inside __str__!</span>
+        <span class="kw">return</span> <span class="str">"Student: "</span> + <span class="kw">self</span>.name + <span class="str">", ID: "</span> + <span class="fn">str</span>(<span class="kw">self</span>.ID)
+
+john = <span class="fn">Student</span>(<span class="str">"John"</span>, <span class="num">20</span>)
+<span class="fn">print</span>(john)       <span class="cm"># Student: John, ID: 20  ← now it looks like a person!</span>
+<span class="fn">print</span>(<span class="fn">str</span>(john))  <span class="cm"># same — str() also calls __str__</span></div>
+        <div class="analogy">
+          <span class="analogy-label">💡 ANALOGY</span>
+          Everyone introduces themselves differently depending on context. <kbd>__str__</kbd> teaches this object "when someone prints you, this is how you introduce yourself." Without it, you blurt out your memory address. With it, you say "I'm John, student ID 20."
+        </div>
+        <table class="compare-table">
+          <tr><th>Special method</th><th>When triggered</th><th>Must return</th></tr>
+          <tr><td><kbd>__init__(self, ...)</kbd></td><td>Automatically when object is created</td><td>❌ No return statement</td></tr>
+          <tr><td><kbd>__str__(self)</kbd></td><td>When <kbd>print(obj)</kbd> or <kbd>str(obj)</kbd> is called</td><td>✅ Must return a string</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMMARY CARD -->
+  <div class="summary-card">
+    <h2>Learning Roadmap + Exam Advice</h2>
+    <p style="font-size:0.8rem;opacity:0.7;margin-bottom:1rem;font-family:'JetBrains Mono',monospace;">Click any keyword to jump directly to that topic ↓</p>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <h4>🧠 NEED TO UNDERSTAND THE LOGIC</h4>
+        <p>
+          <a class="sum-link" onclick="jumpToAnchor('anchor-scope','l5')">variable scope</a> (local vs global),
+          <a class="sum-link" onclick="jumpToAnchor('anchor-void-fruitful','l5')">print vs return</a>,
+          <a class="sum-link" onclick="jumpToAnchor('anchor-recursion','l7')">recursion base case</a>,
+          <a class="sum-link" onclick="jumpToAnchor('anchor-copy','l12')">aliasing / shallow / deep copy</a>,
+          <a class="sum-link" onclick="jumpToAnchor('anchor-tryexcept','l19')">when to use try/except</a>,
+          <a class="sum-link" onclick="jumpToAnchor('anchor-init','l21')">what self means</a>,
+          <a class="sum-link" onclick="jumpToAnchor('anchor-class-attr','l21')">class vs instance attribute</a>
+        </p>
+      </div>
+      <div class="summary-item">
+        <h4>📝 NEED TO MEMORISE</h4>
+        <p>
+          <a class="sum-link" onclick="jumpToAnchor('anchor-binary','l1')">binary conversion method</a>,
+          <a class="sum-link" onclick="jumpToAnchor('anchor-math-ops','l3')"># % // / differences</a>,
+          <a class="sum-link" onclick="jumpToAnchor('anchor-bool-ops','l4')">not/and/or precedence</a>,
+          <a class="sum-link" onclick="jumpToAnchor('anchor-docstring','l5')">docstring format</a>,
+          <a class="sum-link" onclick="jumpToAnchor('anchor-dict-methods','l14')">dict methods</a> (get/pop/keys/items/update),
+          <a class="sum-link" onclick="jumpToAnchor('anchor-fileio','l15')">file modes</a> (r/w/a),
+          <a class="sum-link" onclick="jumpToAnchor('anchor-str-method','l21')">__str__ must return string</a>
+        </p>
+      </div>
+      <div class="summary-item">
+        <h4>⭐ HIGHEST-FREQUENCY EXAM TOPICS</h4>
+        <p>
+          <a class="sum-link" onclick="jumpToAnchor('anchor-input','l3')">input() always returns str</a>,
+          <a class="sum-link" onclick="jumpToAnchor('anchor-ifelse','l4')">if/elif/else</a>,
+          <a class="sum-link" onclick="jumpToAnchor('anchor-while','l6')">while loop</a>,
+          <a class="sum-link" onclick="jumpToAnchor('anchor-forloop','l7')">for loop + range</a>,
+          <a class="sum-link" onclick="jumpToAnchor('anchor-dict-count','l14')">dict counting pattern</a>,
+          <a class="sum-link" onclick="jumpToAnchor('anchor-unpack','l16')">tuple unpacking</a>,
+          <a class="sum-link" onclick="jumpToAnchor('anchor-init','l21')">__init__ structure</a>
+        </p>
+      </div>
+      <div class="summary-item">
+        <h4>🔗 PROGRESSION (don't skip ahead!)</h4>
+        <p>
+          <a class="sum-link" onclick="jumpToAnchor('anchor-variables','l3')">Variables/Types</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-ifelse','l4')">Conditions</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-def','l5')">Functions</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-while','l6')">while</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-forloop','l7')">for</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-listbasics','l10')">List</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-copy','l12')">Copy</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-doctest','l13')">Doctest</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-dict-basics','l14')">Dict</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-tuple','l16')">Tuple</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-tryexcept','l19')">try/except</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-oop-intro','l20')">OOP</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  function toggleLesson(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  function jumpTo(id) {
+    const el = document.getElementById(id);
+    if (!el.classList.contains('open')) el.classList.add('open');
+    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }
+
+  function jumpToAnchor(anchorId, lessonId) {
+    const lesson = document.getElementById(lessonId);
+    if (lesson && !lesson.classList.contains('open')) {
+      lesson.classList.add('open');
+    }
+    setTimeout(() => {
+      const anchor = document.getElementById(anchorId);
+      if (anchor) {
+        anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        anchor.classList.add('highlight-flash');
+        setTimeout(() => anchor.classList.remove('highlight-flash'), 1800);
+      }
+    }, 120);
+  }
+  /* ── Search ── */
+(function () {
+  const input   = document.getElementById('search-input');
+  const clearBtn= document.getElementById('search-clear');
+  const status  = document.getElementById('search-status');
+  const toc     = document.querySelector('.toc');
+  const lessons = Array.from(document.querySelectorAll('.lesson'));
+
+  // 搜索范围：lesson-title + topic-title + lesson-body 全部文本
+  const SEARCH_SELECTORS = ['.lesson-title', '.topic-title', '.lesson-body'];
+
+  // 把上一次的高亮全部清掉（还原成原始 HTML）
+  const originals = lessons.map(lesson => ({
+    el: lesson,
+    html: lesson.innerHTML          // 保存原始 innerHTML 用于还原高亮
+  }));
+
+  function escapeReg(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function highlight(el, re) {
+    // 只在文本节点上做替换，避免破坏 HTML 属性和标签
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+    const nodes = [];
+    let node;
+    while ((node = walker.nextNode())) nodes.push(node);
+
+    nodes.forEach(textNode => {
+      if (!re.test(textNode.nodeValue)) return;
+      const span = document.createElement('span');
+      span.innerHTML = textNode.nodeValue.replace(re,
+        m => `<mark class="search-highlight">${m}</mark>`);
+      textNode.parentNode.replaceChild(span, textNode);
+    });
+  }
+
+  function restoreAll() {
+    originals.forEach(({ el, html }) => { el.innerHTML = html; });
+  }
+
+  function runSearch() {
+    const q = input.value.trim();
+    clearBtn.style.display = q ? 'block' : 'none';
+
+    if (!q) {
+      // 清空时：全部显示、还原高亮、关闭搜索时打开的 lesson、隐藏 status
+      restoreAll();
+      lessons.forEach(l => { l.style.display = ''; });
+      toc.style.display = '';
+      status.textContent = '';
+      return;
+    }
+
+    restoreAll();                   // 先还原，再重新高亮
+
+    const re = new RegExp(escapeReg(q), 'gi');
+    let matchCount = 0;
+
+    lessons.forEach(lesson => {
+      // 在搜索范围内找文本
+      const targets = SEARCH_SELECTORS.flatMap(sel =>
+        Array.from(lesson.querySelectorAll(sel))
+      );
+      const text = targets.map(el => el.textContent).join(' ');
+      const matched = re.test(text);
+      re.lastIndex = 0;             // reset stateful regex
+
+      if (matched) {
+        lesson.style.display = '';
+        lesson.classList.add('open');       // 展开让内容可见
+        highlight(lesson, new RegExp(escapeReg(q), 'gi'));
+        matchCount++;
+      } else {
+        lesson.style.display = 'none';
+      }
+    });
+
+    // 搜索时隐藏目录（TOC），避免视觉干扰
+    toc.style.display = 'none';
+
+    // 状态提示
+    status.textContent = matchCount
+      ? `找到 ${matchCount} 个相关章节`
+      : '没有找到匹配的内容';
+  }
+
+  input.addEventListener('input', runSearch);
+  clearBtn.addEventListener('click', () => { input.value = ''; runSearch(); input.focus(); });
+})();
+</script>
+</body>
+</html>

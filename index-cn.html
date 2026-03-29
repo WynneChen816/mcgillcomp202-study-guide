@@ -1,0 +1,3252 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COMP202 知识点地图</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #D94F3D;
+    --red-light: #f0695a;
+    --red-pale: #fdf2f1;
+    --ink: #1a1a2e;
+    --ink-soft: #3d3d5c;
+    --ink-muted: #7a7a9d;
+    --cream: #faf9f6;
+    --yellow: #F5C842;
+    --yellow-pale: #fffbea;
+    --green: #2D9E6B;
+    --green-pale: #edf8f3;
+    --blue: #3A7BD5;
+    --blue-pale: #eef4fd;
+    --border: #e8e4df;
+    --code-bg: #1e1e2e;
+    --code-text: #cdd6f4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.8;
+  }
+
+  header {
+    background: var(--ink);
+    color: white;
+    padding: 3rem 2rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(217,79,61,0.15);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 20%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(245,200,66,0.08);
+  }
+  .header-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+  .course-tag {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+  header p { color: rgba(255,255,255,0.6); font-size: 0.95rem; max-width: 600px; }
+  .legend { display: flex; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  .lesson {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .lesson:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+
+  .lesson-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .lesson-header:hover { background: #fafafa; }
+  .lesson.open .lesson-header { border-color: var(--border); }
+
+  .lesson-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--red);
+    background: var(--red-pale);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .lesson-title { font-weight: 700; font-size: 1.05rem; flex: 1; }
+  .lesson-meta { font-size: 0.78rem; color: var(--ink-muted); }
+  .chevron { width: 20px; height: 20px; transition: transform 0.3s; color: var(--ink-muted); flex-shrink: 0; }
+  .lesson.open .chevron { transform: rotate(180deg); }
+  .lesson-body { display: none; padding: 1.5rem; }
+  .lesson.open .lesson-body { display: block; }
+
+  .importance-box {
+    background: var(--ink);
+    color: white;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .importance-box .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--yellow);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.4rem;
+    display: block;
+  }
+
+  .topic {
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .topic:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .topic-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.15rem 0.55rem;
+    border-radius: 20px;
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+  }
+  .tag-logic { background: #fef3cd; color: #8a6200; border: 1px solid #f5c842; }
+  .tag-memory { background: #fde8e8; color: #8a1c1c; border: 1px solid #e98585; }
+  .tag-key { background: var(--green-pale); color: #1a6e49; border: 1px solid #7dd4b0; }
+
+  .analogy {
+    background: var(--blue-pale);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 8px 8px 0;
+    padding: 0.85rem 1rem;
+    margin: 0.75rem 0;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+  .analogy .analogy-label {
+    font-weight: 700;
+    color: var(--blue);
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+  }
+
+  .trap {
+    background: #fff8f0;
+    border-left: 3px solid #e8843a;
+    border-radius: 0 8px 8px 0;
+    padding: 0.85rem 1rem;
+    margin: 0.75rem 0;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+  .trap .trap-label {
+    font-weight: 700;
+    color: #c0580a;
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* 专业词汇tooltip */
+  .term {
+    border-bottom: 2px dashed var(--red);
+    cursor: help;
+    position: relative;
+    color: var(--red);
+    font-weight: 500;
+  }
+  .term:hover::after {
+    content: attr(data-def);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: white;
+    font-size: 0.78rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    z-index: 100;
+    pointer-events: none;
+    font-weight: 400;
+    line-height: 1.4;
+    max-width: 220px;
+    white-space: normal;
+    text-align: center;
+  }
+  .term:hover::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--ink);
+    z-index: 100;
+  }
+
+  .code-block {
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    margin: 0.75rem 0;
+    overflow-x: auto;
+    line-height: 1.7;
+    white-space: pre;
+  }
+  .code-block .kw { color: #cba6f7; }
+  .code-block .fn { color: #89b4fa; }
+  .code-block .str { color: #a6e3a1; }
+  .code-block .num { color: #fab387; }
+  .code-block .cm { color: #6c7086; font-style: italic; }
+
+  .topic p { font-size: 0.92rem; color: var(--ink-soft); margin-bottom: 0.6rem; }
+  .topic ul { margin-left: 1.2rem; margin-bottom: 0.6rem; }
+  .topic ul li { font-size: 0.92rem; color: var(--ink-soft); margin-bottom: 0.3rem; line-height: 1.7; }
+
+  .framework-banner {
+    background: linear-gradient(135deg, var(--ink) 0%, #2a2a4a 100%);
+    color: white;
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.75rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .framework-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .framework-banner h3 { font-size: 0.85rem; color: var(--yellow); margin-bottom: 0.3rem; letter-spacing: 0.08em; font-family: 'JetBrains Mono', monospace; }
+  .framework-banner p { font-size: 0.9rem; color: rgba(255,255,255,0.8); line-height: 1.7; }
+
+  .concept-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+  }
+  .concept-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+  .concept-card strong { display: block; margin-bottom: 0.2rem; color: var(--ink); }
+  .concept-card span { color: var(--ink-muted); font-size: 0.82rem; }
+
+  .toc {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .toc h2 { font-size: 0.75rem; letter-spacing: 0.12em; color: var(--ink-muted); font-family: 'JetBrains Mono', monospace; margin-bottom: 1rem; }
+  .toc-list { display: flex; flex-direction: column; gap: 0.4rem; }
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.88rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+    color: var(--ink-soft);
+  }
+  .toc-item:hover { background: var(--red-pale); color: var(--red); }
+  .toc-num { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--red); width: 40px; flex-shrink: 0; }
+
+  .summary-card {
+    background: var(--red);
+    color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 2.5rem;
+  }
+  .summary-card h2 { font-family: 'Playfair Display', serif; margin-bottom: 1rem; }
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .summary-item { background: rgba(255,255,255,0.12); border-radius: 8px; padding: 0.85rem; }
+  .summary-item h4 { font-size: 0.78rem; letter-spacing: 0.08em; opacity: 0.8; margin-bottom: 0.4rem; font-family: 'JetBrains Mono', monospace; }
+  .summary-item p { font-size: 0.87rem; line-height: 1.6; opacity: 0.92; }
+
+  kbd {
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+  }
+
+  /* Summary 区域的可点击关键词链接 */
+  .sum-link {
+    color: white;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(255,255,255,0.45);
+    cursor: pointer;
+    transition: text-decoration-color 0.15s, opacity 0.15s;
+    white-space: nowrap;
+  }
+  .sum-link:hover {
+    text-decoration-color: white;
+    opacity: 0.85;
+  }
+
+  /* 跳转后短暂高亮闪烁 */
+  @keyframes flash-highlight {
+    0%   { background: transparent; }
+    20%  { background: rgba(245, 200, 66, 0.22); border-radius: 8px; }
+    60%  { background: rgba(245, 200, 66, 0.15); border-radius: 8px; }
+    100% { background: transparent; }
+  }
+  .highlight-flash {
+    animation: flash-highlight 1.8s ease-out forwards;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin: 0.75rem 0;
+  }
+  .compare-table th {
+    background: var(--ink);
+    color: white;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.82rem;
+  }
+  .compare-table td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--ink-soft);
+    vertical-align: top;
+  }
+  .compare-table tr:nth-child(even) td { background: #fafafa; }
+
+  @media (max-width: 600px) {
+    .summary-grid { grid-template-columns: 1fr; }
+    .legend { gap: 1rem; }
+  }
+  /* ── Language Switcher ── */
+.lang-switcher {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  display: flex;
+  gap: 0.35rem;
+  z-index: 10;
+}
+.lang-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.75rem;
+  border-radius: 3px;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  background: transparent;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.lang-btn:hover {
+  border-color: rgba(255,255,255,0.6);
+  color: white;
+}
+.lang-btn.active {
+  background: var(--red);
+  border-color: var(--red);
+  color: white;
+}
+/* ── Search Bar ── */
+.search-wrap {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.85rem 1rem 0.85rem 1.1rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.search-wrap svg {
+  flex-shrink: 0;
+  color: var(--ink-muted);
+}
+#search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 0.92rem;
+  color: var(--ink);
+  background: transparent;
+}
+#search-input::placeholder {
+  color: var(--ink-muted);
+}
+#search-clear {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-muted);
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 0.1rem;
+  display: none;        /* 默认隐藏，有输入才显示 */
+}
+#search-clear:hover { color: var(--red); }
+#search-status {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 0.75rem;
+  min-height: 1.2em;   /* 占位，防止布局跳动 */
+}
+.search-highlight {
+  background: #fff176;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="lang-switcher">
+  <span class="lang-btn active">中文</span>
+  <a class="lang-btn" href="index-en.html">EN</a>
+    </div>
+    <div class="course-tag">COMP202 · McGill · U0 Yunying Chen</div>
+    <h1>Python 核心知识点地图</h1>
+    <p>Week 1–13 · Lesson 1–21 · 专业词汇都有中文解释，重难点全部标出来了</p>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#f5c842"></div> 🧠 要理解逻辑</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e98585"></div> 📝 要背/记住</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#7dd4b0"></div> ⭐ 必须掌握</div>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ── Search Bar ── -->
+<div class="search-wrap">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2">
+    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+  </svg>
+  <input id="search-input" type="search" placeholder="搜索关键词，例如：recursion、dict、OOP…" autocomplete="off">
+  <button id="search-clear" title="清除">✕</button>
+</div>
+<div id="search-status"></div>
+  <div class="toc">
+    <h2>LESSONS OVERVIEW — 点击直接跳转</h2>
+    <div class="toc-list">
+      <div class="toc-item" onclick="jumpTo('l1')"><span class="toc-num">L1 W1</span> Binary（二进制）↔ Decimal（十进制）· Bytes · 编码格式</div>
+      <div class="toc-item" onclick="jumpTo('l2')"><span class="toc-num">L2 W2</span> Algorithm · Program · 高低级语言 · print() · 注释</div>
+      <div class="toc-item" onclick="jumpTo('l3')"><span class="toc-num">L3 W2</span> Variables · Type · input() · 数学运算 · Math 模块</div>
+      <div class="toc-item" onclick="jumpTo('l4')"><span class="toc-num">L4 W3</span> Boolean · 关系运算符 · and/or/not · if/elif/else</div>
+      <div class="toc-item" onclick="jumpTo('l5')"><span class="toc-num">L5 W4</span> Functions：def · Scope · Void/Fruitful · Docstring</div>
+      <div class="toc-item" onclick="jumpTo('l6')"><span class="toc-num">L6 W5</span> While Loop · 无限循环 · Shorthand Assignment</div>
+      <div class="toc-item" onclick="jumpTo('l7')"><span class="toc-num">L7 W5</span> Recursion（递归）· For Loop · Variable Scope · Break/Continue</div>
+      <div class="toc-item" onclick="jumpTo('l8')"><span class="toc-num">L8 W6</span> Random（随机数）· Modules（模块）· Strings 基础</div>
+      <div class="toc-item" onclick="jumpTo('l9')"><span class="toc-num">L9 W7</span> 遍历 String 的三种方法</div>
+      <div class="toc-item" onclick="jumpTo('l10')"><span class="toc-num">L10 W7</span> List（列表）：创建、访问、操作、内置函数</div>
+      <div class="toc-item" onclick="jumpTo('l11')"><span class="toc-num">L11 W7</span> Nested Loops（嵌套循环）· Nested Lists · String ↔ List 互转</div>
+      <div class="toc-item" onclick="jumpTo('l12')"><span class="toc-num">L12 W8</span> Object Identity · Shallow/Deep Copy · Mutable vs Immutable</div>
+      <div class="toc-item" onclick="jumpTo('l13')"><span class="toc-num">L13 W8</span> Doctest · Debugging（调试）· Raising Exceptions（抛出异常）</div>
+      <div class="toc-item" onclick="jumpTo('l14')"><span class="toc-num">L14 W10</span> Dictionary（字典）：创建、访问、增删、常用方法、遍历</div>
+      <div class="toc-item" onclick="jumpTo('l15')"><span class="toc-num">L15 W10</span> File I/O（文件读写）· Pickle · CSV</div>
+      <div class="toc-item" onclick="jumpTo('l16')"><span class="toc-num">L16 W11</span> Tuple（元组）· Packing/Unpacking · Enumerate</div>
+      <div class="toc-item" onclick="jumpTo('l19')"><span class="toc-num">L19 W12</span> Exception Handling（异常处理）：Try/Except · Finally</div>
+      <div class="toc-item" onclick="jumpTo('l20')"><span class="toc-num">L20 W13</span> OOP 1：Object · Class · Attributes（面向对象入门）</div>
+      <div class="toc-item" onclick="jumpTo('l21')"><span class="toc-num">L21 W13</span> OOP 2：Constructor · Class Attributes · Methods · __str__</div>
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 1 ==================== -->
+  <div class="lesson" id="l1">
+    <div class="lesson-header" onclick="toggleLesson('l1')">
+      <span class="lesson-num">LESSON 1 · Week 1</span>
+      <span class="lesson-title">Binary ↔ Decimal 转换、Bytes、编码格式</span>
+      <span class="lesson-meta">3个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">💡</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>这是整个课程的"地基"。计算机本质上只认识 0 和 1，所有你看到的文字、图片、音乐，底层都是一串串二进制数。理解这个，你才能真正明白为什么 Python 里有那么多不同的数据类型（int、float、str……）——因为同一串 0 和 1，用不同的方式"解读"，就变成了不同的东西。这节课考试不会让你大量计算，但是选择题和概念题经常出现。</p>
+        </div>
+      </div>
+
+      <!-- BINARY TO DECIMAL -->
+      <div class="topic" id="anchor-binary">
+        <div class="topic-title">
+          <span class="term" data-def="Binary：二进制，只用 0 和 1 表示数字的进位制，是计算机的底层语言">Binary（二进制）</span> ↔ <span class="term" data-def="Decimal：十进制，我们日常用的 0-9 的数字系统">Decimal（十进制）</span> 互转
+          <span class="tag tag-memory">📝 记住方法</span>
+        </div>
+
+        <p><strong>Binary → Decimal（从右到左，每位乘以 2 的幂次）：</strong></p>
+        <div class="code-block">
+<span class="cm"># 10101100 转十进制：</span>
+<span class="cm"># 位置：  7  6  5  4  3  2  1  0   ← 从右边数，从 0 开始</span>
+<span class="cm"># 数字：  1  0  1  0  1  1  0  0</span>
+<span class="cm">#</span>
+<span class="cm"># 计算：1×2⁷ + 0×2⁶ + 1×2⁵ + 0×2⁴ + 1×2³ + 1×2² + 0×2¹ + 0×2⁰</span>
+<span class="cm">#      = 128  +  0   + 32  +  0   +  8   +  4   +  0   +  0</span>
+<span class="cm">#      = 172</span>
+<span class="cm"># 所以 10101100₂ = 172₁₀</span></div>
+
+        <p style="margin-top:0.75rem"><strong>Decimal → Binary（不断除以 2，收集余数，从下往上读）：</strong></p>
+        <div class="code-block">
+<span class="cm"># 把 14 转成二进制：</span>
+<span class="cm"># 14 ÷ 2 = 7  余 0   ← 最低位</span>
+<span class="cm">#  7 ÷ 2 = 3  余 1</span>
+<span class="cm">#  3 ÷ 2 = 1  余 1</span>
+<span class="cm">#  1 ÷ 2 = 0  余 1   ← 最高位</span>
+<span class="cm">#</span>
+<span class="cm"># 余数从下往上读：1 1 1 0</span>
+<span class="cm"># 所以 14₁₀ = 1110₂</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          十进制就是我们数数用的系统（0-9），满 10 进一位。二进制只有 0 和 1，满 2 就进一位——就像一个只有"开"和"关"两种状态的电灯开关，一排开关组合起来就能表示任何数字。
+        </div>
+
+        <table class="compare-table">
+          <tr><th>常用 2 的幂次（要记住！）</th><th>值</th></tr>
+          <tr><td>2⁰</td><td>1</td></tr>
+          <tr><td>2¹</td><td>2</td></tr>
+          <tr><td>2²</td><td>4</td></tr>
+          <tr><td>2³</td><td>8</td></tr>
+          <tr><td>2⁴</td><td>16</td></tr>
+          <tr><td>2⁵</td><td>32</td></tr>
+          <tr><td>2⁶</td><td>64</td></tr>
+          <tr><td>2⁷</td><td>128</td></tr>
+        </table>
+      </div>
+
+      <!-- BITS AND BYTES -->
+      <div class="topic" id="anchor-bytes">
+        <div class="topic-title">
+          Bit、Byte 和编码格式
+          <span class="tag tag-memory">📝 记住概念</span>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>Bit（位）</strong>
+            <span>一个 0 或 1，是计算机信息的最小单位</span>
+          </div>
+          <div class="concept-card" style="border-color:#a0c4ff">
+            <strong>Byte（字节）</strong>
+            <span>8 个 bit 组合在一起。<br>1 Byte = 8 Bits</span>
+          </div>
+        </div>
+
+        <p style="margin-top:0.75rem">同一串二进制数字，用不同方式"解读"，就是完全不同的东西：</p>
+        <div class="code-block">
+<span class="cm"># 二进制 1001000 可以被解读为：</span>
+<span class="cm">#   数字 72</span>
+<span class="cm">#   字符 'H'（ASCII 编码）</span>
+<span class="cm">#   图片里的某种颜色（RGB 编码）</span>
+<span class="cm">#   ……</span>
+<span class="cm"># 所以需要有统一的格式规范来告诉计算机"这串数字是什么意思"：</span>
+<span class="cm">#   .mp3 / .wav  → 音频</span>
+<span class="cm">#   .jpeg / .png → 图片</span>
+<span class="cm">#   ASCII / Unicode → 文本（Unicode 包含中文！）</span></div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ 常见进制系统（了解即可）</span>
+          Decimal（十进制，base 10）· Binary（二进制，base 2）· Octal（八进制，base 8）· Hexadecimal（十六进制，base 16，常见于颜色代码如 <kbd>#FF5733</kbd>）
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 2 ==================== -->
+  <div class="lesson" id="l2">
+    <div class="lesson-header" onclick="toggleLesson('l2')">
+      <span class="lesson-num">LESSON 2 · Week 2</span>
+      <span class="lesson-title">Algorithm、Program、高低级语言、print()、注释</span>
+      <span class="lesson-meta">4个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">📐</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>这节课是"编程思维"的起点。在动手写代码之前，你得先学会把问题分解成一步步清晰的指令——这就是算法（algorithm）的思维方式。同时，你得知道 Python 是什么类型的语言、如何运行，以及最基础的输出工具 <kbd>print()</kbd>。这一课的东西不难，但是"理解编程本质"的关键。</p>
+        </div>
+      </div>
+
+      <!-- ALGORITHM VS PROGRAM -->
+      <div class="topic" id="anchor-algo">
+        <div class="topic-title">
+          Algorithm vs Program
+          <span class="tag tag-memory">📝 记住区别</span>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#f5c842">
+            <strong><span class="term" data-def="Algorithm：算法，解决问题的有限步骤序列，可以用自然语言、伪代码或流程图描述">Algorithm（算法）</span></strong>
+            <span>解决问题的步骤设计，和具体编程语言无关。可以用自然语言、伪代码（pseudo-code）或流程图（flowchart）来表达。</span>
+          </div>
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>Program（程序）</strong>
+            <span>用某种具体编程语言实现的算法。同一个算法可以用 Python、Java、C++ 等不同语言来实现。</span>
+          </div>
+        </div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          Algorithm 是食谱（用文字写的做菜步骤），Program 是你真正下厨做出来的那道菜。食谱可以翻译成任何语言，但最终做菜时你必须用某种厨具（编程语言）来实现它。
+        </div>
+      </div>
+
+      <!-- HIGH LOW LEVEL -->
+      <div class="topic" id="anchor-languages">
+        <div class="topic-title">
+          Low-Level vs High-Level 语言
+          <span class="tag tag-memory">📝 记住分类</span>
+        </div>
+
+        <table class="compare-table">
+          <tr><th></th><th>Low-Level（低级语言）</th><th>High-Level（高级语言）</th></tr>
+          <tr><td>例子</td><td>Machine code、Assembly</td><td>Python、Java、C++</td></tr>
+          <tr><td>可读性</td><td>很差，接近 0/1 指令</td><td>接近人类语言，可读性强</td></tr>
+          <tr><td>可移植性</td><td>与特定机器绑定</td><td>可以在不同机器上运行</td></tr>
+          <tr><td>翻译方式</td><td>直接运行</td><td>需要 Compiler 或 Interpreter 翻译</td></tr>
+        </table>
+
+        <p style="margin-top:0.75rem">Python 是高级语言，用的是 <strong>Interpreter（解释器）</strong>——一行一行翻译执行，边翻边跑；C++ 用的是 <strong>Compiler（编译器）</strong>——先全部翻译成机器码，再统一跑。这就是为什么 Python 报错时你能看到精确的行号：解释器是一行行跑的，跑到哪行崩了就告诉你哪行。</p>
+      </div>
+
+      <!-- PRINT -->
+      <div class="topic" id="anchor-print">
+        <div class="topic-title">
+          print()、<kbd>\n</kbd>、<kbd>\t</kbd>
+          <span class="tag tag-memory">📝 记住用法</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># 基本用法</span>
+<span class="fn">print</span>(<span class="str">"hello"</span>, <span class="str">"world"</span>)          <span class="cm"># hello world（默认 sep=" "）</span>
+<span class="fn">print</span>(<span class="str">"hello"</span>, <span class="str">"world"</span>, sep=<span class="str">"-"</span>)  <span class="cm"># hello-world</span>
+<span class="fn">print</span>(<span class="str">"hello"</span>, end=<span class="str">""</span>)            <span class="cm"># 不换行，紧接着下一个 print</span>
+
+<span class="cm"># 打印变量</span>
+x = <span class="num">7</span>
+<span class="fn">print</span>(<span class="str">"The value of x is"</span>, x)   <span class="cm"># The value of x is 7</span>
+
+<span class="cm"># 特殊字符</span>
+<span class="fn">print</span>(<span class="str">"Line 1\nLine 2"</span>)    <span class="cm"># \n = 换行（new line）</span>
+<span class="fn">print</span>(<span class="str">"col1\tcol2"</span>)        <span class="cm"># \t = Tab 对齐（补空格到4的倍数）</span>
+
+<span class="cm"># 注释：# 开头的内容，Python 完全忽略</span>
+<span class="cm"># 这是一行注释</span>
+x = <span class="num">5</span>  <span class="cm"># 这是行末注释</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 3 ==================== -->
+  <div class="lesson" id="l3">
+    <div class="lesson-header" onclick="toggleLesson('l3')">
+      <span class="lesson-num">LESSON 3 · Week 2</span>
+      <span class="lesson-title">Variables、Type、input()、数学运算、Math 模块、Expression vs Statement</span>
+      <span class="lesson-meta">5个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">🔢</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>变量（variable）是编程的核心——它是你存数据的容器。这节课教你 Python 里有哪些基本数据类型，怎么在它们之间转换（type cast），怎么拿到用户的输入，以及怎么做数学计算。这些东西在之后的每一节课里都会用到，是最基础最核心的一课。</p>
+        </div>
+      </div>
+
+      <!-- VARIABLES AND TYPES -->
+      <div class="topic" id="anchor-variables">
+        <div class="topic-title">
+          Variables（变量）和 Type（类型）
+          <span class="tag tag-memory">📝 记住类型</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># 赋值语句：variable_name = value</span>
+number = <span class="num">67</span>
+name = <span class="str">"Alice"</span>
+pi = <span class="num">3.14</span>
+is_student = <span class="kw">True</span>
+
+<span class="cm"># 查看类型</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="num">12.3</span>))      <span class="cm"># &lt;class 'float'&gt;</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="str">"hello"</span>))  <span class="cm"># &lt;class 'str'&gt;</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="num">5</span>))        <span class="cm"># &lt;class 'int'&gt;</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="kw">True</span>))     <span class="cm"># &lt;class 'bool'&gt;</span></div>
+
+        <p><strong>Type Cast（类型转换）：</strong></p>
+        <div class="code-block">
+<span class="fn">int</span>(<span class="num">3.14</span>)     <span class="cm"># → 3    （直接截断小数部分，不四舍五入！）</span>
+<span class="fn">float</span>(<span class="num">5</span>)      <span class="cm"># → 5.0</span>
+<span class="fn">str</span>(<span class="num">42</span>)       <span class="cm"># → "42"</span>
+<span class="fn">int</span>(<span class="str">"hello"</span>) <span class="cm"># ❌ ValueError，文字不能转成数字！</span>
+<span class="fn">int</span>(<span class="str">"42"</span>)    <span class="cm"># ✅ → 42   （纯数字字符串可以转）</span></div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ int() 截断不是四舍五入！</span>
+          <kbd>int(3.9)</kbd> 结果是 <kbd>3</kbd>，不是 <kbd>4</kbd>。它直接把小数部分扔掉。要四舍五入用 <kbd>round(3.9)</kbd>。
+        </div>
+      </div>
+
+      <!-- INPUT -->
+      <div class="topic" id="anchor-input">
+        <div class="topic-title">
+          input() 函数
+          <span class="tag tag-key">⭐ 必掌握</span>
+          <span class="tag tag-memory">📝 记住坑</span>
+        </div>
+
+        <p><kbd>input()</kbd> 让用户在键盘上输入内容，但它<strong>永远返回 string（字符串）</strong>，就算你输入了数字也是字符串！</p>
+
+        <div class="code-block">
+<span class="cm"># ❌ 危险写法：忘记转类型</span>
+x = <span class="fn">input</span>(<span class="str">"Enter a number: "</span>)
+<span class="fn">print</span>(x + <span class="num">1</span>)   <span class="cm"># TypeError！str + int 不行</span>
+
+<span class="cm"># ✅ 正确写法：记得 type cast</span>
+x = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Enter an integer: "</span>))
+<span class="fn">print</span>(x + <span class="num">1</span>)   <span class="cm"># 现在没问题了</span>
+
+y = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Enter a decimal: "</span>))
+<span class="fn">print</span>(y * <span class="num">2</span>)   <span class="cm"># 也没问题</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          <kbd>input()</kbd> 就像一个总是用中文回答的翻译官——不管你用什么语言问他，他的回答永远是字符串格式。你要的是数字，就要自己"翻译"一下（type cast）。
+        </div>
+      </div>
+
+      <!-- MATH OPS -->
+      <div class="topic" id="anchor-math-ops">
+        <div class="topic-title">
+          数学运算 + 优先级
+          <span class="tag tag-memory">📝 记住运算符</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <div class="code-block">
+<span class="num">10</span> + <span class="num">3</span>    <span class="cm"># → 13   加法</span>
+<span class="num">10</span> - <span class="num">3</span>    <span class="cm"># → 7    减法</span>
+<span class="num">10</span> * <span class="num">3</span>    <span class="cm"># → 30   乘法</span>
+<span class="num">10</span> / <span class="num">3</span>    <span class="cm"># → 3.333... 除法（结果总是 float！）</span>
+<span class="num">10</span> ** <span class="num">3</span>   <span class="cm"># → 1000  幂次（exponentiation，指数）</span>
+<span class="num">10</span> // <span class="num">3</span>   <span class="cm"># → 3    整除（floor division，向下取整）</span>
+<span class="num">10</span> % <span class="num">3</span>    <span class="cm"># → 1    取余（modulus，余数）</span>
+
+<span class="cm"># 运算优先级（从高到低）：</span>
+<span class="cm"># 1. ()   括号最高</span>
+<span class="cm"># 2. **   幂次</span>
+<span class="cm"># 3. * / % //   乘除类</span>
+<span class="cm"># 4. + -   加减类</span></div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ 最容易搞混的三个运算符</span>
+          <kbd>/</kbd> 普通除法，结果永远是 float（比如 <kbd>6/2 = 3.0</kbd>）。<br>
+          <kbd>//</kbd> 整除，结果向下取整（比如 <kbd>7//2 = 3</kbd>，<kbd>-7//2 = -4</kbd>！）。<br>
+          <kbd>%</kbd> 取余（比如 <kbd>7%3 = 1</kbd>），可以用来判断奇偶：<kbd>n%2 == 0</kbd> 说明 n 是偶数。
+        </div>
+
+        <p><strong>常用内置函数 + Math 模块：</strong></p>
+        <div class="code-block">
+<span class="cm"># 内置函数（直接用，不需要 import）</span>
+<span class="fn">abs</span>(-<span class="num">5</span>)           <span class="cm"># → 5    绝对值</span>
+<span class="fn">pow</span>(<span class="num">2</span>, <span class="num">10</span>)         <span class="cm"># → 1024  等同于 2**10</span>
+<span class="fn">round</span>(<span class="num">7.948</span>, <span class="num">2</span>)   <span class="cm"># → 7.95  保留 2 位小数</span>
+
+<span class="cm"># math 模块（需要先 import）</span>
+<span class="kw">import</span> math
+math.<span class="fn">sin</span>(math.pi / <span class="num">4</span>)  <span class="cm"># sin(45°)</span>
+math.<span class="fn">cos</span>(math.pi)       <span class="cm"># cos(180°) = -1.0</span>
+math.pi                   <span class="cm"># → 3.141592653589793</span></div>
+      </div>
+
+      <!-- EXPRESSION VS STATEMENT -->
+      <div class="topic" id="anchor-expr">
+        <div class="topic-title">
+          Expression（表达式）vs Statement（语句）
+          <span class="tag tag-logic">🧠 理解概念</span>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#f5c842">
+            <strong>Expression（表达式）</strong>
+            <span>能被计算出一个值的代码片段。<br>例：<kbd>1/2</kbd>、<kbd>a + 5</kbd>、<kbd>"hello" + "world"</kbd></span>
+          </div>
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>Statement（语句）</strong>
+            <span>执行某个动作的完整指令，不一定有返回值。<br>例：<kbd>x = 5</kbd>（赋值语句）、<kbd>print("hi")</kbd></span>
+          </div>
+        </div>
+
+        <p style="margin-top:0.75rem">程序从上到下一行一行执行 statement，遇到 expression 就计算出值再继续。</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 4 ==================== -->
+  <div class="lesson" id="l4">
+    <div class="lesson-header" onclick="toggleLesson('l4')">
+      <span class="lesson-num">LESSON 4 · Week 3</span>
+      <span class="lesson-title">Boolean、关系运算符、and/or/not、if/elif/else 条件语句</span>
+      <span class="lesson-meta">4个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">🚦</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>到目前为止，程序都是从第一行跑到最后一行，没有任何"判断"。这节课教你如何让程序根据条件走不同的路——这才是让程序"聪明"起来的关键。<span class="term" data-def="Boolean：布尔类型，只有 True 和 False 两个值">Boolean（布尔）</span>值是做判断的基础，<kbd>if/elif/else</kbd> 是控制程序走向的门。几乎所有有意义的程序都需要条件判断。</p>
+        </div>
+      </div>
+
+      <!-- BOOLEAN -->
+      <div class="topic" id="anchor-boolean">
+        <div class="topic-title">
+          Boolean 值和关系运算符
+          <span class="tag tag-memory">📝 记住运算符</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># 关系运算符：比较两个值，结果是 True 或 False</span>
+<span class="num">7</span> == <span class="num">7</span>    <span class="cm"># True   （等于）</span>
+<span class="num">7</span> != <span class="num">5</span>    <span class="cm"># True   （不等于）</span>
+<span class="num">7</span> &gt; <span class="num">5</span>     <span class="cm"># True   （大于）</span>
+<span class="num">7</span> &lt; <span class="num">5</span>     <span class="cm"># False  （小于）</span>
+<span class="num">7</span> &gt;= <span class="num">7</span>    <span class="cm"># True   （大于等于）</span>
+<span class="num">7</span> &lt;= <span class="num">6</span>    <span class="cm"># False  （小于等于）</span></div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ == 和 = 绝对不能搞混！</span>
+          <kbd>=</kbd> 是赋值（assignment）：<kbd>x = 5</kbd> 把 5 存进 x。<br>
+          <kbd>==</kbd> 是比较（comparison）：<kbd>x == 5</kbd> 问"x 等于 5 吗？"结果是 True 或 False。<br>
+          这是最经典的 bug 来源之一，写 <kbd>if x = 5:</kbd> 会直接 SyntaxError。
+        </div>
+
+        <p><strong>浮点数比较的坑：</strong></p>
+        <div class="code-block">
+x = <span class="num">1.1</span> + <span class="num">2.2</span>
+<span class="fn">print</span>(x == <span class="num">3.3</span>)   <span class="cm"># False！！浮点数有精度误差</span>
+
+<span class="cm"># 正确做法：检查是否"足够接近"</span>
+epsilon = <span class="num">0.0001</span>
+<span class="fn">print</span>(<span class="fn">abs</span>(x - <span class="num">3.3</span>) &lt; epsilon)   <span class="cm"># True ← 这才是正确比较浮点数的方式</span></div>
+      </div>
+
+      <!-- BOOLEAN OPERATORS -->
+      <div class="topic" id="anchor-bool-ops">
+        <div class="topic-title">
+          Boolean 运算符：not、and、or
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+          <span class="tag tag-memory">📝 记住真值表</span>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># not（取反）：True ↔ False</span>
+<span class="kw">not</span> <span class="kw">True</span>    <span class="cm"># False</span>
+<span class="kw">not</span> <span class="kw">False</span>   <span class="cm"># True</span>
+
+<span class="cm"># and（与）：两边都 True 才是 True</span>
+<span class="kw">True</span> <span class="kw">and</span> <span class="kw">True</span>    <span class="cm"># True</span>
+<span class="kw">True</span> <span class="kw">and</span> <span class="kw">False</span>   <span class="cm"># False</span>
+<span class="kw">False</span> <span class="kw">and</span> <span class="kw">True</span>   <span class="cm"># False</span>
+
+<span class="cm"># or（或）：至少有一边是 True 就是 True</span>
+<span class="kw">True</span> <span class="kw">or</span> <span class="kw">False</span>    <span class="cm"># True</span>
+<span class="kw">False</span> <span class="kw">or</span> <span class="kw">False</span>   <span class="cm"># False</span>
+
+<span class="cm"># 优先级：not > and > or（和数学里 × > + 一样，先算 not）</span>
+<span class="kw">not</span> <span class="kw">True</span> <span class="kw">or</span> <span class="kw">False</span>   <span class="cm"># = (not True) or False = False or False = False</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          <kbd>and</kbd>：你要"又有学生证，又带了作业"才能进实验室——两个条件都得满足。<br>
+          <kbd>or</kbd>：你"有现金或者有手机支付"就能买奶茶——满足其中一个就行。<br>
+          <kbd>not</kbd>：把 True/False 翻转，就像"不是学生"。
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ Short-circuit evaluation（短路求值）</span>
+          <kbd>True or (3 + "error")</kbd> 结果是 <kbd>True</kbd>——因为左边已经是 True，<kbd>or</kbd> 就不看右边了。右边那个会崩溃的表达式根本没有被执行。<kbd>and</kbd> 同理：<kbd>False and anything</kbd> 直接就是 False。
+        </div>
+      </div>
+
+      <!-- IF ELIF ELSE -->
+      <div class="topic" id="anchor-ifelse">
+        <div class="topic-title">
+          if / elif / else 条件语句
+          <span class="tag tag-key">⭐ 必掌握</span>
+          <span class="tag tag-logic">🧠 理解执行流程</span>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># 基本结构</span>
+<span class="kw">if</span> condition1:
+    <span class="cm"># condition1 为 True 时执行</span>
+    <span class="fn">print</span>(<span class="str">"condition 1 is True"</span>)
+<span class="kw">elif</span> condition2:
+    <span class="cm"># condition1 为 False，且 condition2 为 True 时执行</span>
+    <span class="fn">print</span>(<span class="str">"condition 2 is True"</span>)
+<span class="kw">else</span>:
+    <span class="cm"># 以上全部为 False 时执行（else 不是必须的）</span>
+    <span class="fn">print</span>(<span class="str">"all conditions are False"</span>)
+
+<span class="cm"># 嵌套 if（nested conditionals）</span>
+<span class="kw">if</span> x == y:
+    <span class="fn">print</span>(<span class="str">'x and y are equal'</span>)
+<span class="kw">else</span>:
+    <span class="kw">if</span> x &lt; y:
+        <span class="fn">print</span>(<span class="str">'x is less than y'</span>)
+    <span class="kw">else</span>:
+        <span class="fn">print</span>(<span class="str">'x is greater than y'</span>)</div>
+
+        <p><strong>重点规则：</strong></p>
+        <ul>
+          <li>一旦某个 <kbd>if</kbd> 或 <kbd>elif</kbd> 的条件为 True，执行完那个块后，剩下的 <kbd>elif</kbd> 和 <kbd>else</kbd> 全部跳过</li>
+          <li><kbd>elif</kbd> 可以有任意多个</li>
+          <li><kbd>else</kbd> 不是必须的，可以没有</li>
+          <li><strong>缩进（indentation）是关键</strong>——Python 靠缩进判断哪些代码属于哪个块</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 5 ==================== -->
+  <div class="lesson" id="l5">
+    <div class="lesson-header" onclick="toggleLesson('l5')">
+      <span class="lesson-num">LESSON 5 · Week 4</span>
+      <span class="lesson-title">Functions：def、参数、Scope、Void/Fruitful、Docstring、常见误区</span>
+      <span class="lesson-meta">6个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">⚙️</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>Function（函数）是编程里最重要的抽象工具。有了函数，你就能把一段重复的代码封装起来，给它起个名字，之后随时调用——不需要一遍遍复制粘贴。这节课讲的 scope（作用域）、return vs print、docstring 这几个概念，是 COMP202 里考试和作业最高频的考点之一，务必搞清楚。</p>
+        </div>
+      </div>
+
+      <!-- DEF AND CALL -->
+      <div class="topic" id="anchor-def">
+        <div class="topic-title">
+          定义函数（def）和调用函数
+          <span class="tag tag-key">⭐ 必掌握</span>
+          <span class="tag tag-memory">📝 记住语法</span>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># 定义函数（定义 ≠ 执行！）</span>
+<span class="kw">def</span> <span class="fn">greet</span>(name):
+    <span class="fn">print</span>(<span class="str">"Hello, "</span> + name)
+    <span class="fn">print</span>(<span class="str">"Welcome to McGill!"</span>)
+
+<span class="cm"># 调用函数（定义之后才能调用）</span>
+<span class="fn">greet</span>(<span class="str">"Alice"</span>)   <span class="cm"># Hello, Alice \n Welcome to McGill!</span>
+<span class="fn">greet</span>(<span class="str">"Bob"</span>)     <span class="cm"># Hello, Bob \n Welcome to McGill!</span>
+
+<span class="cm"># 返回多个值（实际上是返回一个 tuple）</span>
+<span class="kw">def</span> <span class="fn">calculator</span>(a, b):
+    add = a + b
+    subtract = <span class="fn">abs</span>(a - b)
+    multiply = a * b
+    divide = a / b
+    <span class="kw">return</span> add, subtract, multiply, divide
+
+result = <span class="fn">calculator</span>(<span class="num">10</span>, <span class="num">5</span>)
+<span class="fn">print</span>(result)   <span class="cm"># (15, 5, 50, 2.0)</span></div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ 定义函数不等于运行！</span>
+          写了 <kbd>def greet():</kbd> 只是告诉 Python "我定义了这个函数"，函数体里的代码<strong>不会立刻执行</strong>。必须要调用 <kbd>greet()</kbd> 才会真正运行。这是初学者最常犯的误解。
+        </div>
+      </div>
+
+      <!-- SCOPE -->
+      <div class="topic" id="anchor-scope">
+        <div class="topic-title">
+          Scope（作用域）：Local vs Global 变量
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#e98585">
+            <strong>Local Variable（局部变量）</strong>
+            <span>在函数体内部定义的变量（包括参数）。只在函数内部"存在"，函数结束后消失。</span>
+          </div>
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>Global Variable（全局变量）</strong>
+            <span>在所有函数外部定义的变量。函数内部可以读取，但不能直接修改（修改需要 <kbd>global</kbd> 关键字）。</span>
+          </div>
+        </div>
+
+        <div class="code-block">
+<span class="kw">def</span> <span class="fn">my_function</span>():
+    x = <span class="num">5</span>              <span class="cm"># x 是 local variable，只在函数里存在</span>
+    <span class="fn">print</span>(<span class="str">"inside:"</span>, x)
+
+X = <span class="num">10</span>              <span class="cm"># X 是 global variable</span>
+<span class="fn">my_function</span>()       <span class="cm"># inside: 5</span>
+<span class="fn">print</span>(<span class="str">"outside:"</span>, X) <span class="cm"># outside: 10  ← 函数里的 x 和外面的 X 是两个独立的变量</span>
+
+<span class="cm"># ❌ 这会报错：在函数内试图修改全局变量</span>
+count = <span class="num">5</span>
+<span class="kw">def</span> <span class="fn">bad_function</span>():
+    count += <span class="num">7</span>    <span class="cm"># UnboundLocalError！Python 认为你在访问一个"还没被赋值的局部变量"</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          函数就像一个独立的工作间。工作间里的工具（local variable）只在里面用，出来就不见了；外面走廊的公共工具（global variable）你可以在工作间里看到和用，但你不能在工作间里把公共工具扔掉或换掉（除非你特别申请——用 <kbd>global</kbd> 关键字）。
+        </div>
+      </div>
+
+      <!-- VOID VS FRUITFUL -->
+      <div class="topic" id="anchor-void-fruitful">
+        <div class="topic-title">
+          Void vs Fruitful 函数：print 和 return 的区别
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+          <span class="tag tag-key">⭐ 超高频考点</span>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#e98585">
+            <strong>Void Function（无返回值函数）</strong>
+            <span>没有 <kbd>return</kbd> 语句（或只有 <kbd>return</kbd> 没有值）。实际上返回 <kbd>None</kbd>。<br>用 <kbd>print()</kbd> 显示内容。</span>
+          </div>
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>Fruitful Function（有返回值函数）</strong>
+            <span>有 <kbd>return 某个值</kbd>。调用者可以把这个值存进变量或继续用。<br>不用 print，而是 return。</span>
+          </div>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># ❌ 常见误区：print 不等于 return</span>
+<span class="kw">def</span> <span class="fn">bad_add</span>(a, b):
+    <span class="fn">print</span>(a + b)     <span class="cm"># 只是显示，不返回值</span>
+
+result = <span class="fn">bad_add</span>(<span class="num">3</span>, <span class="num">4</span>)
+<span class="fn">print</span>(result)       <span class="cm"># None ← 什么都没返回！</span>
+
+<span class="cm"># ✅ 正确做法：用 return</span>
+<span class="kw">def</span> <span class="fn">good_add</span>(a, b):
+    <span class="kw">return</span> a + b     <span class="cm"># 返回计算结果</span>
+
+result = <span class="fn">good_add</span>(<span class="num">3</span>, <span class="num">4</span>)
+<span class="fn">print</span>(result)       <span class="cm"># 7 ← 这才对</span>
+
+<span class="cm"># return 立刻结束函数，后面的代码不会执行</span>
+<span class="kw">def</span> <span class="fn">early_exit</span>(x):
+    <span class="kw">if</span> x &lt; <span class="num">0</span>:
+        <span class="kw">return</span> <span class="num">0</span>    <span class="cm"># 直接退出，下面的不会跑</span>
+    <span class="kw">return</span> x * <span class="num">2</span></div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ 记得接住 return 值！</span>
+          <kbd>test()</kbd> 调用函数但没把返回值存起来，结果就直接消失了。正确写法是 <kbd>value = test()</kbd>，把返回值存进变量，之后才能用。
+        </div>
+      </div>
+
+      <!-- DOCSTRING -->
+      <div class="topic" id="anchor-docstring">
+        <div class="topic-title">
+          Docstring（文档字符串）的格式
+          <span class="tag tag-memory">📝 记住格式</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <p>Docstring 写在函数定义后的第一行，用三引号包裹，解释函数的用途。这是 COMP202 作业的标准要求，格式不对会扣分！</p>
+
+        <div class="code-block">
+<span class="kw">def</span> <span class="fn">area_circle</span>(radius):
+    <span class="str">"""
+    (num) -> num
+    Returns the area of a circle with a given radius.
+
+    &gt;&gt;&gt; area_circle(20)
+    1256.64
+    &gt;&gt;&gt; area_circle(0)
+    0
+    """</span>
+    <span class="kw">import</span> math
+    <span class="kw">return</span> math.pi * <span class="fn">pow</span>(radius, <span class="num">2.0</span>)</div>
+
+        <p>Docstring 三个组成部分：</p>
+        <ul>
+          <li><strong>Type contract（类型契约）</strong>：第一行，格式 <kbd>(input types) -> return type</kbd></li>
+          <li><strong>Description（描述）</strong>：函数做什么事</li>
+          <li><strong>Examples（例子）</strong>：用 <kbd>&gt;&gt;&gt;</kbd> 开头，写输入和预期输出（这就是 L13 的 doctest！）</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 6 ==================== -->
+  <div class="lesson" id="l6">
+    <div class="lesson-header" onclick="toggleLesson('l6')">
+      <span class="lesson-num">LESSON 6 · Week 5</span>
+      <span class="lesson-title">While Loop：语法、更新条件、无限循环、Shorthand Assignment</span>
+      <span class="lesson-meta">4个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">🔄</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>While loop 是让程序"重复做某件事"的工具。区别于 for loop（L7 会讲，用于遍历已知序列），while loop 适合"不知道要重复几次，但知道什么时候停"的场景——比如"一直让用户输入，直到输入正确为止"，或者"一直计算，直到满足某个条件"。While loop 配合 L19 的 try/except 一起用，是处理用户输入错误的经典写法。</p>
+        </div>
+      </div>
+
+      <!-- WHILE SYNTAX -->
+      <div class="topic" id="anchor-while">
+        <div class="topic-title">
+          While Loop 语法 + 执行流程
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># 基本语法</span>
+<span class="kw">while</span> condition:   <span class="cm"># 每次循环开始前都会检查这个条件</span>
+    <span class="cm"># 条件为 True 时执行循环体</span>
+    <span class="cm"># ⚠️ 循环体里必须有代码让条件最终变成 False！</span>
+
+<span class="cm"># 完整例子：倒数</span>
+n = <span class="num">3</span>
+<span class="kw">while</span> n &gt; <span class="num">0</span>:
+    <span class="fn">print</span>(<span class="str">'Value of n is:'</span>, n)
+    n = n - <span class="num">1</span>        <span class="cm"># ← 关键：更新 n，让条件最终变 False</span>
+<span class="cm"># 输出：3、2、1（n=0 时 0>0 为 False，停止）</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          While loop 就像洗衣机的程序："只要衣服还没洗干净，就继续洗"。每洗一遍，检查一下衣服干不干净（条件）——如果还不行，继续洗（循环）；干净了就停下来（条件变 False，退出循环）。关键是：洗衣过程必须让"干净程度"越来越高，否则就会永远洗不完（无限循环）。
+        </div>
+      </div>
+
+      <!-- INFINITE LOOP -->
+      <div class="topic" id="anchor-infinite">
+        <div class="topic-title">
+          无限循环（Infinite Loop）：三种常见原因
+          <span class="tag tag-logic">🧠 理解原因</span>
+          <span class="tag tag-key">⭐ 必须避免</span>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># ❌ 原因 1：根本没有更新条件</span>
+n = <span class="num">3</span>
+<span class="kw">while</span> n &gt; <span class="num">0</span>:
+    <span class="fn">print</span>(<span class="str">'hello'</span>)    <span class="cm"># n 永远是 3，循环永远不停</span>
+
+<span class="cm"># ❌ 原因 2：更新方向错了</span>
+n = <span class="num">6</span>
+<span class="kw">while</span> n &gt; <span class="num">5</span>:
+    n = n + <span class="num">1</span>    <span class="cm"># n 越来越大，永远大于 5</span>
+
+<span class="cm"># ❌ 原因 3：每次都把条件重置成常量</span>
+n = <span class="num">6</span>
+<span class="kw">while</span> n &gt; <span class="num">5</span>:
+    n = <span class="num">7</span>        <span class="cm"># n 永远被重置回 7，永远大于 5</span></div>
+
+        <p>在 Thonny 里如果陷入无限循环，按 <kbd>Ctrl + C</kbd> 强制停止程序。</p>
+      </div>
+
+      <!-- SHORTHAND -->
+      <div class="topic" id="anchor-shorthand">
+        <div class="topic-title">
+          Shorthand Assignment（复合赋值运算符）
+          <span class="tag tag-memory">📝 记住写法</span>
+        </div>
+
+        <p>这些是常用的简写，在 while loop 里更新计数器时特别常用：</p>
+
+        <div class="code-block">
+x += <span class="num">3</span>    <span class="cm"># 等价于 x = x + 3</span>
+x -= <span class="num">3</span>    <span class="cm"># 等价于 x = x - 3</span>
+x *= <span class="num">3</span>    <span class="cm"># 等价于 x = x * 3</span>
+x /= <span class="num">3</span>    <span class="cm"># 等价于 x = x / 3</span>
+x **= <span class="num">2</span>   <span class="cm"># 等价于 x = x ** 2</span>
+x %= <span class="num">3</span>    <span class="cm"># 等价于 x = x % 3</span>
+x //= <span class="num">3</span>   <span class="cm"># 等价于 x = x // 3</span>
+
+<span class="cm"># 实际使用：在 while loop 里更新计数器</span>
+count = <span class="num">0</span>
+<span class="kw">while</span> count &lt; <span class="num">5</span>:
+    <span class="fn">print</span>(count)
+    count += <span class="num">1</span>   <span class="cm"># 比写 count = count + 1 更简洁</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 7 ==================== -->
+  <div class="lesson open" id="l7">
+    <div class="lesson-header" onclick="toggleLesson('l7')">
+      <span class="lesson-num">LESSON 7 · Week 5</span>
+      <span class="lesson-title">Recursion、For Loop、Variable Scope、Break/Continue</span>
+      <span class="lesson-meta">4个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">🏗️</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>这节课的核心是"让程序重复干活"。For loop 让你能批量处理数据；recursion（递归）给你另一种解决问题的思路；variable scope（变量作用域）教你搞清楚变量什么时候"存在"、什么时候"消失"。这三件事是写出真正有用程序的基础。</p>
+        </div>
+      </div>
+
+      <!-- RECURSION -->
+      <div class="topic" id="anchor-recursion">
+        <div class="topic-title">
+          <span class="term" data-def="递归：函数调用自身来解决问题">Recursion（递归）</span>
+          <span class="tag tag-logic">🧠 要理解逻辑</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <p>Recursion 就是一个 function（函数）调用自己。写 recursive function（递归函数）必须搞定两件事，缺一不可：</p>
+        <ul>
+          <li><strong>Base case（基础情况/终止条件）</strong>：告诉程序什么时候该停下来，不然会无限循环崩溃</li>
+          <li><strong>Recursive step（递归步骤）</strong>：调用自己，但每次都要往 base case 靠近一步</li>
+        </ul>
+
+        <div class="code-block">
+<span class="kw">def</span> <span class="fn">countdown</span>(n):
+    <span class="kw">if</span> n &lt;= <span class="num">0</span>:                    <span class="cm"># ← Base case，到这里就停！</span>
+        <span class="fn">print</span>(<span class="str">'Blastoff!'</span>)
+    <span class="kw">else</span>:
+        <span class="fn">print</span>(n)
+        <span class="fn">countdown</span>(n - <span class="num">1</span>)        <span class="cm"># ← Recursive step，n 每次减 1，往 base case 靠</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          想象你在数一叠盘子有多高。你的做法是：拿起最上面那个，数"1"，然后让旁边的人去数剩下的——旁边那个人也用同样的办法。一直到最后一个人发现面前没有盘子了（base case），就报"0"，然后答案一层层往上传回来。这就是 recursion 的运作方式。
+        </div>
+
+        <p><strong>Recursion vs 普通 loop，什么时候用哪个？</strong></p>
+        <ul>
+          <li>递归次数很多、想省内存、追求速度 → 用 loop（while 或 for）</li>
+          <li>不那么 performance-sensitive（对性能要求不高），但想让代码更简洁 → 用 recursion</li>
+        </ul>
+      </div>
+
+      <!-- FOR LOOP -->
+      <div class="topic" id="anchor-forloop">
+        <div class="topic-title">
+          For Loop 语法 + range()
+          <span class="tag tag-memory">📝 要记住</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <p>For loop 的基本 grammar（语法）：</p>
+        <div class="code-block">
+<span class="kw">for</span> variable <span class="kw">in</span> sequence:    <span class="cm"># sequence = 一个序列（比如列表、range）</span>
+    instructions               <span class="cm"># 缩进！每个 element（元素）执行一次</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          就像老师点名：拿着名单（sequence），每次叫出一个名字（variable 被 assign（赋值）成那个同学的名字），那个同学站起来回答问题（跑一次 loop body），然后叫下一个。
+        </div>
+
+        <p style="margin-top:0.75rem"><strong>range() 的三种用法</strong> — 这个必须背下来！</p>
+        <table class="compare-table">
+          <tr><th>写法</th><th>生成的数字</th><th>记忆方法</th></tr>
+          <tr><td><kbd>range(5)</kbd></td><td>0, 1, 2, 3, 4</td><td>从 0 到 end，不含 end</td></tr>
+          <tr><td><kbd>range(3, 7)</kbd></td><td>3, 4, 5, 6</td><td>从 start 到 end，不含 end</td></tr>
+          <tr><td><kbd>range(10, 2, -2)</kbd></td><td>10, 8, 6, 4</td><td>step（步长）可以是负数，倒着数</td></tr>
+        </table>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ 超级常见错误</span>
+          range() 永远<strong>不包含右边那个数</strong>！这叫 <span class="term" data-def="左闭右开区间：包含左端点，不包含右端点">half-open interval（半开区间）</span>，写作 [start, end)。很多人会忘，然后发现自己少算了一个数。
+        </div>
+
+        <p style="margin-top:0.75rem"><strong>For loop 还是 while loop？</strong></p>
+        <ul>
+          <li><strong>For</strong>：知道要 <span class="term" data-def="iterate：逐个遍历序列中的元素">iterate（遍历）</span>多少次，或者要对序列里每个 element 做同样的事</li>
+          <li><strong>While</strong>：不知道要跑多少次，直到某个条件成立才停（比如一直让用户重新输入，直到他输的是 valid（合法的）数据）</li>
+        </ul>
+      </div>
+
+      <!-- VARIABLE SCOPE -->
+      <div class="topic" id="anchor-scope">
+        <div class="topic-title">
+          <span class="term" data-def="Variable Scope：变量的可访问范围，即变量在哪里能被看到和使用">Variable Scope（变量作用域）</span>
+          <span class="tag tag-logic">🧠 要理解逻辑</span>
+        </div>
+
+        <p>Python 里最小的 "local（局部）" 范围是 <strong>function body（函数体）</strong>，不是 if、for、while 的 block（代码块）！</p>
+        <p>这意味着：在 if 或 for 里定义的变量，只要那段代码跑过了，在外面照样能用。但如果那段代码压根没执行，变量就不存在，访问它会报 <span class="term" data-def="NameError：名称错误，访问了一个没有被定义过的变量">NameError</span>。</p>
+
+        <div class="code-block">
+x = <span class="num">5</span>
+<span class="kw">if</span> x > <span class="num">0</span>:
+    y = x
+<span class="fn">print</span>(y)    <span class="cm"># ✅ 没问题！if 跑过了，y 存在，输出 5</span>
+
+<span class="cm"># ─────────────────────────────────────</span>
+
+x = <span class="num">5</span>
+<span class="kw">if</span> x > <span class="num">0</span>:
+    y = x
+<span class="kw">else</span>:
+    z = -x    <span class="cm"># x=5 > 0，所以 else 没执行</span>
+<span class="fn">print</span>(z)    <span class="cm"># ❌ NameError！z 从来没被创建过</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          就像只有你真正打开过一个包裹，里面的东西才到你手上。如果那个 if/else 分支从没执行，变量就从来没被"放进"内存——你去拿，当然拿不到。
+        </div>
+      </div>
+
+      <!-- BREAK CONTINUE -->
+      <div class="topic" id="anchor-breakcontinue">
+        <div class="topic-title">
+          Break 和 Continue
+          <span class="tag tag-memory">📝 要记住区别</span>
+        </div>
+
+        <table class="compare-table">
+          <tr><th>关键字</th><th>作用</th><th>类比</th></tr>
+          <tr><td><kbd>break</kbd></td><td>立刻退出整个 loop，后面的 iteration（迭代）全部取消</td><td>逃课——直接不上了，出门走人</td></tr>
+          <tr><td><kbd>continue</kbd></td><td>跳过这次 iteration，直接去下一个</td><td>这节课睡觉——人在课上，但这节没听，等下节</td></tr>
+        </table>
+
+        <div class="code-block">
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>):
+    <span class="kw">if</span> i == <span class="num">5</span>:
+        <span class="kw">break</span>
+    <span class="fn">print</span>(i, end=<span class="str">" "</span>)
+<span class="cm"># 输出：1 2 3 4  ← 碰到5直接跑路，后面全没了</span>
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>):
+    <span class="kw">if</span> i == <span class="num">5</span>:
+        <span class="kw">continue</span>
+    <span class="fn">print</span>(i, end=<span class="str">" "</span>)
+<span class="cm"># 输出：1 2 3 4 6 7 8 9 10  ← 跳过了5，其他都在</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 8 ==================== -->
+  <div class="lesson" id="l8">
+    <div class="lesson-header" onclick="toggleLesson('l8')">
+      <span class="lesson-num">LESSON 8 · Week 6</span>
+      <span class="lesson-title">Random、Modules、Strings 基础</span>
+      <span class="lesson-meta">4个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">🔧</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>这节课打开了"使用别人写好的工具"的大门（modules），并系统介绍了最常用的 data type（数据类型）之一——string（字符串）。String 几乎出现在所有程序里，理解它的底层逻辑（immutable、indexing 等）对后续学习极重要。</p>
+        </div>
+      </div>
+
+      <!-- MODULES -->
+      <div class="topic" id="anchor-modules">
+        <div class="topic-title">
+          <span class="term" data-def="Module：模块，一个包含可复用代码的 .py 文件">Modules（模块）</span>
+          — 四种 import 方式
+          <span class="tag tag-memory">📝 记住语法</span>
+        </div>
+
+        <p>Module = 别人写好的代码文件，import 进来就能用。有四种写法，它们各有适用场景：</p>
+
+        <table class="compare-table">
+          <tr><th>写法</th><th>怎么调用</th><th>适合什么时候用</th></tr>
+          <tr><td><kbd>import math</kbd></td><td><kbd>math.sqrt(16)</kbd></td><td>最安全，不怕 naming conflict（命名冲突）</td></tr>
+          <tr><td><kbd>from math import sqrt</kbd></td><td><kbd>sqrt(16)</kbd></td><td>只需要几个函数，写起来简洁</td></tr>
+          <tr><td><kbd>from math import *</kbd></td><td><kbd>sqrt(16)</kbd></td><td>谨慎用！可能和你自己的变量名撞</td></tr>
+          <tr><td><kbd>import math as m</kbd></td><td><kbd>m.sqrt(16)</kbd></td><td>module 名太长时用别名省事</td></tr>
+        </table>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          <kbd>import math</kbd> = 借了一整本数学教材，查什么都要翻目录（math.xxx）。<kbd>from math import sqrt</kbd> = 直接把那一页复印出来夹进你的笔记本，随手可用。<kbd>from math import *</kbd> = 把整本书的内容全都抄到你的笔记本里，但万一你笔记里本来就有个叫 "sqrt" 的东西，就乱套了。
+        </div>
+
+        <p style="margin-top:0.75rem"><strong>__name__ 和 __main__</strong> <span class="tag tag-logic" style="vertical-align:middle">🧠 理解逻辑</span></p>
+        <p>当一个 .py 文件被<strong>直接运行</strong>时，Python 会自动把 <kbd>__name__</kbd> 设成 <kbd>"__main__"</kbd>；但如果它被别的文件 import 进来，<kbd>__name__</kbd> 就变成文件名。</p>
+        <p>用途：在 module 底部加上 <kbd>if __name__ == "__main__":</kbd>，这段代码只在直接运行时执行，被 import 的时候不会触发。这样你的 module 就可以既当工具库，又能单独测试运行。</p>
+      </div>
+
+      <!-- RANDOM -->
+      <div class="topic" id="anchor-random">
+        <div class="topic-title">
+          Random — 随机数
+          <span class="tag tag-memory">📝 记住 API 名字</span>
+        </div>
+
+        <div class="code-block">
+<span class="kw">import</span> random
+
+random.<span class="fn">random</span>()              <span class="cm"># 随机 float，范围 [0.0, 1.0)，不含 1.0</span>
+random.<span class="fn">randint</span>(<span class="num">2</span>, <span class="num">5</span>)        <span class="cm"># 随机 int，范围 2 到 5（含两端！）</span>
+random.<span class="fn">seed</span>(<span class="num">123</span>)             <span class="cm"># 固定 seed（种子），让随机结果可复现</span></div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ 易混淆点</span>
+          <kbd>randint(2, 5)</kbd> 是<strong>含两端</strong>的，2 和 5 都可能出现。但 <kbd>range(2, 5)</kbd> 不含 5。两个看起来格式类似，但规则不一样，别搞混！
+        </div>
+
+        <p><span class="term" data-def="Seed（种子）：随机数生成的起始值，相同的 seed 会产生相同的随机序列，用于复现实验结果">random.seed()</span> 的作用：用同一个 seed，每次跑程序生成的"随机"数都一样。测试代码的时候很有用，因为你可以 reproduce（复现）结果。</p>
+      </div>
+
+      <!-- STRINGS -->
+      <div class="topic" id="anchor-strings">
+        <div class="topic-title">
+          Strings — 索引、切片、方法
+          <span class="tag tag-memory">📝 要记住</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <p><strong>Indexing（索引）</strong>：第一个字符是 [0]，最后一个是 [-1]</p>
+        <div class="code-block">
+fruit = <span class="str">'banana'</span>
+fruit[<span class="num">0</span>]     <span class="cm"># 'b'</span>
+fruit[-<span class="num">1</span>]    <span class="cm"># 'a'（最后一个，负数 index 从末尾数）</span>
+fruit[<span class="num">1000</span>]  <span class="cm"># ❌ IndexError（索引越界错误）</span></div>
+
+        <p style="margin-top:0.75rem"><strong>Slicing（切片）s[start : end : step]</strong> — 一个超级实用的技巧</p>
+        <div class="code-block">
+s = <span class="str">'Hello world'</span>
+s[<span class="num">0</span>:<span class="num">5</span>]       <span class="cm"># 'Hello'（取 index 0 到 4，不含 5）</span>
+s[<span class="num">6</span>:]        <span class="cm"># 'world'（从 6 到末尾）</span>
+s[<span class="num">0</span>:<span class="num">5</span>:<span class="num">2</span>]     <span class="cm"># 'Hlo'（step=2，每隔一个取一个）</span>
+s[::<span class="num">-1</span>]      <span class="cm"># 'dlrow olleH'（反转字符串！经典写法）</span></div>
+
+        <p style="margin-top:0.75rem"><strong>常用 string methods（字符串方法）：</strong></p>
+        <div class="concept-grid">
+          <div class="concept-card"><strong>s.lower() / s.upper()</strong><span>转全小写 / 全大写，返回新 string</span></div>
+          <div class="concept-card"><strong>s.replace(old, new)</strong><span>把所有 old 替换成 new</span></div>
+          <div class="concept-card"><strong>s.count(c)</strong><span>统计 c 出现了多少次</span></div>
+          <div class="concept-card"><strong>s.find(c)</strong><span>找第一次出现的 index，没找到返回 -1</span></div>
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ Strings 最重要的特性</span>
+          String 是 <span class="term" data-def="Immutable：不可变的，创建之后内容不能被修改">immutable（不可变）</span> 的！所有 method 都是<strong>返回一个新 string</strong>，原来那个不会变。你不能用 <kbd>s[0] = 'X'</kbd> 去修改某个字符，这样写会直接报 <span class="term" data-def="TypeError：类型错误，对某种类型的对象做了不支持的操作">TypeError</span>。
+        </div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          String 就像刻在石碑上的字，你没法拿小刀改某一个字——只能重新刻一块新石碑（创建一个新 string）。
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 9 ==================== -->
+  <div class="lesson" id="l9">
+    <div class="lesson-header" onclick="toggleLesson('l9')">
+      <span class="lesson-num">LESSON 9 · Week 7</span>
+      <span class="lesson-title">遍历 String 的三种方式</span>
+      <span class="lesson-meta">2个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">🔍</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p><span class="term" data-def="Traverse：遍历，逐个访问序列中的每一个元素">Traverse（遍历）</span>字符串是文本处理的基础操作。三种方式各有适用场景，搞清楚什么时候用哪种，写代码会省很多事，也不容易出 bug。</p>
+        </div>
+      </div>
+
+      <div class="topic" id="anchor-traverse">
+        <div class="topic-title">
+          三种遍历方式对比
+          <span class="tag tag-logic">🧠 理解区别</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <div class="code-block">
+text = <span class="str">'orange'</span>
+
+<span class="cm"># 方式 1：while + 手动 index（最灵活，但最容易写出 bug）</span>
+index = <span class="num">0</span>
+<span class="kw">while</span> index &lt; <span class="fn">len</span>(text):
+    <span class="fn">print</span>(text[index])
+    index += <span class="num">1</span>
+
+<span class="cm"># 方式 2：for + range（可以同时拿到 index 和字符）</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(text)):
+    <span class="fn">print</span>(text[i])
+
+<span class="cm"># 方式 3：for 直接 iterate（最简洁，但只能拿到字符，拿不到 index）</span>
+<span class="kw">for</span> char <span class="kw">in</span> text:
+    <span class="fn">print</span>(char)</div>
+
+        <table class="compare-table">
+          <tr><th>方式</th><th>需要 index 吗？</th><th>推荐场景</th></tr>
+          <tr><td>while + 手动 index</td><td>✅ 可以用</td><td>需要在 loop 里动态跳 index，比如每次跳两格</td></tr>
+          <tr><td>for + range</td><td>✅ 可以用</td><td>需要知道当前是第几个字符</td></tr>
+          <tr><td>for 直接 iterate</td><td>❌ 没有 index</td><td>只关心字符本身，最 Pythonic 的写法</td></tr>
+        </table>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ Off-by-one error（差一错误）— 最常见的 bug！</span>
+          写 <kbd>range(len(text) + 1)</kbd> 就会 <span class="term" data-def="Out of bounds：越界，访问了不存在的 index">out of bounds（越界）</span>，因为有效 index 是 0 到 len-1，len 本身不是合法的 index。只要多写了一个 +1，程序直接崩。
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 10 ==================== -->
+  <div class="lesson" id="l10">
+    <div class="lesson-header" onclick="toggleLesson('l10')">
+      <span class="lesson-num">LESSON 10 · Week 7</span>
+      <span class="lesson-title">List（列表）：创建、访问、操作、内置函数</span>
+      <span class="lesson-meta">5个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">📦</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>List 是 Python 里最重要的 <span class="term" data-def="Data structure：数据结构，组织和存储数据的方式">data structure（数据结构）</span>之一。现实程序里你几乎永远在跟"一组数据"打交道——学生成绩、购物车商品、用户列表……List 就是存放和处理这些集合数据的容器。</p>
+        </div>
+      </div>
+
+      <!-- LIST BASICS -->
+      <div class="topic" id="anchor-listbasics">
+        <div class="topic-title">
+          List 基础 — 创建和访问
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <p>List 的三大特征：<strong>有序（Ordered）</strong>、<strong>可索引（Indexing from 0）</strong>、<strong>可变（<span class="term" data-def="Mutable：可变的，创建之后内容可以被修改">Mutable</span>）</strong></p>
+
+        <div class="code-block">
+my_list = [<span class="num">1</span>, <span class="str">'two'</span>, <span class="num">3.75</span>]    <span class="cm"># List 里可以混合不同类型！</span>
+days = [<span class="str">"Mon"</span>, <span class="str">"Tue"</span>, <span class="str">"Wed"</span>]
+
+<span class="cm"># Accessing elements（访问元素）</span>
+days[<span class="num">0</span>]      <span class="cm"># "Mon"</span>
+days[-<span class="num">1</span>]     <span class="cm"># "Wed"（最后一个）</span>
+days[<span class="num">0</span>:<span class="num">2</span>]    <span class="cm"># ["Mon", "Tue"]（切片，和 string 一样）</span>
+
+<span class="cm"># Modifying（修改）— 这是 list 和 string 最大的区别！</span>
+days[<span class="num">0</span>] = <span class="str">"Sunday"</span>    <span class="cm"># ✅ 完全合法，直接改掉</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          List 就像一排有编号的储物柜，从 0 号开始。String 像刻在石碑上的字（没法改），List 像白板上的内容（随时可以擦写）。
+        </div>
+      </div>
+
+      <!-- BUILT-IN FUNCTIONS -->
+      <div class="topic" id="anchor-listmethods">
+        <div class="topic-title">
+          内置函数和 Methods
+          <span class="tag tag-memory">📝 要背下来</span>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-card"><strong>len(a)</strong><span>返回元素个数</span></div>
+          <div class="concept-card"><strong>sum(a)</strong><span>求所有元素之和</span></div>
+          <div class="concept-card"><strong>min(a) / max(a)</strong><span>最小 / 最大值</span></div>
+          <div class="concept-card"><strong>a.append(x)</strong><span>在末尾加一个元素</span></div>
+          <div class="concept-card"><strong>a.insert(i, x)</strong><span>在位置 i 插入 x</span></div>
+          <div class="concept-card"><strong>a.remove(x)</strong><span>删除第一个 x（没有就报 ValueError）</span></div>
+          <div class="concept-card"><strong>a.pop(i)</strong><span>取出并删除第 i 个元素，有返回值</span></div>
+          <div class="concept-card"><strong>a.count(x)</strong><span>x 出现的次数</span></div>
+          <div class="concept-card"><strong>a.index(x)</strong><span>x 第一次出现的 index</span></div>
+          <div class="concept-card"><strong>a.sort()</strong><span>原地排序，直接修改 a 本身</span></div>
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ 最经典的错误之一</span>
+          <kbd>x = x.append('first')</kbd> 这样写，x 会变成 <kbd>None</kbd>！因为 append() 是直接修改 list，它的 <span class="term" data-def="Return value：函数执行完后返回的值">return value（返回值）</span>是 None，不是修改后的 list。正确写法是直接写 <kbd>x.append('first')</kbd>，不要赋值。
+        </div>
+      </div>
+
+      <!-- PATTERNS -->
+      <div class="topic" id="anchor-patterns">
+        <div class="topic-title">
+          三种经典 List 处理模式
+          <span class="tag tag-logic">🧠 理解思路</span>
+        </div>
+
+        <table class="compare-table">
+          <tr><th>模式</th><th>干什么</th><th>例子</th></tr>
+          <tr><td><strong>Reducing（聚合）</strong></td><td>把一堆元素合并成一个值</td><td>把所有价格加起来求总价</td></tr>
+          <tr><td><strong>Mapping（映射）</strong></td><td>对每个元素做相同变换，生成新 list</td><td>把所有名字变成大写</td></tr>
+          <tr><td><strong>Filtering（过滤）</strong></td><td>只保留满足条件的元素</td><td>从宠物列表里只选家养的</td></tr>
+        </table>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          想象你在处理一袋苹果：Reducing = 把所有苹果榨成一杯果汁（多变一）；Mapping = 把每个苹果削皮（个数不变，但每个都变了）；Filtering = 挑出好苹果，扔掉烂的（数量变少了）。
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 11 ==================== -->
+  <div class="lesson" id="l11">
+    <div class="lesson-header" onclick="toggleLesson('l11')">
+      <span class="lesson-num">LESSON 11 · Week 7</span>
+      <span class="lesson-title">Nested Loops、Nested Lists、String ↔ List 互转</span>
+      <span class="lesson-meta">4个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">🗂️</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>现实数据通常是二维的：Excel 表格、矩阵、图片的像素……<span class="term" data-def="Nested list：嵌套列表，列表里面套列表，可以表示二维甚至多维数据">Nested list（嵌套列表）</span>+ nested loop（嵌套循环）是处理这类数据的核心模式。split/join 则是文本解析的必备工具，几乎所有真实程序都用得到。</p>
+        </div>
+      </div>
+
+      <!-- NESTED LOOPS -->
+      <div class="topic" id="anchor-nestedloops">
+        <div class="topic-title">
+          Nested Loops（嵌套循环）
+          <span class="tag tag-logic">🧠 理解执行顺序</span>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># 乘法表：外层管行，内层管列</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">6</span>):           <span class="cm"># 外层跑一次...</span>
+    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">13</span>):       <span class="cm"># ...内层就跑完一整圈！</span>
+        <span class="fn">print</span>(i * j, end=<span class="str">' '</span>)
+    <span class="fn">print</span>()                        <span class="cm"># 外层每次结束后换行</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          嵌套循环就像在停车场找车位：外层循环是"走哪一层楼"，内层循环是"在这层楼把每个车位检查一遍"。外面走一步，里面跑完一整圈。
+        </div>
+      </div>
+
+      <!-- NESTED LISTS -->
+      <div class="topic" id="anchor-nestedlists">
+        <div class="topic-title">
+          Nested Lists（嵌套列表）
+          <span class="tag tag-logic">🧠 理解 indexing</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <p>Nested list = list 里面套 list，用来表示二维数据（比如矩阵、表格）。</p>
+
+        <div class="code-block">
+matrix = [[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>],
+          [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>],
+          [<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>]]
+
+matrix[<span class="num">1</span>]       <span class="cm"># [4, 5, 6]  ← 第二行（row）</span>
+matrix[<span class="num">1</span>][<span class="num">2</span>]    <span class="cm"># 6          ← 第二行、第三列（column）</span>
+<span class="cm"># 规则：matrix[row][column]，先行后列</span></div>
+      </div>
+
+      <!-- STRING LIST CONVERT -->
+      <div class="topic" id="anchor-splitjoin">
+        <div class="topic-title">
+          String ↔ List 互转：split() 和 join()
+          <span class="tag tag-memory">📝 记住语法</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># String → List：用 split()</span>
+<span class="str">"Hello world"</span>.<span class="fn">split</span>()         <span class="cm"># ['Hello', 'world']（默认按空格切）</span>
+<span class="str">"a-b-c"</span>.<span class="fn">split</span>(<span class="str">'-'</span>)            <span class="cm"># ['a', 'b', 'c']（按 '-' 切）</span>
+<span class="fn">list</span>(<span class="str">"Hi"</span>)                      <span class="cm"># ['H', 'i']（拆成单个字符）</span>
+
+<span class="cm"># List → String：用 join()</span>
+<span class="str">' '</span>.<span class="fn">join</span>([<span class="str">'Hello'</span>, <span class="str">'world'</span>])  <span class="cm"># 'Hello world'</span>
+<span class="str">','</span>.<span class="fn">join</span>([<span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'c'</span>])     <span class="cm"># 'a,b,c'</span>
+<span class="str">''</span>.<span class="fn">join</span>([<span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'c'</span>])      <span class="cm"># 'abc'（空字符串直接拼在一起）</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          split 像把一串珠子剪断——你指定在哪里剪（<span class="term" data-def="Delimiter/Separator：分隔符，用来分割字符串的字符或字符串">delimiter（分隔符）</span>），得到一粒粒独立的珠子（list）。join 像把珠子重新穿起来——用一段绳子（separator string）串在一起。
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ join 的语法容易写反！</span>
+          是 <kbd>"分隔符".join(列表)</kbd>，不是 <kbd>列表.join("分隔符")</kbd>。记忆方法：<strong>分隔符调用 join，list 是参数</strong>。很多人第一次写都会搞反。
+        </div>
+
+        <p>另外，string method 和 function 的区别：</p>
+        <ul>
+          <li><strong>Function（函数）</strong>：独立存在，直接调用，如 <kbd>len()</kbd>、<kbd>int()</kbd></li>
+          <li><strong>Method（方法）</strong>：属于某个 <span class="term" data-def="Object：对象，Python 里一切皆对象，包括字符串、列表等">object（对象）</span>，要用点号调用，如 <kbd>s.split()</kbd>、<kbd>a.append()</kbd></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 12 ==================== -->
+  <div class="lesson" id="l12">
+    <div class="lesson-header" onclick="toggleLesson('l12')">
+      <span class="lesson-num">LESSON 12 · Week 8</span>
+      <span class="lesson-title">Object Identity、Shallow/Deep Copy、Mutable vs Immutable</span>
+      <span class="lesson-meta">4个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">🧬</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>这节是 Python 的"底层逻辑"课。理解 <span class="term" data-def="Reference：引用，变量存储的不是值本身，而是值在内存中的地址">reference（引用）</span>和 copy（拷贝）能避免一类极其隐蔽的 bug：你以为自己改了"副本"，实际上改的是"原件"，然后原来的数据莫名其妙就变了。这在 assignment 和 interview 里都非常常考。</p>
+        </div>
+      </div>
+
+      <!-- IDENTITY -->
+      <div class="topic" id="anchor-identity">
+        <div class="topic-title">
+          <span class="term" data-def="Object Identity：对象标识，每个对象在内存中的唯一地址编号">Object Identity（对象标识）</span> — is vs ==
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+        </div>
+
+        <p>Python 里每个对象都有一个唯一的内存地址，用 <kbd>id()</kbd> 可以查看。</p>
+        <ul>
+          <li><kbd>==</kbd>：比较两个变量的<strong>值是否相同</strong></li>
+          <li><kbd>is</kbd>：比较两个变量是否<strong>指向内存里同一个对象</strong>（相当于 <kbd>id(a) == id(b)</kbd>）</li>
+        </ul>
+
+        <div class="code-block">
+a = <span class="str">"hello"</span>
+b = <span class="str">"hel"</span>
+b += <span class="str">"lo"</span>
+a == b    <span class="cm"># True  ← 值相同</span>
+a <span class="kw">is</span> b   <span class="cm"># False ← 不是同一个对象（不同 memory address）</span>
+
+<span class="cm"># b = a 是复制引用，所以 is 为 True</span>
+a = <span class="num">400</span>
+b = a     <span class="cm"># b 和 a 指向同一块内存</span>
+a <span class="kw">is</span> b   <span class="cm"># True</span>
+b = <span class="num">200</span>  <span class="cm"># b 现在指向一个新对象</span>
+a <span class="kw">is</span> b   <span class="cm"># False</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          <kbd>==</kbd> 是比较两个人的名字是不是一样；<kbd>is</kbd> 是比较他们是不是同一个人（同一张身份证号）。两个不同的人都叫"张三"（== True），但他们是两个人（is False）。
+        </div>
+      </div>
+
+      <!-- SHALLOW VS DEEP COPY -->
+      <div class="topic" id="anchor-copy">
+        <div class="topic-title">
+          Aliasing、Shallow Copy、Deep Copy 三者的区别
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+          <span class="tag tag-key">⭐ 重难点</span>
+        </div>
+
+        <p>这三个概念经常放在一起，但本质上是<strong>完全不同的三件事</strong>。区分它们最好的方式是分 <strong>1D list</strong> 和 <strong>2D list（nested list）</strong> 两种情况来看。</p>
+
+        <!-- ALIASING -->
+        <p style="margin-top:1rem"><strong>① Aliasing（别名）——根本不是 copy！</strong></p>
+        <p><kbd>list2 = list1</kbd> 不会创建新 list，只是让 <kbd>list2</kbd> 这个变量名也指向同一块内存。两个名字，同一个东西。</p>
+
+        <div class="code-block">
+list1 = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
+list2 = list1          <span class="cm"># ← Aliasing！list2 不是新 list，只是同一个 list 的另一个名字</span>
+
+list1[<span class="num">0</span>] = <span class="num">99</span>
+<span class="fn">print</span>(list1)   <span class="cm"># [99, 2, 3]</span>
+<span class="fn">print</span>(list2)   <span class="cm"># [99, 2, 3]  ← list2 也变了！因为它们本来就是同一个东西</span>
+<span class="fn">print</span>(list1 <span class="kw">is</span> list2)  <span class="cm"># True ← id 完全相同，确认是同一个对象</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 类比</span>
+          Aliasing 就像给同一个人起了两个外号——"老张"和"张老师"指的是同一个人，跟"老张"说"剪头发"，"张老师"的头发也变短了。
+        </div>
+
+        <!-- 1D LIST -->
+        <p style="margin-top:1.25rem"><strong>② 1D list 的情况：用 <kbd>.copy()</kbd> 或 <kbd>[:]</kbd> 就足够了</strong></p>
+        <p>对于普通的一维 list（元素都是 int、str 等 immutable 值），<kbd>.copy()</kbd> 和 <kbd>[:]</kbd> 会创建一个新的 list 对象，两个 list 从此独立，互不影响。</p>
+
+        <div class="code-block">
+list1 = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
+list2 = list1.<span class="fn">copy</span>()   <span class="cm"># 方式 1：.copy()</span>
+list3 = list1[:]        <span class="cm"># 方式 2：切片，效果完全一样</span>
+
+<span class="fn">print</span>(list1 <span class="kw">is</span> list2)  <span class="cm"># False ← 是两个不同的 list 对象了</span>
+
+list1[<span class="num">0</span>] = <span class="num">99</span>
+<span class="fn">print</span>(list1)   <span class="cm"># [99, 2, 3]</span>
+<span class="fn">print</span>(list2)   <span class="cm"># [1, 2, 3]  ← 不受影响 ✅</span>
+<span class="fn">print</span>(list3)   <span class="cm"># [1, 2, 3]  ← 也不受影响 ✅</span></div>
+
+        <!-- 2D LIST -->
+        <p style="margin-top:1.25rem"><strong>③ 2D list（nested list）的情况：.copy() 不够，必须用 <kbd>copy.deepcopy()</kbd></strong></p>
+        <p>这是最容易出 bug 的地方！当 list 里面还套着 list 时，<kbd>.copy()</kbd> 只复制了外层结构，内层的子 list <strong>仍然是 shared（共享）的 reference</strong>——改内层，两边都会变。</p>
+
+        <div class="code-block">
+<span class="kw">import</span> copy
+
+original = [[<span class="num">1</span>, <span class="num">2</span>], [<span class="num">3</span>, <span class="num">4</span>]]
+
+<span class="cm"># ⚠️ .copy() 在 2D list 上只是 shallow copy——外层新建，内层仍然共享</span>
+shallow = original.<span class="fn">copy</span>()
+
+<span class="fn">print</span>(original <span class="kw">is</span> shallow)         <span class="cm"># False ← 外层 list 确实是新的</span>
+<span class="fn">print</span>(original[<span class="num">0</span>] <span class="kw">is</span> shallow[<span class="num">0</span>])  <span class="cm"># True  ← 但内层 [1,2] 还是同一个！</span>
+
+original[<span class="num">0</span>][<span class="num">0</span>] = <span class="num">99</span>   <span class="cm"># 修改内层子 list</span>
+<span class="fn">print</span>(original)  <span class="cm"># [[99, 2], [3, 4]]</span>
+<span class="fn">print</span>(shallow)   <span class="cm"># [[99, 2], [3, 4]]  ← shallow 也变了！😱</span>
+
+<span class="cm"># ✅ 正确做法：copy.deepcopy() 把每一层都真正复制</span>
+deep = copy.<span class="fn">deepcopy</span>(original)
+
+<span class="fn">print</span>(original[<span class="num">0</span>] <span class="kw">is</span> deep[<span class="num">0</span>])  <span class="cm"># False ← 内层子 list 也是全新的</span>
+
+original[<span class="num">0</span>][<span class="num">0</span>] = <span class="num">0</span>
+<span class="fn">print</span>(original)  <span class="cm"># [[0, 2], [3, 4]]</span>
+<span class="fn">print</span>(deep)      <span class="cm"># [[99, 2], [3, 4]]  ← deep 完全不受影响 ✅</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 类比（用公寓来理解三者）</span>
+          <strong>Aliasing</strong>：你把你家的地址给了朋友，他们来"住"其实是住你的房子，搬走任何东西你都感受得到。<br><br>
+          <strong>Shallow copy（1D够用，2D不够）</strong>：你搬进一套"一模一样的新公寓"，但公寓里的家具（内层子 list）还是租来的公共家具，朋友在他那边把公共沙发拆了，你这边也发现沙发没了。<br><br>
+          <strong>Deep copy</strong>：你搬进一套新公寓，连里面所有家具都重新买了一套全新的。朋友怎么折腾他那边都和你无关。
+        </div>
+
+        <table class="compare-table">
+          <tr><th></th><th>Aliasing <kbd>b = a</kbd></th><th>Shallow Copy <kbd>.copy()</kbd> / <kbd>[:]</kbd></th><th>Deep Copy <kbd>copy.deepcopy()</kbd></th></tr>
+          <tr><td>创建新 list？</td><td>❌ 同一个对象</td><td>✅ 外层新建</td><td>✅ 每层都新建</td></tr>
+          <tr><td>1D list 改外层元素</td><td>两边都变</td><td>互不影响 ✅</td><td>互不影响 ✅</td></tr>
+          <tr><td>2D list 改内层元素</td><td>两边都变</td><td>两边都变 ⚠️</td><td>互不影响 ✅</td></tr>
+          <tr><td>需要 import？</td><td>❌</td><td>❌</td><td>✅ <kbd>import copy</kbd></td></tr>
+        </table>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ 结论：记住这个判断流程</span>
+          你的 list 是 1D（里面都是数字、字符串）→ 用 <kbd>.copy()</kbd> 或 <kbd>[:]</kbd>，足够了。<br>
+          你的 list 是 2D 或更深的嵌套结构 → 必须用 <kbd>copy.deepcopy()</kbd>，否则内层还是共享的。
+        </div>
+      </div>
+
+      <!-- MUTABLE IMMUTABLE -->
+      <div class="topic" id="anchor-mutable">
+        <div class="topic-title">
+          <span class="term" data-def="Mutable：可变的，对象创建后内容可以被修改">Mutable</span> vs <span class="term" data-def="Immutable：不可变的，对象创建后内容不能被修改，修改等于创建新对象">Immutable</span>
+          <span class="tag tag-memory">📝 记住分类</span>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>✅ Mutable（可变）</strong>
+            <span>List、Dictionary（字典）<br>可以原地修改内容，id 不变</span>
+          </div>
+          <div class="concept-card" style="border-color:#e98585">
+            <strong>❌ Immutable（不可变）</strong>
+            <span>String、int、float、bool<br>"修改"等于创建新对象，id 会变</span>
+          </div>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># String — immutable，改不了</span>
+t = <span class="str">"hello"</span>
+t[<span class="num">0</span>] = <span class="str">"1"</span>    <span class="cm"># ❌ TypeError，字符串不能这样改</span>
+
+<span class="cm"># List — mutable，随便改</span>
+lst = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
+lst[<span class="num">0</span>] = <span class="num">99</span>    <span class="cm"># ✅ 完全没问题</span></div>
+
+        <p style="margin-top:0.75rem">一个重要的 implication（含义）：把 list 传给 function（函数）时，function 拿到的是 reference（引用）。如果 function 在里面修改了 list，<strong>外面的原始 list 也会变</strong>！这和 int、string 完全不同，注意不要踩坑。</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 13 ==================== -->
+  <div class="lesson" id="l13">
+    <div class="lesson-header" onclick="toggleLesson('l13')">
+      <span class="lesson-num">LESSON 13 · Week 8</span>
+      <span class="lesson-title">Doctest、Debugging（调试）、Raising Exceptions（抛出异常）</span>
+      <span class="lesson-meta">3个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">🛡️</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>写代码分两步：让代码"跑起来"，和让代码"跑对了"。前面所有课教的都是第一步。这节课教的是第二步——如何测试代码、找 bug（<span style="color:var(--yellow)">debug</span>），以及当用户传进来奇怪的数据时，怎么优雅地"拒绝"并告诉他哪里错了。在大型项目里，<span style="color:var(--yellow)">测试</span>和<span style="color:var(--yellow)">错误处理</span>的代码量有时候和功能代码本身一样多。这节课是写出"专业级"代码的开始。</p>
+        </div>
+      </div>
+
+      <!-- DOCTEST -->
+      <div class="topic" id="anchor-doctest">
+        <div class="topic-title">
+          <span class="term" data-def="Doctest：写在 docstring 里的测试案例，Python 可以自动帮你跑这些测试">Doctest（文档测试）</span>
+          <span class="tag tag-memory">📝 记格式</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <p>想象你开了一家奶茶店，每次上新品都要自己喝一口确认味道对不对。<strong>Doctest 就是这个"自动试喝"系统</strong>——你在写函数的时候，顺手在 <span class="term" data-def="Docstring：写在函数开头三引号里的说明文字，用来解释函数作用">docstring</span> 里写几个"如果我传这个进去，应该出来什么"的例子，Python 就会帮你自动验证这些例子对不对。</p>
+
+        <p><strong>怎么用 doctest？两行搞定：</strong></p>
+        <div class="code-block">
+<span class="kw">import</span> doctest      <span class="cm"># 第一行：导入 doctest 模块</span>
+doctest.<span class="fn">testmod</span>()   <span class="cm"># 第二行：运行所有测试（放在文件最底部）</span></div>
+
+        <p><strong>Doctest 怎么写？</strong> 在 docstring 里，每一行测试以 <kbd>&gt;&gt;&gt;</kbd> 开头，下一行写你期望的输出：</p>
+
+        <div class="code-block">
+<span class="kw">def</span> <span class="fn">add</span>(x, y):
+    <span class="str">"""
+    (num, num) -> num
+    Returns the sum of x and y
+
+    &gt;&gt;&gt; add(2, 2)
+    4
+    &gt;&gt;&gt; add(-2, 3)
+    1
+    &gt;&gt;&gt; add(1.2, 3.5)
+    4.7
+    """</span>
+    summation = x + y   <span class="cm"># 正确写法</span>
+    <span class="kw">return</span> summation
+
+<span class="kw">import</span> doctest
+doctest.<span class="fn">testmod</span>()   <span class="cm"># 全部通过 → 什么都不打印（安静 = 好事！）</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          <kbd>&gt;&gt;&gt; add(2, 2)</kbd> 就是你在说"好，我来测试：往机器里放 2 和 2，机器应该吐出 4"。<br>
+          如果你写的函数里 <kbd>x * y</kbd> 写错成乘法，机器吐出了 <kbd>4</kbd>（凑巧对了），但 <kbd>add(-2, 3)</kbd> 就会暴露 bug——应该是 <kbd>1</kbd>，但乘法会给你 <kbd>-6</kbd>。所以好的 doctest 要覆盖<strong>边界情况（edge cases）</strong>，不能只测"正常情况"。
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ 重点细节：doctest 对格式极其敏感</span>
+          doctest 是逐字符比较的！如果你的函数返回 <kbd>4.699999999999999</kbd>（浮点数精度问题），但你 docstring 写的是 <kbd>4.7</kbd>，测试会失败。解决方法：用 <kbd>round()</kbd> 处理浮点数结果，或者把期望值也写成精确的格式。
+        </div>
+
+        <p><strong>如果函数会 raise exception（抛出异常），doctest 怎么写？</strong></p>
+        <p>格式固定，必须背下来：先写 <kbd>Traceback (most recent call last):</kbd>，中间的 stack trace（调用栈）可以省略，最后一行写 exception 的名字和消息：</p>
+
+        <div class="code-block">
+<span class="kw">def</span> <span class="fn">print_multiples</span>(n, times):
+    <span class="str">"""
+    &gt;&gt;&gt; print_multiples('2', 4)
+    Traceback (most recent call last):
+        ...
+    TypeError: the function expects two integers as input
+    """</span>
+    <span class="kw">if</span> <span class="kw">not</span> <span class="fn">isinstance</span>(n, <span class="fn">int</span>) <span class="kw">or</span> <span class="kw">not</span> <span class="fn">isinstance</span>(times, <span class="fn">int</span>):
+        <span class="kw">raise</span> <span class="fn">TypeError</span>(<span class="str">"the function expects two integers as input"</span>)
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, times + <span class="num">1</span>):
+        <span class="fn">print</span>(n * i)</div>
+
+        <table class="compare-table">
+          <tr><th>doctest 要点</th><th>说明</th></tr>
+          <tr><td>测试行以 <kbd>&gt;&gt;&gt;</kbd> 开头</td><td>Python 靠这个识别哪行是测试</td></tr>
+          <tr><td>期望输出在下一行（不加 <kbd>&gt;&gt;&gt;</kbd>）</td><td>如果函数返回 None（无返回值），不写期望输出</td></tr>
+          <tr><td>异常测试：先写 Traceback 头，再写 exception 类型</td><td>中间 stack trace 用 <kbd>...</kbd> 省略</td></tr>
+          <tr><td>全部通过 = 没有输出</td><td>有输出才说明有 test 挂掉了</td></tr>
+        </table>
+      </div>
+
+      <!-- DEBUGGING -->
+      <div class="topic" id="anchor-debugging">
+        <div class="topic-title">
+          <span class="term" data-def="Debugging：调试，找出并修复程序错误的过程。Bug 这个词源于 1947 年一只真正的飞蛾卡进了电脑！">Debugging（调试）</span>：三种 Error 类型
+          <span class="tag tag-memory">📝 记住分类</span>
+          <span class="tag tag-logic">🧠 要理解逻辑</span>
+        </div>
+
+        <p>Python 里的 bug 分三大类，记住这个分类非常重要——因为它决定了你用什么方式去找 bug：</p>
+
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#a0c4ff">
+            <strong>① Stylistic Errors<br>（代码风格问题）</strong>
+            <span>不影响运行结果，但让代码很难读。比如变量命名乱七八糟、缩进不统一。<br><em>不是"真"的 error，但会被扣分！</em></span>
+          </div>
+          <div class="concept-card" style="border-color:#e98585">
+            <strong>② Syntax Errors<br>（语法错误）</strong>
+            <span>代码语法写错了，Python 连运行都不运行，直接报错。<br><em>最先被检测到，修起来也相对好找。</em></span>
+          </div>
+          <div class="concept-card" style="border-color:#f5c842">
+            <strong>③ Runtime Errors<br>（运行时错误）</strong>
+            <span>语法没问题，但执行到某一行的时候崩了。比如除以零、类型不对。<br><em>发现起来比语法错误晚一步。</em></span>
+          </div>
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>④ Logic Errors<br>（逻辑错误）</strong>
+            <span>程序跑完了，但结果不对。Python 完全不报错，是最难找的！<br><em>完全靠你自己的大脑去发现。</em></span>
+          </div>
+        </div>
+
+        <p style="margin-top:0.75rem"><strong>每种 error 的例子：</strong></p>
+
+        <div class="code-block">
+<span class="cm"># ❌ Syntax Error — 忘记写冒号</span>
+x = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Enter a number: "</span>))
+<span class="kw">if</span> x &gt; <span class="num">100</span>   <span class="cm"># 少了冒号 ':'，Python 直接报 SyntaxError</span>
+    <span class="fn">print</span>(<span class="str">"You think big!"</span>)
+
+<span class="cm"># ❌ Runtime Error — 类型不对</span>
+x = <span class="fn">input</span>(<span class="str">"Enter a number: "</span>)  <span class="cm"># input() 返回的是 str（字符串）！</span>
+<span class="kw">if</span> x &gt; <span class="num">100</span>:   <span class="cm"># ← TypeError: '>' not supported between str and int</span>
+    <span class="fn">print</span>(<span class="str">"You think big!"</span>)
+
+<span class="cm"># ❌ Logic Error — 代码跑通了，但结果不对</span>
+x = <span class="fn">input</span>(<span class="str">"Enter your favourite number: "</span>)
+<span class="fn">print</span>(<span class="str">"Multiplied by 2:"</span>, x * <span class="num">2</span>)
+<span class="cm"># 输入 5 → 输出 "55"，因为 "5" * 2 = "55"（字符串重复，不是数学乘法！）</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          <strong>Syntax Error</strong> 就像你写了一封语法错误的申请信，秘书直接退回来，都没有递进去。<br>
+          <strong>Runtime Error</strong> 就像申请信格式正确，但进了系统发现你填的身份证号少一位，系统崩了。<br>
+          <strong>Logic Error</strong> 就像申请顺利通过，但你把目的地填错了，最后飞到了错误的城市，没有任何人提醒你。
+        </div>
+
+        <p><strong>怎么解决这三类 bug？</strong></p>
+        <ul>
+          <li><strong>Syntax / Runtime Errors</strong>：认真读报错信息，它会告诉你第几行出错了、出了什么问题。配合 Google 或课件查。</li>
+          <li><strong>Logic Errors（最难！）</strong>：
+            <ul>
+              <li>在可疑的地方加 <kbd>print()</kbd>，把中间变量的值打印出来，追踪哪一步开始不对</li>
+              <li>用 IDE 的 debug 工具（debugger）打断点（breakpoint），一步一步执行看变量变化</li>
+              <li><strong>Rubber ducking（橡皮鸭调试法）</strong>：对着橡皮鸭（或者任何人、任何东西）大声把代码逻辑讲一遍——很神奇，讲着讲着你自己就发现问题了</li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ 最容易踩的坑：Syntax Error 会屏蔽其他所有错误</span>
+          如果你的代码里有 syntax error，Python 根本不会运行，所以 runtime error 和 logic error 都不会被发现。<strong>永远先修 syntax error</strong>，修完再跑，再看还有没有其他问题。
+        </div>
+      </div>
+
+      <!-- RAISING EXCEPTIONS -->
+      <div class="topic" id="anchor-exceptions">
+        <div class="topic-title">
+          <span class="term" data-def="Exception：异常，程序执行时遇到的错误事件，会中断正常的代码流程">Raising Exceptions（主动抛出异常）</span>
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+          <span class="tag tag-memory">📝 记住语法</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <p>Exception（异常）是程序在运行时遇到"说不通"的事情时发出的警报。Python 自己会 raise 一些 exception（比如 <kbd>TypeError</kbd>、<kbd>ZeroDivisionError</kbd>）。但作为程序员，你也可以——而且<strong>应该</strong>——主动 raise exception，来告诉别人"你传进来的东西不对"。</p>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          你开了一家外卖店，有人点了"0份炒饭"。机器不会报错，但这明显不合理。作为厨师，你应该主动说"不行，至少要点1份"然后拒绝这个订单，而不是默默地做了0份然后送出去一个空盒子。这就是 <kbd>raise Exception</kbd> 的意义——<strong>提前把问题截住，让 bug 更快暴露、更容易找</strong>。
+        </div>
+
+        <p><strong>语法：</strong></p>
+        <div class="code-block">
+<span class="kw">raise</span> SomeExceptionType(<span class="str">"错误信息写在这里"</span>)
+
+<span class="cm"># 常用的 exception 类型：</span>
+<span class="kw">raise</span> <span class="fn">TypeError</span>(<span class="str">"message"</span>)     <span class="cm"># 类型不对时用这个</span>
+<span class="kw">raise</span> <span class="fn">ValueError</span>(<span class="str">"message"</span>)    <span class="cm"># 类型对但值不合理时用这个</span></div>
+
+        <p><strong>完整例子：</strong></p>
+        <div class="code-block">
+<span class="kw">def</span> <span class="fn">divide</span>(a, b):
+    <span class="str">"""
+    (int, int) -> float
+    Divides a by b.
+
+    &gt;&gt;&gt; divide(10, 2)
+    5.0
+    &gt;&gt;&gt; divide(10, 0)
+    Traceback (most recent call last):
+        ...
+    ValueError: The divisor 'b' cannot be zero.
+    &gt;&gt;&gt; divide(10.0, 2)
+    Traceback (most recent call last):
+        ...
+    TypeError: Both arguments must be integers.
+    """</span>
+    <span class="kw">if</span> <span class="kw">not</span> <span class="fn">isinstance</span>(a, <span class="fn">int</span>) <span class="kw">or</span> <span class="kw">not</span> <span class="fn">isinstance</span>(b, <span class="fn">int</span>):
+        <span class="kw">raise</span> <span class="fn">TypeError</span>(<span class="str">"Both arguments must be integers."</span>)
+    <span class="kw">if</span> b == <span class="num">0</span>:
+        <span class="kw">raise</span> <span class="fn">ValueError</span>(<span class="str">"The divisor 'b' cannot be zero."</span>)
+    <span class="kw">return</span> a / b
+
+<span class="kw">import</span> doctest
+doctest.<span class="fn">testmod</span>()</div>
+
+        <table class="compare-table">
+          <tr><th>Exception 类型</th><th>什么时候 raise</th><th>例子</th></tr>
+          <tr><td><kbd>TypeError</kbd></td><td>传进来的<strong>类型</strong>不对</td><td>函数要 int，你传了 str</td></tr>
+          <tr><td><kbd>ValueError</kbd></td><td>类型对，但<strong>值</strong>不合理</td><td>函数要正数，你传了 -5</td></tr>
+          <tr><td><kbd>ZeroDivisionError</kbd></td><td>除数是零</td><td>通常 Python 自己 raise，但你也可以提前截住</td></tr>
+        </table>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ TypeError vs ValueError 别搞混</span>
+          类比一下：你订了一杯"珍珠奶茶"，结果店员给你端来了一碗炒饭 —— 这是 <strong>TypeError</strong>（类型完全不对）。但如果你订了"微糖"，结果给你超甜的 —— 这是 <strong>ValueError</strong>（类型没错，就是个饮料，但值不是你要的）。
+        </div>
+
+        <p style="margin-top:0.75rem"><strong>Exception 和 Doctest 的关系：</strong> 当你的函数里有 <kbd>raise</kbd>，你<strong>必须</strong>在 doctest 里写对应的 exception 测试案例，格式固定（见上面 doctest 章节）。这是 COMP202 作业里常见的失分点——写了 raise 但忘了在 docstring 里加对应测试。</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 14 ==================== -->
+  <div class="lesson" id="l14">
+    <div class="lesson-header" onclick="toggleLesson('l14')">
+      <span class="lesson-num">LESSON 14 · Week 10</span>
+      <span class="lesson-title">Dictionary（字典）：创建、访问、增删、方法、遍历</span>
+      <span class="lesson-meta">6个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">📖</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>List 让你存一排东西，但每次找东西都要靠位置（index）。Dictionary 则是给每个东西贴上一个"名字标签"（key），你直接喊标签名字就能拿到对应的东西，不用知道它排在第几位。这是从"书架"升级到"图书馆检索系统"——数据量一大，dict 的查找速度远比 list 快。几乎所有实际项目都大量用 dict。</p>
+        </div>
+      </div>
+
+      <!-- CREATION -->
+      <div class="topic" id="anchor-dict-basics">
+        <div class="topic-title">
+          Dictionary 的创建 + Key/Value 规则
+          <span class="tag tag-memory">📝 记住规则</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <p><span class="term" data-def="Dictionary：字典，一种 key-value 映射结构，通过 key 快速查找 value">Dictionary</span> 的每个元素叫做 <strong>item（条目）</strong>，由一个 <strong>key（键）</strong> 和一个 <strong>value（值）</strong> 组成，中间用冒号 <kbd>:</kbd> 分隔。</p>
+
+        <div class="code-block">
+<span class="cm"># 方式 1：直接用花括号 {}</span>
+heights = {<span class="str">'Sasha'</span>: <span class="num">182</span>, <span class="str">'Rohan'</span>: <span class="num">168</span>, <span class="str">'Kate'</span>: <span class="num">177</span>}
+
+<span class="cm"># 方式 2：用 dict() 函数创建空字典</span>
+empty_dict = <span class="fn">dict</span>()
+also_empty = {}   <span class="cm"># 两种方式都可以</span></div>
+
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>✅ Key 的规则</strong>
+            <span>必须是 <strong>immutable</strong>（不可变）类型：str、int、float、bool、tuple。<br>在同一个 dict 里必须<strong>唯一</strong>（不能重复）。</span>
+          </div>
+          <div class="concept-card" style="border-color:#a0c4ff">
+            <strong>✅ Value 的规则</strong>
+            <span>可以是<strong>任意类型</strong>，包括 list、dict、None。<br>不需要唯一，可以重复。</span>
+          </div>
+        </div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ List 不能当 Key！</span>
+          因为 list 是 mutable（可变的），所以不能作为 dictionary 的 key，否则会报 <kbd>TypeError: unhashable type: 'list'</kbd>。但 tuple 可以！
+        </div>
+      </div>
+
+      <!-- ACCESS ADD REMOVE -->
+      <div class="topic" id="anchor-dict-ops">
+        <div class="topic-title">
+          访问、添加、删除
+          <span class="tag tag-memory">📝 记住语法</span>
+        </div>
+
+        <div class="code-block">
+heights = {<span class="str">'Sasha'</span>: <span class="num">182</span>, <span class="str">'Rohan'</span>: <span class="num">168</span>, <span class="str">'Kate'</span>: <span class="num">177</span>}
+
+<span class="cm"># 访问 value：dict[key]</span>
+<span class="fn">print</span>(heights[<span class="str">'Rohan'</span>])   <span class="cm"># 168</span>
+
+<span class="cm"># 添加 / 修改：直接赋值就行</span>
+heights[<span class="str">'Rohan'</span>] = <span class="num">175</span>   <span class="cm"># key 已存在 → 覆盖旧值</span>
+heights[<span class="str">'Lena'</span>] = <span class="num">165</span>    <span class="cm"># key 不存在 → 新增一条</span>
+
+<span class="cm"># 删除：del dict[key]</span>
+<span class="kw">del</span> heights[<span class="str">'Sasha'</span>]
+<span class="fn">print</span>(heights)   <span class="cm"># {'Rohan': 175, 'Kate': 177, 'Lena': 165}</span></div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ KeyError：访问不存在的 key 会崩！</span>
+          <kbd>heights['NotExist']</kbd> 会直接抛出 <kbd>KeyError</kbd>。安全写法是用 <kbd>dict.get(key)</kbd>——找不到时返回 <kbd>None</kbd> 而不是崩溃。
+        </div>
+      </div>
+
+      <!-- METHODS -->
+      <div class="topic" id="anchor-dict-methods">
+        <div class="topic-title">
+          常用方法速查
+          <span class="tag tag-memory">📝 要背住</span>
+        </div>
+
+        <table class="compare-table">
+          <tr><th>方法 / 函数</th><th>作用</th><th>注意事项</th></tr>
+          <tr><td><kbd>d.get(key)</kbd></td><td>安全取值，找不到返回 <kbd>None</kbd></td><td>不报 KeyError，推荐用这个代替直接 <kbd>d[key]</kbd></td></tr>
+          <tr><td><kbd>d.pop(key)</kbd></td><td>删除并返回对应 value</td><td>key 不存在会报 KeyError</td></tr>
+          <tr><td><kbd>d.keys()</kbd></td><td>返回所有 key（类似 list）</td><td>不是真正的 list，需要 <kbd>list(d.keys())</kbd> 才是</td></tr>
+          <tr><td><kbd>d.items()</kbd></td><td>返回所有 (key, value) 对</td><td>每个元素是个 tuple，配合 for loop 超好用</td></tr>
+          <tr><td><kbd>d.update(d2)</kbd></td><td>把 d2 的内容合并进 d</td><td>key 冲突时 d2 的 value 覆盖 d 的</td></tr>
+          <tr><td><kbd>len(d)</kbd></td><td>返回 item 数量</td><td>普通函数，不是方法</td></tr>
+          <tr><td><kbd>key in d</kbd></td><td>检查 key 是否存在</td><td>只检查 key，不检查 value</td></tr>
+        </table>
+      </div>
+
+      <!-- ITERATION -->
+      <div class="topic" id="anchor-dict-iter">
+        <div class="topic-title">
+          遍历 Dictionary
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+        </div>
+
+        <div class="code-block">
+scores = {<span class="str">'Alice'</span>: <span class="num">90</span>, <span class="str">'Bob'</span>: <span class="num">85</span>, <span class="str">'Carol'</span>: <span class="num">92</span>}
+
+<span class="cm"># 方式 1：直接 for loop → 遍历所有 key</span>
+<span class="kw">for</span> key <span class="kw">in</span> scores:
+    <span class="fn">print</span>(key, scores[key])
+
+<span class="cm"># 方式 2：用 .items() 同时拿 key 和 value（更 Pythonic！）</span>
+<span class="kw">for</span> name, score <span class="kw">in</span> scores.<span class="fn">items</span>():
+    <span class="fn">print</span>(name, <span class="str">"scored"</span>, score)</div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          遍历 dict 就像翻通讯录——方式 1 是一页一页翻看名字（key），然后手动去查电话；方式 2（用 <kbd>.items()</kbd>）是直接看每一行的"姓名 + 电话"，一次拿到两个信息，省事多了。
+        </div>
+      </div>
+
+      <!-- COUNT OCCURRENCES PATTERN -->
+      <div class="topic" id="anchor-dict-count">
+        <div class="topic-title">
+          经典用法：用 Dict 统计出现次数
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <p>这是 COMP202 里 dictionary 最常考的实际应用！核心思路：key 是"东西是什么"，value 是"出现了多少次"。</p>
+
+        <div class="code-block">
+<span class="kw">def</span> <span class="fn">count_occurrences</span>(input_list):
+    <span class="str">"""
+    (list) -> dict
+    Returns a dict counting how many times each element appears.
+
+    &gt;&gt;&gt; count_occurrences(['a', 'b', 'a', 'c', 'b', 'a'])
+    {'a': 3, 'b': 2, 'c': 1}
+    """</span>
+    count = {}
+    <span class="kw">for</span> element <span class="kw">in</span> input_list:
+        <span class="kw">if</span> element <span class="kw">in</span> count:
+            count[element] += <span class="num">1</span>   <span class="cm"># 已经见过，计数 +1</span>
+        <span class="kw">else</span>:
+            count[element] = <span class="num">1</span>    <span class="cm"># 第一次见，初始化为 1</span>
+    <span class="kw">return</span> count</div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          你在统计班里有多少人喜欢不同口味的奶茶。拿着一张白纸，每碰到一个同学：先找白纸上有没有他的口味；有 → 在旁边的数字上 +1；没有 → 新写一行，数字从 1 开始。这就是这段代码的逻辑，非常直白。
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 15 ==================== -->
+  <div class="lesson" id="l15">
+    <div class="lesson-header" onclick="toggleLesson('l15')">
+      <span class="lesson-num">LESSON 15 · Week 10</span>
+      <span class="lesson-title">File I/O（文件读写）、Pickle、CSV</span>
+      <span class="lesson-meta">3个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">💾</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>到目前为止，你写的所有程序关了就什么都没了——变量全消失。File I/O（<span style="color:var(--yellow)">Input/Output，输入/输出</span>）让你的程序能和硬盘上的文件交互：把数据存下来，或者读取别人给你的数据。这是写出"真正有用的程序"的关键一步——任何需要处理数据文件的应用都靠这个。</p>
+        </div>
+      </div>
+
+      <!-- FILE WORKFLOW -->
+      <div class="topic" id="anchor-fileio">
+        <div class="topic-title">
+          文件操作三步走：Open → Read/Write → Close
+          <span class="tag tag-memory">📝 记住流程</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          操作文件就像借图书馆的书：先去<strong>借书（open）</strong>，然后<strong>看书或写笔记（read/write）</strong>，最后一定要<strong>还书（close）</strong>——不还书（不 close）会导致文件被锁住，其他程序没法用，还可能丢数据。
+        </div>
+
+        <p><strong>open() 的 mode（模式）参数：</strong></p>
+        <table class="compare-table">
+          <tr><th>mode</th><th>含义</th><th>注意</th></tr>
+          <tr><td><kbd>'r'</kbd></td><td>read（只读）</td><td>文件不存在会报错</td></tr>
+          <tr><td><kbd>'w'</kbd></td><td>write（写入/覆盖）</td><td>⚠️ 文件已存在会<strong>清空重写</strong>！</td></tr>
+          <tr><td><kbd>'a'</kbd></td><td>append（追加）</td><td>在文件末尾添加，不会清空原内容</td></tr>
+          <tr><td><kbd>'rb'</kbd> / <kbd>'wb'</kbd></td><td>二进制读/写</td><td>Pickle 专用，处理非文本数据</td></tr>
+        </table>
+
+        <p style="margin-top:0.75rem"><strong>读取文件（Reading）：</strong></p>
+        <div class="code-block">
+<span class="cm"># 方式 1：用 for loop 逐行读（最常用！内存友好）</span>
+fobj = <span class="fn">open</span>(<span class="str">'quotes.txt'</span>, <span class="str">'r'</span>)
+<span class="kw">for</span> line <span class="kw">in</span> fobj:
+    <span class="fn">print</span>(line)          <span class="cm"># 注意：每行末尾会有 '\n'（换行符）</span>
+fobj.<span class="fn">close</span>()
+
+<span class="cm"># 方式 2：一次性读全部内容成一个 string</span>
+fobj = <span class="fn">open</span>(<span class="str">'quotes.txt'</span>, <span class="str">'r'</span>)
+content = fobj.<span class="fn">read</span>()
+fobj.<span class="fn">close</span>()
+
+<span class="cm"># 方式 3：读成一个 list，每行是一个元素</span>
+fobj = <span class="fn">open</span>(<span class="str">'quotes.txt'</span>, <span class="str">'r'</span>)
+lines = fobj.<span class="fn">readlines</span>()   <span class="cm"># → ['line1\n', 'line2\n', ...]</span>
+fobj.<span class="fn">close</span>()</div>
+
+        <p style="margin-top:0.75rem"><strong>写入文件（Writing）：</strong></p>
+        <div class="code-block">
+<span class="cm"># 覆盖写入（原内容会被清空！）</span>
+fobj = <span class="fn">open</span>(<span class="str">'output.txt'</span>, <span class="str">'w'</span>)
+fobj.<span class="fn">write</span>(<span class="str">'Hello, world!\n'</span>)   <span class="cm"># write() 不会自动换行，要手动加 '\n'</span>
+fobj.<span class="fn">write</span>(<span class="str">'Second line\n'</span>)
+fobj.<span class="fn">close</span>()
+
+<span class="cm"># 追加写入（保留原内容）</span>
+fobj = <span class="fn">open</span>(<span class="str">'output.txt'</span>, <span class="str">'a'</span>)
+fobj.<span class="fn">write</span>(<span class="str">'This is appended.\n'</span>)
+fobj.<span class="fn">close</span>()</div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ 两个最容易忘的坑</span>
+          1. <strong>一定要 close()</strong>！没 close 可能导致数据没有真正写进文件（数据还在缓冲区）。<br>
+          2. <strong><kbd>'w'</kbd> 模式会直接清空原文件</strong>，不可恢复。想保留原内容就用 <kbd>'a'</kbd>。
+        </div>
+      </div>
+
+      <!-- PICKLE -->
+      <div class="topic" id="anchor-pickle">
+        <div class="topic-title">
+          <span class="term" data-def="Pickle：Python 专属的序列化模块，可以把任何 Python 对象（list、dict 等）直接存进二进制文件">Pickle 模块</span>
+          <span class="tag tag-memory">📝 记住语法</span>
+        </div>
+
+        <p>普通文件 I/O 只能存字符串（文本）。但如果你想把一个 list 或 dict 直接存进文件，不想手动转成字符串，就用 <strong>pickle</strong>！</p>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          普通文件 I/O 就像把东西拍成照片存档——别人也能看，但可能失真（原本是 list，变成了一串文字）。Pickle 则像把东西真空密封存档——原封不动，但只有你自己（Python）能打开，别人（Excel、记事本）打开看到的是乱码。
+        </div>
+
+        <div class="code-block">
+<span class="kw">import</span> pickle
+
+<span class="cm"># 存（dump）：把 Python 对象写进文件</span>
+data = [<span class="num">1</span>, <span class="num">3</span>, <span class="num">1001</span>, <span class="str">'a'</span>, [<span class="num">7</span>, <span class="num">8</span>]]
+f = <span class="fn">open</span>(<span class="str">'data.pkl'</span>, <span class="str">'wb'</span>)   <span class="cm"># 注意：模式是 'wb'（write binary）</span>
+pickle.<span class="fn">dump</span>(data, f)
+f.<span class="fn">close</span>()
+
+<span class="cm"># 取（load）：从文件还原 Python 对象</span>
+f = <span class="fn">open</span>(<span class="str">'data.pkl'</span>, <span class="str">'rb'</span>)   <span class="cm"># 注意：模式是 'rb'（read binary）</span>
+saved_data = pickle.<span class="fn">load</span>(f)
+f.<span class="fn">close</span>()
+<span class="fn">print</span>(saved_data)   <span class="cm"># [1, 3, 1001, 'a', [7, 8]] ← 完全还原！</span></div>
+
+        <table class="compare-table">
+          <tr><th></th><th>普通文件 I/O（.txt）</th><th>Pickle（.pkl）</th></tr>
+          <tr><td>存储格式</td><td>纯文本，人能读</td><td>二进制，只有 Python 能读</td></tr>
+          <tr><td>能存的类型</td><td>只能存字符串</td><td>任意 Python 对象</td></tr>
+          <tr><td>适合场景</td><td>和其他人/程序共享数据</td><td>你自己的程序内部使用</td></tr>
+        </table>
+      </div>
+
+      <!-- CSV -->
+      <div class="topic" id="anchor-csv">
+        <div class="topic-title">
+          <span class="term" data-def="CSV：Comma-Separated Values，逗号分隔值文件，可以用 Excel 打开的表格格式">CSV 文件</span>
+          <span class="tag tag-memory">📝 了解概念</span>
+        </div>
+
+        <p>CSV 是一种用逗号分隔数据的纯文本格式，Excel / Numbers 可以直接打开。对 Python 来说，读写 CSV 和读写普通 .txt 文件方法完全一样——只是文件里的内容格式是"用逗号隔开的"。</p>
+
+        <div class="code-block">
+<span class="cm"># CSV 文件长这样（文本内容）：</span>
+<span class="cm"># Movie1,80,100,90,100</span>
+<span class="cm"># Movie2,90,93,100,100</span>
+
+<span class="cm"># Python 读取 CSV：和读普通 txt 一样</span>
+fobj = <span class="fn">open</span>(<span class="str">'movies.csv'</span>, <span class="str">'r'</span>)
+<span class="kw">for</span> line <span class="kw">in</span> fobj:
+    parts = line.<span class="fn">strip</span>().<span class="fn">split</span>(<span class="str">','</span>)   <span class="cm"># strip() 去掉换行符，split 按逗号切</span>
+    <span class="fn">print</span>(parts)   <span class="cm"># → ['Movie1', '80', '100', '90', '100']</span>
+fobj.<span class="fn">close</span>()</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 16 ==================== -->
+  <div class="lesson" id="l16">
+    <div class="lesson-header" onclick="toggleLesson('l16')">
+      <span class="lesson-num">LESSON 16 · Week 11</span>
+      <span class="lesson-title">Tuple（元组）、Packing/Unpacking、Enumerate</span>
+      <span class="lesson-meta">4个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">📦</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p><span class="term" data-def="Tuple：元组，不可变的有序集合，用圆括号 () 定义">Tuple</span> 是 list 的"只读版"——结构一样，但创建后就不能改了。这个"不能改"不是缺点，是特性：当你想保证一组数据不被意外修改时（比如坐标、日期），用 tuple 就对了。另外，<kbd>enumerate()</kbd> 是个超实用的小工具，能让 for loop 同时拿到"元素"和"位置"，是写遍历代码的一大利器。</p>
+        </div>
+      </div>
+
+      <!-- TUPLE BASICS -->
+      <div class="topic" id="anchor-tuple">
+        <div class="topic-title">
+          Tuple 基础：创建、索引、不可修改
+          <span class="tag tag-memory">📝 记住特性</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># 创建 tuple：用圆括号 ()</span>
+coords = (<span class="num">45.5</span>, <span class="num">-73.6</span>)
+tup = (<span class="num">45</span>, <span class="num">23</span>, <span class="str">'abc'</span>)
+
+<span class="cm"># 索引和 list 一样</span>
+<span class="fn">print</span>(tup[<span class="num">1</span>])     <span class="cm"># 23</span>
+<span class="fn">print</span>(tup[-<span class="num">1</span>])    <span class="cm"># 'abc'</span>
+
+<span class="cm"># tuple 转换：tuple() 把其他序列变成 tuple</span>
+t = <span class="fn">tuple</span>(<span class="str">'lupins'</span>)
+<span class="fn">print</span>(t)   <span class="cm"># ('l', 'u', 'p', 'i', 'n', 's')</span>
+
+<span class="cm"># ❌ 不能修改！</span>
+tup[<span class="num">0</span>] = <span class="num">99</span>   <span class="cm"># TypeError: 'tuple' object does not support item assignment</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          List 就像铅笔写的购物清单，随时可以划掉、添加。Tuple 就像刻在石头上的清单——就算你以后想改，也改不了。这在有些场景下反而是好事，比如你存了一个 GPS 坐标，你绝对不希望它被程序里某个 bug 偷偷改掉。
+        </div>
+
+        <table class="compare-table">
+          <tr><th></th><th>List <kbd>[]</kbd></th><th>Tuple <kbd>()</kbd></th></tr>
+          <tr><td>可修改？</td><td>✅ 可以增删改</td><td>❌ 创建后不可变</td></tr>
+          <tr><td>速度</td><td>相对慢</td><td>比 list 快</td></tr>
+          <tr><td>能做 dict key？</td><td>❌ 不行（mutable）</td><td>✅ 可以！</td></tr>
+          <tr><td>适合场景</td><td>需要修改的数据</td><td>固定不变的数据（坐标、日期）</td></tr>
+        </table>
+      </div>
+
+      <!-- PACKING UNPACKING -->
+      <div class="topic" id="anchor-unpack">
+        <div class="topic-title">
+          Packing（打包）& Unpacking（解包）& 多重赋值
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <p><strong>Packing（打包）</strong>：把多个值"打包"成一个 tuple，括号可以省略：</p>
+        <div class="code-block">
+my_tuple = <span class="num">0</span>, <span class="num">3</span>, <span class="num">7</span>   <span class="cm"># 等价于 my_tuple = (0, 3, 7)</span></div>
+
+        <p><strong>Unpacking（解包）</strong>：把 tuple / list / string 里的值一次性赋给多个变量：</p>
+        <div class="code-block">
+my_tuple = (<span class="num">0</span>, <span class="num">3</span>, <span class="num">7</span>)
+x, y, z = my_tuple
+<span class="fn">print</span>(x, y, z)   <span class="cm"># 0  3  7</span>
+
+<span class="cm"># 多重赋值（multiple assignment）也是同一个道理</span>
+city, population, area = <span class="str">'Montreal'</span>, <span class="num">1704694</span>, <span class="num">431.5</span>
+<span class="fn">print</span>(city)       <span class="cm"># Montreal</span>
+<span class="fn">print</span>(population) <span class="cm"># 1704694</span></div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ 左右数量必须一致，否则 ValueError</span>
+          <kbd>x, y = (1, 2, 3)</kbd> 会报 <kbd>ValueError: too many values to unpack (expected 2)</kbd>。左边变量数量必须等于右边元素数量，不多不少。
+        </div>
+
+        <p><strong>For loop 与 list of tuples（这个考试很爱考！）：</strong></p>
+        <div class="code-block">
+favorite_languages = [(<span class="str">'Bob'</span>, <span class="str">'C++'</span>), (<span class="str">'Rahul'</span>, <span class="str">'Python'</span>), (<span class="str">'Yifan'</span>, <span class="str">'R'</span>)]
+
+<span class="cm"># 方式 1：靠 index 取</span>
+<span class="kw">for</span> tup <span class="kw">in</span> favorite_languages:
+    <span class="fn">print</span>(tup[<span class="num">0</span>], tup[<span class="num">1</span>])
+
+<span class="cm"># 方式 2：直接解包（更清晰，推荐！）</span>
+<span class="kw">for</span> name, language <span class="kw">in</span> favorite_languages:
+    <span class="fn">print</span>(name, language)
+<span class="cm"># Bob C++ / Rahul Python / Yifan R</span></div>
+      </div>
+
+      <!-- TUPLE AND DICT -->
+      <div class="topic" id="anchor-tuple-dict">
+        <div class="topic-title">
+          Tuple ↔ Dictionary 互转
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># list of tuples → dict（每个 tuple 是 (key, value) 对）</span>
+list_of_pairs = [(<span class="str">'Montreal'</span>, <span class="num">1.78</span>), (<span class="str">'Rome'</span>, <span class="num">2.87</span>), (<span class="str">'Tokyo'</span>, <span class="num">9.27</span>)]
+city_pop = <span class="fn">dict</span>(list_of_pairs)   <span class="cm"># {'Montreal': 1.78, 'Rome': 2.87, 'Tokyo': 9.27}</span>
+
+<span class="cm"># dict → list of tuples（用 .items()）</span>
+items_view = city_pop.<span class="fn">items</span>()
+as_list = <span class="fn">list</span>(items_view)
+<span class="cm"># [('Montreal', 1.78), ('Rome', 2.87), ('Tokyo', 9.27)]</span></div>
+      </div>
+
+      <!-- ENUMERATE -->
+      <div class="topic" id="anchor-enumerate">
+        <div class="topic-title">
+          <span class="term" data-def="enumerate()：内置函数，遍历时同时提供元素和它的 index（位置序号）">enumerate()</span>：遍历时同时拿到 index 和 value
+          <span class="tag tag-key">⭐ 必掌握</span>
+          <span class="tag tag-memory">📝 记住用法</span>
+        </div>
+
+        <p>以前你要在 loop 里同时知道"现在是第几个"，得自己设一个计数器变量。<kbd>enumerate()</kbd> 帮你自动做这件事：</p>
+
+        <div class="code-block">
+s = <span class="str">"banana"</span>
+
+<span class="cm"># 没有 enumerate 的老写法（麻烦）</span>
+i = <span class="num">0</span>
+<span class="kw">for</span> char <span class="kw">in</span> s:
+    <span class="fn">print</span>(char, <span class="str">"has index"</span>, i)
+    i += <span class="num">1</span>
+
+<span class="cm"># 用 enumerate 的优雅写法 ✅</span>
+<span class="kw">for</span> index, char <span class="kw">in</span> <span class="fn">enumerate</span>(s):
+    <span class="fn">print</span>(char, <span class="str">"has index"</span>, index)
+<span class="cm"># b has index 0 / a has index 1 / n has index 2 ...</span>
+
+<span class="cm"># enumerate 也适用于 list、tuple、dict</span>
+fruits = [<span class="str">'apple'</span>, <span class="str">'banana'</span>, <span class="str">'cherry'</span>]
+<span class="kw">for</span> i, fruit <span class="kw">in</span> <span class="fn">enumerate</span>(fruits):
+    <span class="fn">print</span>(i, fruit)   <span class="cm"># 0 apple / 1 banana / 2 cherry</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          老师点名时，不只喊"张三"，而是喊"第 1 号，张三；第 2 号，李四……" —— <kbd>enumerate()</kbd> 就是帮你自动加上那个序号的工具人，再也不用自己数了。
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 19 ==================== -->
+  <div class="lesson" id="l19">
+    <div class="lesson-header" onclick="toggleLesson('l19')">
+      <span class="lesson-num">LESSON 19 · Week 12</span>
+      <span class="lesson-title">Exception Handling：Try/Except、Multiple Exceptions、Finally</span>
+      <span class="lesson-meta">3个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">🪤</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>L13 学的是"主动 raise（抛出）exception"——你自己说哪里有问题。这节课学的是"<strong>捕获（catch）exception</strong>"——当有错误发生时，不让程序崩掉，而是优雅地处理它。想象你写了一个让用户输入数字的程序，用户输入了"abc"——你不可能阻止用户犯蠢，但你可以提前设好"容错机制"，让程序在出错时不崩溃，而是告诉用户"请重新输入"。这就是 try/except 的意义。</p>
+        </div>
+      </div>
+
+      <!-- TRY EXCEPT -->
+      <div class="topic" id="anchor-tryexcept">
+        <div class="topic-title">
+          Try / Except 基本结构
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          Try/except 就像开车时的安全气囊：<br>
+          <kbd>try</kbd> 块 = 正常开车（做你想做的事）<br>
+          <kbd>except</kbd> 块 = 撞车时安全气囊弹出（出错时做的补救）<br>
+          有了安全气囊，撞车不一定会死人；有了 except，程序报错不一定会崩溃。
+        </div>
+
+        <div class="code-block">
+<span class="kw">try</span>:
+    s = <span class="fn">input</span>(<span class="str">'Please enter a number: '</span>)
+    number = <span class="fn">int</span>(s)            <span class="cm"># ← 这行可能会崩（用户输入 "abc" 的话）</span>
+    <span class="fn">print</span>(<span class="str">'No error, you entered:'</span>, number)
+<span class="kw">except</span> <span class="fn">ValueError</span>:
+    <span class="fn">print</span>(<span class="str">'That was not a valid number!'</span>)   <span class="cm"># ← 只有 ValueError 发生时才执行</span></div>
+
+        <p>执行流程：Python 先跑 <kbd>try</kbd> 块；如果抛出了 <kbd>ValueError</kbd>，立刻跳到 <kbd>except ValueError</kbd> 块执行；如果没有报错，<kbd>except</kbd> 块就被跳过。</p>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ 什么时候该用 try/except？只用来处理"你没法提前防止"的错误！</span>
+          比如用户输入的内容、网络连接、文件存不存在——这些你作为程序员控制不了。<br>
+          <strong>绝对不要</strong>用 try/except 来"掩盖"你自己代码里的 bug——那样 bug 永远找不到！
+        </div>
+      </div>
+
+      <!-- MULTIPLE EXCEPTIONS -->
+      <div class="topic" id="anchor-multi-except">
+        <div class="topic-title">
+          处理多种 Exception
+          <span class="tag tag-memory">📝 记住语法</span>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># 方式 1：分开写多个 except（推荐，每种错误处理方式不同）</span>
+<span class="kw">try</span>:
+    result = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">'Enter index: '</span>))
+    my_list = [<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>]
+    <span class="fn">print</span>(my_list[result])
+<span class="kw">except</span> <span class="fn">ValueError</span>:
+    <span class="fn">print</span>(<span class="str">'Input is not a number'</span>)
+<span class="kw">except</span> <span class="fn">IndexError</span>:
+    <span class="fn">print</span>(<span class="str">'Index out of range'</span>)
+
+<span class="cm"># 方式 2：用 tuple 把多个 exception 合并在一个 except 里</span>
+<span class="kw">try</span>:
+    <span class="cm"># ... some code ...</span>
+    <span class="kw">pass</span>
+<span class="kw">except</span> (<span class="fn">IndexError</span>, <span class="fn">TypeError</span>):
+    <span class="fn">print</span>(<span class="str">'IndexError or TypeError occurred'</span>)
+
+<span class="cm"># 方式 3：裸 except（捕获所有错误——一般不推荐！）</span>
+<span class="kw">try</span>:
+    <span class="kw">pass</span>
+<span class="kw">except</span>:
+    <span class="fn">print</span>(<span class="str">'Something went wrong'</span>)   <span class="cm"># 藏了什么错都不知道，慎用！</span></div>
+      </div>
+
+      <!-- FINALLY -->
+      <div class="topic" id="anchor-finally">
+        <div class="topic-title">
+          <kbd>finally</kbd> 块：无论如何都执行
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+        </div>
+
+        <p><kbd>finally</kbd> 块里的代码<strong>无论如何都会运行</strong>，不管 try 成功还是 except 被触发，甚至就算里面有 <kbd>return</kbd>、<kbd>break</kbd>、<kbd>continue</kbd> 也照样跑。</p>
+
+        <div class="code-block">
+<span class="kw">while</span> <span class="kw">True</span>:
+    <span class="kw">try</span>:
+        s = <span class="fn">input</span>(<span class="str">'Please enter a valid number: '</span>)
+        number = <span class="fn">int</span>(s)
+        <span class="kw">break</span>                    <span class="cm"># ← 成功了，跳出 while 循环</span>
+    <span class="kw">except</span> <span class="fn">ValueError</span>:
+        <span class="fn">print</span>(<span class="str">'Invalid input!'</span>)
+    <span class="kw">finally</span>:
+        <span class="fn">print</span>(<span class="str">'This always prints.'</span>)  <span class="cm"># ← 不管成功还是失败，每次都打印</span>
+
+<span class="fn">print</span>(<span class="str">"Valid number entered: "</span> + <span class="fn">str</span>(number))</div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          <kbd>finally</kbd> 就像餐厅关门前的"收拾桌子"——不管今天生意好不好，客人满不满意，关门前总要收拾桌子。在文件操作里，<kbd>finally</kbd> 常用来保证 <kbd>close()</kbd> 一定被执行，不管读取过程有没有报错。
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 20 ==================== -->
+  <div class="lesson" id="l20">
+    <div class="lesson-header" onclick="toggleLesson('l20')">
+      <span class="lesson-num">LESSON 20 · Week 13</span>
+      <span class="lesson-title">OOP 1：Object-Oriented Programming、Object、Class、Attributes</span>
+      <span class="lesson-meta">4个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">🏛️</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>到目前为止，你用的所有数据类型（int、list、str）都是 Python 内置的。<strong>OOP（Object-Oriented Programming，面向对象编程）</strong>让你能<strong>自己定义新的数据类型</strong>。这是编程的一次重大升级：你可以创建一个 "Student" 类型，里面存名字、学号、成绩，还能有"查成绩""改名字"这些操作——远比单独用 list 和 dict 管理要清晰得多。几乎所有大型软件都是用 OOP 写的。</p>
+        </div>
+      </div>
+
+      <!-- WHAT IS OOP -->
+      <div class="topic" id="anchor-oop-intro">
+        <div class="topic-title">
+          什么是 Object-Oriented Programming？
+          <span class="tag tag-logic">🧠 理解概念</span>
+        </div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          想想乐高积木。乐高工厂设计了一种"小人"零件的<strong>模具（Class/Blueprint，蓝图）</strong>，规定了小人有头、身体、手、腿，还能"坐下"和"拿东西"。工厂用这个模具可以批量生产无数个小人——每个小人都是一个<strong>Object（对象/实例）</strong>。每个小人的颜色、头发可以不同，但结构都遵循同一个模具。<br><br>
+          Python 里：<strong>Class（类）= 模具</strong>，<strong>Object（对象）= 用模具做出来的具体东西</strong>。
+        </div>
+
+        <p>你其实从第一天就在用 OOP——只是没意识到：</p>
+        <div class="code-block">
+a = <span class="str">"hello"</span>         <span class="cm"># a 是 str 类的一个 object（实例）</span>
+a.<span class="fn">upper</span>()         <span class="cm"># upper() 是 str 这个 class 里定义的 method（方法）</span>
+
+my_list = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]  <span class="cm"># my_list 是 list 类的一个 object</span>
+my_list.<span class="fn">append</span>(<span class="num">4</span>) <span class="cm"># append() 是 list 这个 class 里定义的 method</span>
+
+<span class="fn">print</span>(<span class="fn">type</span>(a))       <span class="cm"># &lt;class 'str'&gt; ← 每个东西都属于某个 class！</span></div>
+      </div>
+
+      <!-- CLASS -->
+      <div class="topic" id="anchor-class">
+        <div class="topic-title">
+          定义一个 Class
+          <span class="tag tag-memory">📝 记住语法</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <div class="code-block">
+<span class="cm"># 定义一个新的 class（蓝图）</span>
+<span class="kw">class</span> <span class="fn">MyClass</span>:
+    <span class="str">"""a new type"""</span>   <span class="cm"># docstring 还是要写的</span>
+
+<span class="cm"># 用 class 创建一个 object（实例）</span>
+my_object = <span class="fn">MyClass</span>()   <span class="cm"># 调用 class 名就能创建，就像调用函数一样</span>
+
+<span class="fn">print</span>(<span class="fn">type</span>(my_object))
+<span class="cm"># &lt;class '__main__.MyClass'&gt;  ← '__main__' 指的是当前文件</span></div>
+
+        <p>关键区别：</p>
+        <ul>
+          <li><strong>Class（类）</strong>：设计图 / 模具，本身不是具体东西</li>
+          <li><strong>Object / Instance（对象 / 实例）</strong>：用 class 造出来的具体东西，<kbd>MyClass()</kbd> 就会创建一个</li>
+        </ul>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ class 名首字母一定大写！</span>
+          Python 惯例：class 名用 <strong>CamelCase</strong>（驼峰命名），如 <kbd>Student</kbd>、<kbd>BankAccount</kbd>；变量和函数名用 <strong>snake_case</strong>（下划线），如 <kbd>my_student</kbd>、<kbd>get_balance</kbd>。这是代码可读性的基本规范。
+        </div>
+      </div>
+
+      <!-- ATTRIBUTES -->
+      <div class="topic" id="anchor-attributes">
+        <div class="topic-title">
+          <span class="term" data-def="Attribute：属性，属于某个 object 的变量，用 object.attribute 访问">Attributes（属性）</span>：给 Object 贴数据
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <p>Attribute 就是"属于这个 object 的变量"。通过 <kbd>object.attribute_name</kbd> 访问和修改：</p>
+
+        <div class="code-block">
+<span class="kw">class</span> <span class="fn">MyClass</span>:
+    <span class="str">"""a new type"""</span>
+
+my_object = <span class="fn">MyClass</span>()
+
+<span class="cm"># 给 object 设置 attribute</span>
+my_object.name = <span class="str">"John"</span>
+my_object.age = <span class="num">20</span>
+
+<span class="cm"># 读取 attribute</span>
+<span class="fn">print</span>(my_object.name)   <span class="cm"># John</span>
+<span class="fn">print</span>(my_object.age)    <span class="cm"># 20</span>
+
+<span class="cm"># 修改 attribute</span>
+my_object.name = <span class="str">"Max"</span>
+<span class="fn">print</span>(my_object.name)   <span class="cm"># Max</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          Attribute 就像一个人的"个人信息档案"里的字段：姓名、年龄、学号。每个 object 都有自己的一套，互不干扰。<kbd>my_object.name</kbd> 就是说"这个 object 的 name 字段"，用点号 <kbd>.</kbd> 表示"属于谁的"。
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== LESSON 21 ==================== -->
+  <div class="lesson" id="l21">
+    <div class="lesson-header" onclick="toggleLesson('l21')">
+      <span class="lesson-num">LESSON 21 · Week 13</span>
+      <span class="lesson-title">OOP 2：Constructor（__init__）、Class Attributes、Methods、__str__</span>
+      <span class="lesson-meta">4个核心概念</span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="lesson-body">
+
+      <div class="framework-banner">
+        <div class="framework-icon">🔧</div>
+        <div>
+          <h3>这节课在 Python 里是干什么用的？</h3>
+          <p>上节课知道了 class 是什么，这节课教你怎么把 class 写得"专业"：用 <kbd>__init__</kbd> 让每个 object 一生下来就有自己的数据；用 methods（方法）给 object 附上能做的事；用 <kbd>__str__</kbd> 控制 object 打印出来长什么样。学完这两节 OOP，你就能理解为什么 <kbd>my_list.append()</kbd> 是这样用的，以及未来你自己写的类型也能这么用。</p>
+        </div>
+      </div>
+
+      <!-- CONSTRUCTOR -->
+      <div class="topic" id="anchor-init">
+        <div class="topic-title">
+          Constructor（构造函数）：<kbd>__init__</kbd>
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <p>每次你写 <kbd>MyClass()</kbd> 创建一个 object，Python 会自动调用一个叫 <kbd>__init__</kbd> 的特殊方法——这就是 <span class="term" data-def="Constructor：构造函数，创建 object 时自动被调用，用来初始化 object 的属性">constructor（构造函数）</span>。你可以自己定义它，控制 object 创建时长什么样：</p>
+
+        <div class="code-block">
+<span class="kw">class</span> <span class="fn">Student</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, name, ID=<span class="num">0</span>):
+        <span class="cm"># self 代表"正在被创建的这个 object 本身"</span>
+        <span class="kw">self</span>.name = name   <span class="cm"># 把传进来的 name 存成 attribute</span>
+        <span class="kw">self</span>.ID = ID       <span class="cm"># ID 有默认值 0</span>
+
+<span class="cm"># 创建 object 时传参数，__init__ 会自动接收</span>
+john = <span class="fn">Student</span>(<span class="str">"John"</span>, <span class="num">20</span>)
+<span class="fn">print</span>(john.name, john.ID)   <span class="cm"># John 20</span>
+
+<span class="cm"># 有默认值，可以少传一个</span>
+default_student = <span class="fn">Student</span>(<span class="str">"no name"</span>)
+<span class="fn">print</span>(default_student.name, default_student.ID)   <span class="cm"># no name 0</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          <kbd>__init__</kbd> 就像新生入学填的注册表。每个学生（object）一入学（被创建），学校（class）就要求你填上姓名、学号。这些信息从此就跟着你这个人（object）了，其他地方随时可以查。
+        </div>
+
+        <p><strong>关于 <kbd>self</kbd> 的关键理解：</strong></p>
+        <ul>
+          <li><kbd>self</kbd> 是约定俗成的名字（理论上可以叫其他的，但<strong>绝对不要</strong>这么做）</li>
+          <li><kbd>self</kbd> 代表"当前这个 object 本身"。在 class 内部，你不知道 object 未来会叫什么名字，所以用 <kbd>self</kbd> 代替</li>
+          <li>定义 <kbd>__init__</kbd> 时 <kbd>self</kbd> 必须是第一个参数；但调用时你不用传——Python 自动传入</li>
+          <li><kbd>__init__</kbd> 没有 <kbd>return</kbd> 语句（不需要，也不应该有）</li>
+        </ul>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ 忘传必填参数会报 TypeError</span>
+          如果 <kbd>__init__(self, name, ID)</kbd> 两个参数都没有默认值，<kbd>Student()</kbd> 不传参数会报 <kbd>TypeError: __init__() missing 2 required positional arguments</kbd>。注意 self 不算！
+        </div>
+      </div>
+
+      <!-- CLASS ATTRIBUTES -->
+      <div class="topic" id="anchor-class-attr">
+        <div class="topic-title">
+          Class Attributes vs Instance Attributes
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+          <span class="tag tag-key">⭐ 容易混淆！</span>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-card" style="border-color:#7dd4b0">
+            <strong>Instance Attribute（实例属性）</strong>
+            <span>在 <kbd>__init__</kbd> 里用 <kbd>self.xxx</kbd> 定义。<br>每个 object 有自己独立的一份，互不影响。</span>
+          </div>
+          <div class="concept-card" style="border-color:#f5c842">
+            <strong>Class Attribute（类属性）</strong>
+            <span>在 class 最顶部定义（不在任何方法里）。<br>所有 object 共享同一个值。</span>
+          </div>
+        </div>
+
+        <div class="code-block">
+<span class="kw">class</span> <span class="fn">Car</span>:
+    fuel = <span class="num">100</span>        <span class="cm"># ← Class Attribute：所有 Car 对象共享</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, brand):
+        <span class="kw">self</span>.brand = brand  <span class="cm"># ← Instance Attribute：每辆车自己的</span>
+
+car1 = <span class="fn">Car</span>(<span class="str">"Toyota"</span>)
+car2 = <span class="fn">Car</span>(<span class="str">"BMW"</span>)
+
+<span class="fn">print</span>(car1.fuel)   <span class="cm"># 100 ← 从 class 继承来的</span>
+<span class="fn">print</span>(car2.fuel)   <span class="cm"># 100</span>
+
+car1.fuel = <span class="num">20</span>    <span class="cm"># 给 car1 单独设置 → 会创建一个 instance attribute，遮住 class attribute</span>
+<span class="fn">print</span>(car1.fuel)   <span class="cm"># 20 ← car1 自己的</span>
+<span class="fn">print</span>(car2.fuel)   <span class="cm"># 100 ← car2 不受影响，还是看 class attribute</span></div>
+
+        <div class="trap">
+          <span class="trap-label">⚠️ 修改 Class Attribute 的正确方式</span>
+          如果你想真正改掉所有 object 共享的值，要用 <kbd>Car.fuel = 50</kbd>（通过 class 名修改），而不是 <kbd>car1.fuel = 50</kbd>（那只是给 car1 创建了一个独立的 instance attribute）。
+        </div>
+      </div>
+
+      <!-- METHODS -->
+      <div class="topic" id="anchor-methods">
+        <div class="topic-title">
+          Methods（方法）：属于 Class 的函数
+          <span class="tag tag-logic">🧠 理解逻辑</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <p>Method 就是定义在 class 里面的 function。和普通 function 的唯一区别：第一个参数必须是 <kbd>self</kbd>（代表调用这个方法的那个 object）。</p>
+
+        <div class="code-block">
+<span class="kw">class</span> <span class="fn">Student</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, name, ID=<span class="num">0</span>):
+        <span class="kw">self</span>.name = name
+        <span class="kw">self</span>.ID = ID
+
+    <span class="kw">def</span> <span class="fn">print_info</span>(<span class="kw">self</span>):              <span class="cm"># 只需要 self，无其他参数</span>
+        <span class="fn">print</span>(<span class="str">"Name:"</span>, <span class="kw">self</span>.name, <span class="str">"ID:"</span>, <span class="kw">self</span>.ID)
+
+    <span class="kw">def</span> <span class="fn">modify_name</span>(<span class="kw">self</span>, new_name):   <span class="cm"># self + 额外参数</span>
+        <span class="kw">self</span>.name = new_name            <span class="cm"># 修改的是"这个 object"的 name</span>
+
+john = <span class="fn">Student</span>(<span class="str">"John"</span>, <span class="num">20</span>)
+john.<span class="fn">print_info</span>()           <span class="cm"># Name: John ID: 20</span>
+john.<span class="fn">modify_name</span>(<span class="str">"John Doe"</span>)
+john.<span class="fn">print_info</span>()           <span class="cm"># Name: John Doe ID: 20</span></div>
+
+        <p>调用方法时，<kbd>self</kbd> 是自动传的：<kbd>john.print_info()</kbd> 等价于 Python 内部执行 <kbd>Student.print_info(john)</kbd>——Python 自动把 <kbd>john</kbd> 作为 <kbd>self</kbd> 传进去。</p>
+      </div>
+
+      <!-- STR -->
+      <div class="topic" id="anchor-str-method">
+        <div class="topic-title">
+          <kbd>__str__()</kbd>：控制 print() 的输出格式
+          <span class="tag tag-memory">📝 记住用法</span>
+          <span class="tag tag-key">⭐ 必掌握</span>
+        </div>
+
+        <p>默认情况下，print 一个自定义 object 会显示很难看的内存地址：</p>
+
+        <div class="code-block">
+john = <span class="fn">Student</span>(<span class="str">"John"</span>, <span class="num">20</span>)
+<span class="fn">print</span>(john)
+<span class="cm"># &lt;__main__.Student object at 0x0000024F6EBC8F10&gt;  ← 一堆内存地址，完全没用</span></div>
+
+        <p>定义 <kbd>__str__</kbd> 方法，就能让 print 显示你想要的内容：</p>
+
+        <div class="code-block">
+<span class="kw">class</span> <span class="fn">Student</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(<span class="kw">self</span>, name, ID=<span class="num">0</span>):
+        <span class="kw">self</span>.name = name
+        <span class="kw">self</span>.ID = ID
+
+    <span class="kw">def</span> <span class="fn">__str__</span>(<span class="kw">self</span>):
+        <span class="cm"># 注意：必须 return 一个 string，不能 print！</span>
+        <span class="kw">return</span> <span class="str">"Student: "</span> + <span class="kw">self</span>.name + <span class="str">", ID: "</span> + <span class="fn">str</span>(<span class="kw">self</span>.ID)
+
+john = <span class="fn">Student</span>(<span class="str">"John"</span>, <span class="num">20</span>)
+<span class="fn">print</span>(john)   <span class="cm"># Student: John, ID: 20  ← 现在看起来像个人了！</span>
+<span class="fn">print</span>(<span class="fn">str</span>(john))  <span class="cm"># 同上，str() 也会调用 __str__</span></div>
+
+        <div class="analogy">
+          <span class="analogy-label">💡 生活类比</span>
+          每个人在不同场合有不同的"自我介绍"。<kbd>__str__</kbd> 就是你教这个 object "当别人 print 你的时候，你怎么介绍自己"。没有定义就是报出一串身份证内存地址，有了 <kbd>__str__</kbd> 就能说"我是 John，学号 20"。
+        </div>
+
+        <table class="compare-table">
+          <tr><th>特殊方法</th><th>触发时机</th><th>必须 return</th></tr>
+          <tr><td><kbd>__init__(self, ...)</kbd></td><td>创建 object 时自动调用</td><td>❌ 无 return</td></tr>
+          <tr><td><kbd>__str__(self)</kbd></td><td><kbd>print(obj)</kbd> 或 <kbd>str(obj)</kbd> 时调用</td><td>✅ 必须 return string</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary-card">
+    <h2>整体学习路线 + 备考建议</h2>
+    <p style="font-size:0.8rem;opacity:0.7;margin-bottom:1rem;font-family:'JetBrains Mono',monospace;">点击关键词可以直接跳转到对应知识点 ↓</p>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <h4>🧠 最需要理解逻辑的</h4>
+        <p>
+          <a class="sum-link" onclick="jumpToAnchor('anchor-scope','l5')">variable scope</a>（local vs global）、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-void-fruitful','l5')">print vs return</a>、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-recursion','l7')">Recursion</a> base case、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-copy','l12')">shallow/deep copy</a>、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-tryexcept','l19')">try/except 何时用</a>、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-init','l21')">self 的含义</a>、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-class-attr','l21')">class vs instance attr</a>
+        </p>
+      </div>
+      <div class="summary-item">
+        <h4>📝 最需要背 / 记住的</h4>
+        <p>
+          <a class="sum-link" onclick="jumpToAnchor('anchor-binary','l1')">二进制转换方法</a>、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-math-ops','l3')">% // / 的区别</a>、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-bool-ops','l4')">not/and/or 优先级</a>、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-docstring','l5')">Docstring 格式</a>、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-dict-methods','l14')">dict 常用方法</a>、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-fileio','l15')">文件三种 mode</a>、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-str-method','l21')">__str__ 规则</a>
+        </p>
+      </div>
+      <div class="summary-item">
+        <h4>⭐ 最核心、最常考的</h4>
+        <p>
+          <a class="sum-link" onclick="jumpToAnchor('anchor-input','l3')">input() 永远返回 str</a>、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-ifelse','l4')">if/elif/else</a>、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-while','l6')">while loop</a>、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-forloop','l7')">for loop + range</a>、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-dict-count','l14')">dict 统计出现次数</a>、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-unpack','l16')">tuple unpacking</a>、
+          <a class="sum-link" onclick="jumpToAnchor('anchor-init','l21')">__init__ 写法</a>
+        </p>
+      </div>
+      <div class="summary-item">
+        <h4>🔗 知识点递进路线（别跳着学！）</h4>
+        <p>
+          <a class="sum-link" onclick="jumpToAnchor('anchor-variables','l3')">变量/类型</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-ifelse','l4')">条件</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-def','l5')">函数</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-while','l6')">while</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-forloop','l7')">for</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-listbasics','l10')">List</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-copy','l12')">Copy</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-doctest','l13')">Doctest</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-dict-basics','l14')">Dict</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-tuple','l16')">Tuple</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-tryexcept','l19')">try/except</a> →
+          <a class="sum-link" onclick="jumpToAnchor('anchor-oop-intro','l20')">OOP</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  function toggleLesson(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  function jumpTo(id) {
+    const el = document.getElementById(id);
+    if (!el.classList.contains('open')) el.classList.add('open');
+    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }
+
+  function jumpToAnchor(anchorId, lessonId) {
+    // 1. 先打开对应的 lesson
+    const lesson = document.getElementById(lessonId);
+    if (lesson && !lesson.classList.contains('open')) {
+      lesson.classList.add('open');
+    }
+    // 2. 等 DOM 展开后再滚动到具体 topic
+    setTimeout(() => {
+      const anchor = document.getElementById(anchorId);
+      if (anchor) {
+        anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // 3. 短暂高亮闪烁效果
+        anchor.classList.add('highlight-flash');
+        setTimeout(() => anchor.classList.remove('highlight-flash'), 1800);
+      }
+    }, 120);
+  }
+  /* ── Search ── */
+(function () {
+  const input   = document.getElementById('search-input');
+  const clearBtn= document.getElementById('search-clear');
+  const status  = document.getElementById('search-status');
+  const toc     = document.querySelector('.toc');
+  const lessons = Array.from(document.querySelectorAll('.lesson'));
+
+  // 搜索范围：lesson-title + topic-title + lesson-body 全部文本
+  const SEARCH_SELECTORS = ['.lesson-title', '.topic-title', '.lesson-body'];
+
+  // 把上一次的高亮全部清掉（还原成原始 HTML）
+  const originals = lessons.map(lesson => ({
+    el: lesson,
+    html: lesson.innerHTML          // 保存原始 innerHTML 用于还原高亮
+  }));
+
+  function escapeReg(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function highlight(el, re) {
+    // 只在文本节点上做替换，避免破坏 HTML 属性和标签
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+    const nodes = [];
+    let node;
+    while ((node = walker.nextNode())) nodes.push(node);
+
+    nodes.forEach(textNode => {
+      if (!re.test(textNode.nodeValue)) return;
+      const span = document.createElement('span');
+      span.innerHTML = textNode.nodeValue.replace(re,
+        m => `<mark class="search-highlight">${m}</mark>`);
+      textNode.parentNode.replaceChild(span, textNode);
+    });
+  }
+
+  function restoreAll() {
+    originals.forEach(({ el, html }) => { el.innerHTML = html; });
+  }
+
+  function runSearch() {
+    const q = input.value.trim();
+    clearBtn.style.display = q ? 'block' : 'none';
+
+    if (!q) {
+      // 清空时：全部显示、还原高亮、关闭搜索时打开的 lesson、隐藏 status
+      restoreAll();
+      lessons.forEach(l => { l.style.display = ''; });
+      toc.style.display = '';
+      status.textContent = '';
+      return;
+    }
+
+    restoreAll();                   // 先还原，再重新高亮
+
+    const re = new RegExp(escapeReg(q), 'gi');
+    let matchCount = 0;
+
+    lessons.forEach(lesson => {
+      // 在搜索范围内找文本
+      const targets = SEARCH_SELECTORS.flatMap(sel =>
+        Array.from(lesson.querySelectorAll(sel))
+      );
+      const text = targets.map(el => el.textContent).join(' ');
+      const matched = re.test(text);
+      re.lastIndex = 0;             // reset stateful regex
+
+      if (matched) {
+        lesson.style.display = '';
+        lesson.classList.add('open');       // 展开让内容可见
+        highlight(lesson, new RegExp(escapeReg(q), 'gi'));
+        matchCount++;
+      } else {
+        lesson.style.display = 'none';
+      }
+    });
+
+    // 搜索时隐藏目录（TOC），避免视觉干扰
+    toc.style.display = 'none';
+
+    // 状态提示
+    status.textContent = matchCount
+      ? `找到 ${matchCount} 个相关章节`
+      : '没有找到匹配的内容';
+  }
+
+  input.addEventListener('input', runSearch);
+  clearBtn.addEventListener('click', () => { input.value = ''; runSearch(); input.focus(); });
+})();
+</script>
+</body>
+</html>

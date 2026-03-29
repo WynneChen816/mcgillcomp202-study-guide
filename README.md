@@ -50,6 +50,13 @@ This site is designed based on how I personally learn:
   - helpful if you think in both languages
 
 ---
+## 📸 Preview
+
+### Overview
+![Overview](preview1.png)(preview2.png)
+
+### Search Function
+![Search](preview3.png)
 
 ## 🔍 Features
 
